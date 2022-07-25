@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>
+  <div id="router-view" class="theme-dark">
     <router-view></router-view>
   </div>
 </template>

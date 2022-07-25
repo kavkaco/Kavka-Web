@@ -2,6 +2,8 @@
 @tailwind components
 @tailwind utilities
 
+@import "configs"
+
 @font-face
   font-family: "Poppins"
   src: url("../fonts/Poppins/Poppins-Regular.ttf")
@@ -17,3 +19,12 @@
 
 body
   font-family: "Poppins", "Vazir"
+
+#router-view
+  width: 100%
+  min-height: 100vh
+  &.theme-dark
+    background-color: $dark
+    color: #D1D1D1
+
+@import "components/forms"
