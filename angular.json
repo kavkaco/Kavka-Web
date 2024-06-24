@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Kavka-Web-NG": {
+    "Kavka-Web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -15,9 +15,13 @@
       "prefix": "app",
       "architect": {
         "build": {
+          "optimizeDeps.include": [
+            "@fontsource/poppins",
+            "@fontsource/vazirmatn"
+          ],
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/kavka-web-ng",
+            "outputPath": "dist/kavka-web",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -69,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Kavka-Web-NG:build:production"
+              "buildTarget": "Kavka-Web:build:production"
             },
             "development": {
-              "buildTarget": "Kavka-Web-NG:build:development"
+              "buildTarget": "Kavka-Web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -103,5 +107,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "043110a9-a5da-4926-948c-6c414d6d0b74"
   }
 }
