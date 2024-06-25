@@ -1,0 +1,13 @@
+.login-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 530px;
+
+    @media screen and (max-width: 670px) {
+        & {
+            width: 95%;
+        }    
+    }
+}

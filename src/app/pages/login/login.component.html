@@ -1,69 +1,53 @@
-<style>
-    .login-page {
-        height: 100vh;
-        padding: 14px;
-    }
+<div class="w-100 flex text-center justify-center py-10">
+    <img class="w-14" src="/img/kavka-transparent.png" alt="Kavka">
+</div>
 
-    .login-page-img {
-        background: url("/img/login_img.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        height: 100%;
-        border-radius: 20px;
-    }
+<div class="login-form">
+    <form class="flex flex-col p-4 sm:p-14">
+        <h2 class="mb-4 text-2xl">Login</h2>
 
-    .login-form {
-        width: 410px;
-    }
-</style>
+        <div class="form-group">
+            <div class="form-field">
+                <label class="form-label">Email</label>
 
-<div class="login-page grid xl:flex xl:flex-col-reverse xl:grid-cols-2">
-    <div class="h-full flex xl:justify-center items-center">
-        <form class="login-form mx-auto flex flex-col">
-            <h1 class="text-3xl mb-4">Login</h1>
-
-            <div class="form-group">
-                <div class="form-field">
-                    <label class="form-label">Email address</label>
-
-                    <input placeholder="mail@kavka.org" type="email" class="input max-w-full" />
-                    <label class="form-label">
-                        <span class="form-label-alt">Please enter a valid email.</span>
-                    </label>
+                <input placeholder="mail@kavka.org" type="email" class="input max-w-full" />
+                <label class="form-label">
+                    <span class="form-label-alt">Please enter a valid email.</span>
+                </label>
+            </div>
+            <div class="form-field">
+                <label class="form-label">
+                    <span>Password</span>
+                </label>
+                <div class="form-control">
+                    <input placeholder="Secure password" type="password" class="input max-w-full" />
                 </div>
-                <div class="form-field">
-                    <label class="form-label">
-                        <span>Password</span>
-                    </label>
-                    <div class="form-control">
-                        <input placeholder="Your password" type="password" class="input max-w-full" />
-                    </div>
-                </div>
-                <div class="form-field">
-                    <div class="form-control justify-between">
-                        <div class="flex gap-2">
-                            <input type="checkbox" class="checkbox" />
-                            <a href="#">Remember me</a>
-                        </div>
-                        <label class="form-label">
-                            <a class="link link-underline-hover link-primary text-sm">Forgot your password?</a>
-                        </label>
-                    </div>
-                </div>
-                <div class="form-field pt-5">
-                    <div class="form-control justify-between">
-                        <button type="button" class="btn btn-primary w-full">Submit</button>
-                    </div>
-                </div>
-
-                <div class="form-field">
-                    <div class="form-control">
-                        <a class="link link-underline-hover link-primary text-sm">Don't have an account? Sign in</a>
-                    </div>
+                <div class="form-label">
+                    <span class="form-label-alt">At least 8 characters and strong structure.</span>
                 </div>
             </div>
-        </form>
-    </div>
-    <div class="login-page-img xl:order-1"></div>
+            <div class="form-field mt-4">
+                <div class="form-control justify-between">
+                    <div class="flex gap-2">
+                        <input type="checkbox" class="checkbox" />
+                        <a href="#">Remember me</a>
+                    </div>
+                    <label class="form-label">
+                        <a class="link link-underline-hover link-primary text-sm">Forgot your password?</a>
+                    </label>
+                </div>
+            </div>
+            <div class="form-field pt-5">
+                <div class="form-control justify-between">
+                    <button type="button" class="btn btn-primary w-full">Sign in</button>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-control">
+                    <a class="link link-underline-hover link-primary text-sm">Don't have an account? Sign in</a>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
