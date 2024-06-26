@@ -1,9 +1,5 @@
-<div class="w-100 flex text-center justify-center py-10">
-    <img class="w-14" src="/img/kavka-transparent.png" alt="Kavka">
-</div>
-
-<div class="login-form">
-    <form class="flex flex-col p-4 sm:p-14">
+<div class="form force-center">
+    <form class="flex flex-col p-4">
         <h2 class="mb-4 text-2xl">Login</h2>
 
         <div class="form-group">
@@ -33,19 +29,21 @@
                         <a href="#">Remember me</a>
                     </div>
                     <label class="form-label">
-                        <a class="link link-underline-hover link-primary text-sm">Forgot your password?</a>
+                        <a href="/auth/forgot_password" class="link link-underline-hover link-primary text-sm">Forgot
+                            your password?</a>
                     </label>
                 </div>
             </div>
             <div class="form-field pt-5">
                 <div class="form-control justify-between">
-                    <button type="button" class="btn btn-primary w-full">Sign in</button>
+                    <button type="button" class="btn btn-primary w-full">Submit</button>
                 </div>
             </div>
 
             <div class="form-field">
                 <div class="form-control">
-                    <a class="link link-underline-hover link-primary text-sm">Don't have an account? Sign in</a>
+                    <a href="/auth/signup" class="link link-underline-hover link-primary text-sm">Don't have an account?
+                        Signup!</a>
                 </div>
             </div>
         </div>
