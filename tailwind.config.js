@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-/** @type {import('rippleui').Config} */
 module.exports = {
   content: ["./src/**/*.{html,ts}"],
   theme: {
@@ -10,6 +9,7 @@ module.exports = {
     },
   },
   plugins: [require("rippleui")],
+  /** @type {import('rippleui').Config} */
   rippleui: {
     themes: [
       {
