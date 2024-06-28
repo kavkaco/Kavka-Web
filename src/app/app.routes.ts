@@ -4,8 +4,8 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { SignupComponent } from './pages/signup/signup.component';
 import { BlankAppFormComponent } from './layouts/blank-app-form/blank-app-form.component';
 import { PlatformComponent } from './layouts/platform/platform.component';
-import { MainComponent } from './pages/platform/main/main.component';
 import { SettingsComponent } from './pages/platform/settings/settings.component';
+import { ChatsComponent } from './pages/platform/chats/chats.component';
 
 export const routes: Routes = [
     {
@@ -32,7 +32,7 @@ export const routes: Routes = [
         children: [
             {
                 path: "u",
-                component: MainComponent
+                component: ChatsComponent
             },
             {
                 path: "settings",

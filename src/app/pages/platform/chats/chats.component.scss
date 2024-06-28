@@ -1,0 +1,12 @@
+.platform-chats {
+    --sidebar-size: 320px;
+
+    display: grid;
+    grid-template-columns: var(--sidebar-size) calc(100% - var(--sidebar-size));
+    border-left: 1px solid rgb(var(--border));
+    height: 100%;
+
+    .platform--sidebar {
+        border-right: 1px solid rgb(var(--border));
+    }
+}
