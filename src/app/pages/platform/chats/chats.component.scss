@@ -1,3 +1,5 @@
+$mobile-break-point: 900px;
+
 .platform-chats {
     --sidebar-size: 370px;
 
@@ -8,5 +10,19 @@
 
     .platform--sidebar {
         border-right: 1px solid rgb(var(--border));
+    }
+
+    // Responsive :: Mobile
+    @media screen and (max-width: $mobile-break-point) {
+        &{
+            --sidebar-size: 100%;
+            // grid-template-columns: unset;
+        }
+
+        .platform-chats--viewbox{
+            // FIXME - after designing active-chat section
+            display: none;
+            background-color: orangered;
+        }
     }
 }
