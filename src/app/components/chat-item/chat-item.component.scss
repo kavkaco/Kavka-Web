@@ -1,0 +1,28 @@
+.platform-chats--item {
+    justify-content: left;
+    height: 70px;
+    background-color: transparent;
+    transition: 0.2s ease-out;
+    margin-bottom: 8px;
+
+    &.platform-chats--active-item {
+        &,
+        &:hover {
+            background-color: rgb(var(--primary));
+        }
+
+        .platform-chats--item--caption,
+        .platform-chats--item--caption svg {
+            color: #fff !important;
+            fill: #fff !important;
+        }
+    }
+
+    &:hover {
+        background-color: rgb(var(--backgroundSecondary));
+    }
+
+    .platform-chats--item--caption {
+        width: 260px;
+    }
+}

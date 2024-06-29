@@ -1,49 +1,18 @@
 <div class="platform-chats">
     <div class="platform--sidebar p-4">
-        <div>
-            <input class="input border-border bg-backgroundPrimary input-rounded" placeholder="Search..." />
-        </div>
+        <input [(ngModel)]="searchText" (ngModelChange)="onSearchInputChange()"
+            class="input border-border bg-backgroundPrimary input-rounded block max-w-full w-100"
+            placeholder="Search..." />
 
         <h1 class="text-xl mt-4 mb-2">Messages</h1>
 
         <div class="platform-chats--list">
-            <div
-                class="platform-chats--item platform-chats--active-item card flex flex-row-reverse items-center cursor-pointer gap-3 px-2 py-1 overflow-hidden">
-                <div>
-                    <h2 class="card-header text-sm">Go Engineers</h2>
-                    <p
-                        class="platform-chats--item--caption text-content2 text-ellipsis whitespace-nowrap overflow-hidden">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </p>
-                </div>
-                <div>
-                    <div class="avatar">
-                        <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="platform-chats--item card flex flex-row-reverse items-center cursor-pointer gap-3 px-2 py-1 overflow-hidden">
-                <div>
-                    <h2 class="card-header mb-1 text-sm">Go Engineers</h2>
-                    <p
-                        class="platform-chats--item--caption text-content2 text-ellipsis whitespace-nowrap overflow-hidden flex gap-2">
-                        <!-- Take a look at this kitty! -->
-                        <svg class="w-4 fill-content2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path
-                                d="M19,0H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H19a5.006,5.006,0,0,0,5-5V5A5.006,5.006,0,0,0,19,0ZM5,2H19a3,3,0,0,1,3,3V19a2.951,2.951,0,0,1-.3,1.285l-9.163-9.163a5,5,0,0,0-7.072,0L2,14.586V5A3,3,0,0,1,5,2ZM5,22a3,3,0,0,1-3-3V17.414l4.878-4.878a3,3,0,0,1,4.244,0L20.285,21.7A2.951,2.951,0,0,1,19,22Z" />
-                            <path
-                                d="M16,10.5A3.5,3.5,0,1,0,12.5,7,3.5,3.5,0,0,0,16,10.5Zm0-5A1.5,1.5,0,1,1,14.5,7,1.5,1.5,0,0,1,16,5.5Z" />
-                        </svg>
-                    </p>
-                </div>
-                <div>
-                    <div class="avatar">
-                        <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
-                    </div>
-                </div>
-            </div>
+            @for (item of chatsList; track $index) {
+                <app-chat-item [isActive]="item.isActive" [chatId]="item.chatId"
+                    [avatar]="item.avatar"
+                    [title]="item.title" [lastMessageType]="item.lastMessageType"
+                    [lastMessageCaption]="item.lastMessageCaption"></app-chat-item>
+            }
         </div>
     </div>
 
