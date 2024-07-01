@@ -1,28 +1,56 @@
 $mobile-break-point: 900px;
 
 .platform-chats {
-    --sidebar-size: 370px;
+  --sidebar-size: 370px;
 
-    display: grid;
-    grid-template-columns: var(--sidebar-size) calc(100% - var(--sidebar-size));
-    border-left: 1px solid rgb(var(--border));
-    height: 100%;
+  display: grid;
+  grid-template-columns: var(--sidebar-size) calc(100% - var(--sidebar-size));
+  border-left: 1px solid rgb(var(--border));
+  height: 100%;
 
-    .platform--sidebar {
-        border-right: 1px solid rgb(var(--border));
+  .platform--sidebar {
+    border-right: 1px solid rgb(var(--border));
+  }
+
+  .platform-chats--list {
+    height: calc(100vh - 125px);
+  }
+
+  // Responsive :: Mobile
+  @media screen and (max-width: $mobile-break-point) {
+    & {
+      --sidebar-size: 100%;
     }
 
-    // Responsive :: Mobile
-    @media screen and (max-width: $mobile-break-point) {
-        &{
-            --sidebar-size: 100%;
-            // grid-template-columns: unset;
-        }
-
-        .platform-chats--viewbox{
-            // FIXME - after designing active-chat section
-            display: none;
-            background-color: orangered;
-        }
+    .platform-chats--list {
+      height: calc(100vh - 230px);
     }
+
+    .platform-chats--viewbox {
+      // FIXME - after designing active-chat section
+      display: none;
+    }
+  }
+}
+
+.platform--mobile-header {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+
+  padding: 0 10px;
+  margin-bottom: 10px;
+
+  .platform-mobile-header--icon {
+    width: 40px;
+  }
+
+  // Enable only for Mobile Mode
+  @media screen and (max-width: $mobile-break-point) {
+    & {
+      display: flex;
+    }
+  }
 }

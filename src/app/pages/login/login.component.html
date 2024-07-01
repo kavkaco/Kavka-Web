@@ -29,20 +29,22 @@
                         <label class="cursor-pointer" for="remember-me">Remember me</label>
                     </div>
                     <label class="form-label">
-                        <a routerLink="/auth/forgot_password" class="link link-underline-hover link-primary text-sm">Forgot
+                        <a routerLink="/auth/forgot_password"
+                            class="link link-underline-hover link-primary text-sm">Forgot
                             your password?</a>
                     </label>
                 </div>
             </div>
             <div class="form-field pt-5">
                 <div class="form-control justify-between">
-                    <button type="button" class="btn btn-primary w-full">Submit</button>
+                    <button (click)="submitLogin()" type="button" class="btn btn-primary w-full">Submit</button>
                 </div>
             </div>
 
             <div class="form-field">
                 <div class="form-control">
-                    <a routerLink="/auth/signup" class="link link-underline-hover link-primary text-sm">Don't have an account?
+                    <a routerLink="/auth/signup" class="link link-underline-hover link-primary text-sm">Don't have an
+                        account?
                         Signup!</a>
                 </div>
             </div>

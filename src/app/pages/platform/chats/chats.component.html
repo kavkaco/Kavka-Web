@@ -1,5 +1,10 @@
 <div class="platform-chats">
     <div class="platform--sidebar p-4">
+        <div class="platform--mobile-header">
+            <img class="platform-mobile-header--icon" src="/assets/logo/icon-transparent.png" alt="Kavka Logo">
+            <app-user-avatar-dropdown dropDownPosition="bottom-left"></app-user-avatar-dropdown>
+        </div>
+
         <input [(ngModel)]="searchText" (ngModelChange)="onSearchInputChange()"
             class="input border-border bg-backgroundPrimary input-rounded block max-w-full w-100"
             placeholder="Search..." />
@@ -7,12 +12,13 @@
         <h1 class="text-xl mt-4 mb-2">Messages</h1>
 
         <div class="platform-chats--list">
-            @for (item of chatsList; track $index) {
-                <app-chat-item [isActive]="item.isActive" [chatId]="item.chatId"
-                    [avatar]="item.avatar"
+            <ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden">
+                @for (item of chatsList; track $index) {
+                <app-chat-item [isActive]="item.isActive" [chatId]="item.chatId" [avatar]="item.avatar"
                     [title]="item.title" [lastMessageType]="item.lastMessageType"
                     [lastMessageCaption]="item.lastMessageCaption"></app-chat-item>
-            }
+                }
+            </ng-scrollbar>
         </div>
     </div>
 

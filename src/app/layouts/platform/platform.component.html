@@ -32,21 +32,7 @@
         </div>
 
         <div class="platform-sidebar--footer">
-            <div class="avatar avatar-md">
-                <div class="dropdown-container">
-                    <div class="dropdown">
-                        <label class="btn btn-ghost flex cursor-pointer px-0 hover:bg-inherit" tabindex="0">
-                            <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
-                        </label>
-                        <div class="dropdown-menu dropdown-menu-top-right mb-4">
-                            <a routerLink="/settings/account" class="dropdown-item hover:bg-primary text-sm">Account
-                                settings</a>
-                            <a routerLink="/auth/logout"
-                                class="dropdown-item hover:bg-primary text-sm">Subscriptions</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <app-user-avatar-dropdown dropDownPosition="top-right"></app-user-avatar-dropdown>
         </div>
     </div>
 

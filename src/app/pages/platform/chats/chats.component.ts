@@ -4,6 +4,8 @@ import { ChatDetailDrawerComponent } from '../../../components/chat-detail-drawe
 import { ChatItemComponent } from '../../../components/chat-item/chat-item.component';
 import { IChatItem } from '../../../models/chat';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { UserAvatarDropdownComponent } from '../../../components/user-avatar-dropdown/user-avatar-dropdown.component';
 
 @Component({
   selector: 'app-chats',
@@ -14,6 +16,8 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
     ChatDetailDrawerComponent,
     ActiveChatComponent,
     ChatItemComponent,
+    NgScrollbarModule,
+    UserAvatarDropdownComponent,
   ],
   templateUrl: './chats.component.html',
   styleUrl: './chats.component.scss',
@@ -29,7 +33,8 @@ export class ChatsComponent {
       chatId: '1',
       lastMessageType: 'video',
       lastMessageCaption: 'Hi Taha! How is it going on?',
-      avatar: 'https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp',
+      avatar:
+        'https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp',
     },
     {
       isActive: false,
@@ -45,7 +50,8 @@ export class ChatsComponent {
       chatId: '2',
       lastMessageType: 'file',
       lastMessageCaption: 'Please print this when you coming back',
-      avatar: 'https://play-lh.googleusercontent.com/jInS55DYPnTZq8GpylyLmK2L2cDmUoahVacfN_Js_TsOkBEoizKmAl5-p8iFeLiNjtE=w526-h296-rw',
+      avatar:
+        'https://play-lh.googleusercontent.com/jInS55DYPnTZq8GpylyLmK2L2cDmUoahVacfN_Js_TsOkBEoizKmAl5-p8iFeLiNjtE=w526-h296-rw',
     },
     {
       isActive: false,
@@ -53,7 +59,43 @@ export class ChatsComponent {
       chatId: '3',
       lastMessageType: 'file',
       lastMessageCaption: 'Good night dude.',
-      avatar: 'https://images.sftcdn.net/images/t_app-cover-l,f_auto/p/e76d4296-43f3-493b-9d50-f8e5c142d06c/2117667014/boys-profile-picture-screenshot.png',
+      avatar:
+        'https://images.sftcdn.net/images/t_app-cover-l,f_auto/p/e76d4296-43f3-493b-9d50-f8e5c142d06c/2117667014/boys-profile-picture-screenshot.png',
+    },
+    {
+      isActive: false,
+      title: 'Amupxm',
+      chatId: '1',
+      lastMessageType: 'video',
+      lastMessageCaption: 'Hi Taha! How is it going on?',
+      avatar:
+        'https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp',
+    },
+    {
+      isActive: false,
+      title: 'Taha Dostifam',
+      chatId: '5',
+      lastMessageType: 'text',
+      lastMessageCaption: 'Kavka is awesome!',
+      avatar: 'https://avatars.githubusercontent.com/u/72092675?v=4',
+    },
+    {
+      isActive: false,
+      title: 'Darling',
+      chatId: '2',
+      lastMessageType: 'file',
+      lastMessageCaption: 'Please print this when you coming back',
+      avatar:
+        'https://play-lh.googleusercontent.com/jInS55DYPnTZq8GpylyLmK2L2cDmUoahVacfN_Js_TsOkBEoizKmAl5-p8iFeLiNjtE=w526-h296-rw',
+    },
+    {
+      isActive: false,
+      title: 'Bob',
+      chatId: '3',
+      lastMessageType: 'file',
+      lastMessageCaption: 'Good night dude.',
+      avatar:
+        'https://images.sftcdn.net/images/t_app-cover-l,f_auto/p/e76d4296-43f3-493b-9d50-f8e5c142d06c/2117667014/boys-profile-picture-screenshot.png',
     },
   ];
   chatsList: IChatItem[] = this.chatsListOfStore;
@@ -66,7 +108,7 @@ export class ChatsComponent {
     let temp: IChatItem[] = [];
 
     sourceList.forEach((item) => {
-      if (item.title.toLowerCase().indexOf(input) > -1) {
+      if (item.title.toLowerCase().indexOf(input.toLowerCase()) > -1) {
         temp.push(item);
       }
     });
@@ -74,7 +116,6 @@ export class ChatsComponent {
     return temp;
   }
 
-  
   onSearchInputChange() {
     this.chatsList = this.filterChatsList(
       this.searchText,
