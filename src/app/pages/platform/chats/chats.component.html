@@ -12,7 +12,8 @@
         <h1 class="text-xl mt-4 mb-2">Messages</h1>
 
         <div class="platform-chats--list">
-            <ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden">
+            <ng-scrollbar [visibility]="'hover'" [sensorThrottleTime]="20" [appearance]="'compact'"
+                class="ngx-custom-scrollbar overflow-x-hidden">
                 @for (item of chatsList; track $index) {
                 <app-chat-item [isActive]="item.isActive" [chatId]="item.chatId" [avatar]="item.avatar"
                     [title]="item.title" [lastMessageType]="item.lastMessageType"

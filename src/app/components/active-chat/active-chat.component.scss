@@ -1,0 +1,46 @@
+.active-chat {
+  --head-size: 65px;
+  --input-section-size: 40px;
+
+  height: 100%;
+  display: grid;
+  grid-template-rows: var(--head-size) auto;
+
+  .active-chat--head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    border-bottom: 1px solid rgb(var(--border));
+  }
+
+  .active-chat--body {
+    display: grid;
+    grid-template-rows: auto max-content;
+
+    .active-chat--body--messages-list {
+      height: auto;
+      //   background-color: blue;
+      //   height: calc(100vh - var(--input-section-size) - var(--head-size));
+    }
+    .active-chat--body--input-section {
+      display: grid;
+      align-items: end;
+      grid-template-columns: max-content auto max-content;
+      border-top: 1px solid rgb(var(--border));
+      padding: 5px 10px;
+      padding-top: 7px;
+
+      min-height: var(--input-section-size);
+
+      textarea {
+        background-color: transparent;
+        outline: none;
+        height: 40px;
+        line-height: 18px;
+        padding: 10px;
+        border: none;
+      }
+    }
+  }
+}
