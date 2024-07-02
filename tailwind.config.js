@@ -8,15 +8,13 @@ module.exports = {
       },
     },
   },
+  darkMode: "selector",
   plugins: [require("rippleui")],
   /** @type {import('rippleui').Config} */
   rippleui: {
-    defaultStyle: "dark",
-    removeThemes: "light",
     themes: [
       {
         themeName: "dark",
-        colorScheme: "dark",
         colors: {
           primary: "#1759f3",
           backgroundPrimary: "#020202",
