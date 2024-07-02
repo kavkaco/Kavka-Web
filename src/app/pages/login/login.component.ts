@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { select, StateObservable, Store } from '@ngrx/store';
-import * as authActions from '../../store/auth/auth.actions';
-import * as authSelectors from '../../store/auth/auth.selectors';
-import { IAccount } from '../../models/auth';
+import * as authActions from '@store/auth/auth.actions';
+import * as authSelectors from '@store/auth/auth.selectors';
+import { IAccount } from '@models/auth';
 
 @Component({
   selector: 'app-login',

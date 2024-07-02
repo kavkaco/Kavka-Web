@@ -1,13 +1,13 @@
 import { Component, Input, output, Output } from '@angular/core';
-import { IActiveChat } from '../../models/chat';
-import { ILastMessage } from '../../models/message';
+import { IActiveChat } from '@models/chat';
+import { ILastMessage } from '@models/message';
 
 @Component({
   selector: 'app-chat-item',
   standalone: true,
   imports: [],
   templateUrl: './chat-item.component.html',
-  styleUrl: './chat-item.component.scss'
+  styleUrl: './chat-item.component.scss',
 })
 export class ChatItemComponent {
   @Input() isActive: boolean = false;
@@ -18,6 +18,6 @@ export class ChatItemComponent {
   @Input() lastMessageCaption?: string;
 
   submitActivateChat() {
-    alert(this.chatId)
+    alert(this.chatId);
   }
 }

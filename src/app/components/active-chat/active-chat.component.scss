@@ -19,9 +19,8 @@
     grid-template-rows: auto max-content;
 
     .active-chat--body--messages-list {
+      padding: 30px 20px;
       height: auto;
-      //   background-color: blue;
-      //   height: calc(100vh - var(--input-section-size) - var(--head-size));
     }
     .active-chat--body--input-section {
       display: grid;

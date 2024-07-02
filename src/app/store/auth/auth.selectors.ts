@@ -3,7 +3,7 @@ import {
   createFeatureSelector,
   createSelector,
 } from '@ngrx/store';
-import { IAccount } from '../../models/auth';
+import { IAccount } from '@models//auth';
 
 export const selectAccounts =
   createFeatureSelector<ReadonlyArray<IAccount>>('accountsList');
@@ -21,5 +21,6 @@ export const selectAccountsCollection = createSelector(
     return collection;
   }
 );
+
 // export const selectAccountsList = createFeatureSelector<ReadonlyArray<IAccount>>('accountsList')
 // export const selectAccountsList = (state: { accountsList: IAccount[]; }) => state.accountsList

@@ -23,6 +23,17 @@
       "ES2022",
       "dom"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "@app/*": ["app/*"],
+      "@pages/*": ["app/pages/*"],
+      "@layouts/*": ["app/layouts/*"],
+      "@store/*": ["app/store/*"],
+      "@models/*": ["app/models/*"],
+      "@services/*": ["app/services/*"],
+      "@directives/*": ["app/directives/*"],
+      "@components/*": ["app/components/*"],
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

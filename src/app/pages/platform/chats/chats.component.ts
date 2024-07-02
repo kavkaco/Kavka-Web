@@ -1,11 +1,11 @@
 import { Component, input, Input, model } from '@angular/core';
-import { ActiveChatComponent } from '../../../components/active-chat/active-chat.component';
-import { ChatDetailDrawerComponent } from '../../../components/chat-detail-drawer/chat-detail-drawer.component';
-import { ChatItemComponent } from '../../../components/chat-item/chat-item.component';
-import { IChatItem } from '../../../models/chat';
+import { ActiveChatComponent } from '@components/active-chat/active-chat.component';
+import { ChatDetailDrawerComponent } from '@components/chat-detail-drawer/chat-detail-drawer.component';
+import { ChatItemComponent } from '@components/chat-item/chat-item.component';
+import { IChatItem } from '@models/chat';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { UserAvatarDropdownComponent } from '../../../components/user-avatar-dropdown/user-avatar-dropdown.component';
+import { UserAvatarDropdownComponent } from '@components/user-avatar-dropdown/user-avatar-dropdown.component';
 
 @Component({
   selector: 'app-chats',
