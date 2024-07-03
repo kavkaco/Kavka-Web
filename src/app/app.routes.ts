@@ -6,43 +6,45 @@ import { BlankAppFormComponent } from './layouts/blank-app-form/blank-app-form.c
 import { PlatformComponent } from './layouts/platform/platform.component';
 import { SettingsComponent } from './pages/platform/settings/settings.component';
 import { ChatsComponent } from './pages/platform/chats/chats.component';
+import { authGuard } from '@app/guards/auth.guard';
 
 export const routes: Routes = [
-    {
-        path: "auth",
-        component: BlankAppFormComponent,
-        children: [
-            {
-                path: "login",
-                component: LoginComponent
-            },
-            {
-                path: "forgot_password",
-                component: ForgotPasswordComponent
-            },
-            {
-                path: "signup",
-                component: SignupComponent
-            },
-        ]
-    },
-    {
-        path: "p",
-        component: PlatformComponent,
-        children: [
-            {
-                path: "u",
-                component: ChatsComponent
-            },
-            {
-                path: "settings",
-                component: SettingsComponent
-            },
-        ]
-    },
-    {
-        path: "",
-        redirectTo: "/p/u",
-        pathMatch: "full"
-    },
+  {
+    path: 'auth',
+    component: BlankAppFormComponent,
+    children: [
+      {
+        path: 'login',
+        component: LoginComponent,
+      },
+      {
+        path: 'forgot_password',
+        component: ForgotPasswordComponent,
+      },
+      {
+        path: 'signup',
+        component: SignupComponent,
+      },
+    ],
+  },
+  {
+    path: 'p',
+    component: PlatformComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'u',
+        component: ChatsComponent,
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent,
+      },
+    ],
+  },
+  {
+    path: '',
+    redirectTo: '/p/u',
+    pathMatch: 'full',
+  },
 ];
