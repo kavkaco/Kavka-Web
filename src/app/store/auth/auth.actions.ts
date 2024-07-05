@@ -9,12 +9,7 @@ import { IAccount, IAccountUpdatableFields } from '@models/auth';
 export const AuthActions = createActionGroup({
   source: 'auth',
   events: {
-    Add: props<{
-      account: IAccount;
-      rememberMe: boolean;
-      accessToken: string;
-      refreshToken: string;
-    }>(),
+    Add: props<{ account: IAccount }>(),
     Remove: props<{ accountId: string }>(),
     Update: props<{
       accountId: string;

@@ -34,9 +34,6 @@ export class AutoGrowingInputDirective {
 
   calculateInputHeight(value: string) {
     const numberOfLineBreaks = (value.match(/\n/g) || []).length;
-
-    console.log('numberOfLineBreaks', numberOfLineBreaks);
-
     if (numberOfLineBreaks == 0) {
       return this.initialHeight;
     }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { FormsModule } from '@angular/forms';
@@ -8,19 +8,22 @@ import { AuthActions } from '@store/auth/auth.actions';
 import * as AuthSelectors from '@app/store/auth/auth.selectors';
 import { isAccountAlreadyExist } from '@app/store/auth/auth.reducer';
 import { take } from 'rxjs';
+import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, RouterLink, FormsModule],
+  imports: [RouterModule, RouterLink, FormsModule, AsyncPipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
+  platformId = inject(PLATFORM_ID);
   emailInput = '';
   passwordInput = '';
   rememberMeInput = true;
   formErrors: string[] = [];
+  accountsList: IAccount[] | null = null;
 
   addNewFormError(msg: string) {
     const i = this.formErrors.findIndex((_msg) => _msg.trim() === msg.trim());
@@ -31,6 +34,12 @@ export class LoginComponent {
   private authService = inject(AuthService);
 
   constructor(private router: Router, private store: Store) {}
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.accountsList = this.authService.GetSavedAccountsList();
+    }
+  }
 
   submitLogin() {
     this.authService
@@ -44,8 +53,7 @@ export class LoginComponent {
           lastName: user.lastName,
           email: user.email,
           username: user.username,
-          authToken: response.accessToken,
-          refreshToken: response.refreshToken,
+          accessToken: response.accessToken,
         };
 
         this.store
@@ -60,9 +68,6 @@ export class LoginComponent {
             this.store.dispatch(
               AuthActions.add({
                 account,
-                rememberMe: this.rememberMeInput,
-                accessToken: response.accessToken,
-                refreshToken: response.refreshToken,
               })
             );
 

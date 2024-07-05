@@ -15,6 +15,22 @@
 
         <h2 class="mb-4 text-2xl">Login</h2>
 
+        @if (accountsList && accountsList!.length > 0) {
+        <nav class="menu border border-border p-2 mb-4 rounded-xl">
+            <section class="menu-section">
+                <ul class="menu-items">
+                    @for (item of accountsList; track $index) {
+                    <li track class="menu-item hover:bg-transparent">
+                        <input type="radio" class="radio-primary radio" checked />
+                        {{item.email}}
+                    </li>
+                    }
+                </ul>
+            </section>
+        </nav>
+        }
+
+
         <div class="form-group">
             <div class="form-field">
                 <label class="form-label">Email</label>

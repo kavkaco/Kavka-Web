@@ -4,15 +4,14 @@ export interface IAccount {
   lastName: string;
   username: string;
   email: string;
-  authToken: string;
-  refreshToken: string;
+  accessToken: string;
 }
 
 export interface IAccountUpdatableFields {
   name?: string;
   lastName?: string;
   username?: string;
-  authToken?: string;
+  accessToken?: string;
   refreshToken?: string;
 }
 
