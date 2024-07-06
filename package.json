@@ -30,13 +30,14 @@
     "@ngrx/store": "^18.0.1",
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
-    "kavka-core": "^1.0.5",
+    "kavka-core": "^1.0.9",
     "localstorage-polyfill": "^1.0.1",
     "ngx-scrollbar": "^15.0.1",
     "pnpm": "^9.4.0",
     "rippleui": "^1.12.1",
     "rxjs": "^7.8.1",
     "tslib": "^2.6.3",
+    "xhr2": "^0.2.1",
     "zone.js": "~0.14.7"
   },
   "devDependencies": {

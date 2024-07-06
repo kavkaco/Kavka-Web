@@ -1,11 +1,12 @@
 import { Inject, inject, Injectable } from '@angular/core';
 import { GrpcTransportService } from '@app/services/grpc-transport.service';
 import { createPromiseClient, PromiseClient } from '@connectrpc/connect';
-// import { AuthService as GrpcAuthService } from 'kavka-core/auth/v1/auth_connect';
-import { AuthService as GrpcAuthService } from '/home/tahadostifam/Code/Kavka-Core/protobuf/gen/es/protobuf/auth/v1/auth_connect';
-import { LoginResponse } from '/home/tahadostifam/Code/Kavka-Core/protobuf/gen/es/protobuf/auth/v1/auth_pb';
 import { isAccountAlreadyExist } from '@app/store/auth/auth.reducer';
-import { IAccount, IAccountUpdatableFields } from '@app/models/auth';
+import { IAccount } from '@app/models/auth';
+
+import { AuthService as GrpcAuthService } from 'kavka-core/auth/v1/auth_connect';
+import { LoginResponse } from 'kavka-core/auth/v1/auth_pb';
+
 class UnauthorizedError extends Error {
   constructor() {
     super();
