@@ -7,6 +7,7 @@ import { PlatformComponent } from './layouts/platform/platform.component';
 import { SettingsComponent } from './pages/platform/settings/settings.component';
 import { ChatsComponent } from './pages/platform/chats/chats.component';
 import { authGuard } from '@app/guards/auth.guard';
+import { AccountCreatedComponent } from '@app/pages/account-created/account-created.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,10 @@ export const routes: Routes = [
       {
         path: 'signup',
         component: SignupComponent,
+      },
+      {
+        path: 'account_created',
+        component: AccountCreatedComponent,
       },
     ],
   },

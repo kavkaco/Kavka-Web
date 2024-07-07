@@ -66,8 +66,8 @@ importers:
         specifier: ^4.19.2
         version: 4.19.2
       kavka-core:
-        specifier: ^1.1.1
-        version: 1.1.1
+        specifier: ^1.1.3
+        version: 1.1.3
       localstorage-polyfill:
         specifier: ^1.0.1
         version: 1.0.1
@@ -2898,8 +2898,8 @@ packages:
     engines: {node: '>= 10'}
     hasBin: true
 
-  kavka-core@1.1.1:
-    resolution: {integrity: sha512-CqdqrSwl2CcnhfIreAlpGJvhcajg/cMmI/BMPI9hLRekhipCmZitYaHniolyCgDdjkONe6DTLJMEeroquWjliA==}
+  kavka-core@1.1.3:
+    resolution: {integrity: sha512-uhcpQazEnnm2LDE352eFFuZGNW1tPNlJbcGaUPb7rXvSNSHEtwjYLL5bXR61sS1o5r7OwQe52R/XulNwCOXOJA==}
 
   kind-of@6.0.3:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
@@ -7385,7 +7385,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  kavka-core@1.1.1:
+  kavka-core@1.1.3:
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 

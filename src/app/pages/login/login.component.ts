@@ -25,6 +25,8 @@ export class LoginComponent {
   formErrors: string[] = [];
   accountsList: IAccount[] | null = null;
 
+  showSelectAccount: boolean = false;
+
   addNewFormError(msg: string) {
     const i = this.formErrors.findIndex((_msg) => _msg.trim() === msg.trim());
 
@@ -38,6 +40,10 @@ export class LoginComponent {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.accountsList = this.authService.GetSavedAccountsList();
+
+      if (this.accountsList && this.accountsList.length > 0) {
+        this.showSelectAccount = true;
+      }
     }
   }
 

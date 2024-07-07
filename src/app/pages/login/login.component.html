@@ -1,5 +1,27 @@
 <div class="form form-center">
     <div class="flex flex-col p-4">
+        @if (showSelectAccount) {
+        <h2 class="mb-4 text-2xl">Activate an account</h2>
+
+        <nav class="menu border border-border p-2 mb-4 rounded-xl">
+            <section class="menu-section">
+                <ul class="menu-items">
+                    @for (item of accountsList; track $index) {
+                    <li track class="menu-item menu-item-no-animation hover:bg-transparent">
+                        <input type="radio" class="radio-primary radio" checked />
+                        {{item.email}}
+                    </li>
+                    }
+
+                    <button (click)="showSelectAccount = false" class="btn btn-primary mt-2">
+                        Add new account
+                    </button>
+                </ul>
+            </section>
+        </nav>
+        }
+
+        @else {
         @for (item of formErrors; track $index) {
         <div track class="alert alert-error mb-3">
             <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,24 +35,11 @@
         </div>
         }
 
-        <h2 class="mb-4 text-2xl">Login</h2>
-
-        @if (accountsList && accountsList!.length > 0) {
-        <nav class="menu border border-border p-2 mb-4 rounded-xl">
-            <section class="menu-section">
-                <ul class="menu-items">
-                    @for (item of accountsList; track $index) {
-                    <li track class="menu-item hover:bg-transparent">
-                        <input type="radio" class="radio-primary radio" checked />
-                        {{item.email}}
-                    </li>
-                    }
-                </ul>
-            </section>
-        </nav>
-        }
-
-
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl">Login</h2>
+            <a (click)="showSelectAccount = true" class="link link-underline-hover link-primary text-sm">Select
+                account</a>
+        </div>
         <div class="form-group">
             <div class="form-field">
                 <label class="form-label">Email</label>
@@ -79,5 +88,6 @@
                 </div>
             </div>
         </div>
+        }
     </div>
 </div>

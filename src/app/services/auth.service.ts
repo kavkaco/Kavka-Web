@@ -4,8 +4,8 @@ import { createPromiseClient, PromiseClient } from '@connectrpc/connect';
 import { isAccountAlreadyExist } from '@app/store/auth/auth.reducer';
 import { IAccount } from '@app/models/auth';
 
-import { AuthService as GrpcAuthService } from 'kavka-core/auth/v1/auth_connect';
-import { LoginResponse } from 'kavka-core/auth/v1/auth_pb';
+import { AuthService as KavkaAuthService } from 'kavka-core/auth/v1/auth_connect';
+import { LoginResponse, RegisterResponse } from 'kavka-core/auth/v1/auth_pb';
 
 class UnauthorizedError extends Error {
   constructor() {
@@ -30,10 +30,10 @@ const localStorageKeys = {
 })
 export class AuthService {
   private transport = new GrpcTransportService().transport;
-  private client;
+  private client: PromiseClient<typeof KavkaAuthService>;
 
   constructor() {
-    this.client = createPromiseClient(GrpcAuthService, this.transport);
+    this.client = createPromiseClient(KavkaAuthService, this.transport);
   }
 
   GetSavedActiveAccountId() {
@@ -114,7 +114,11 @@ export class AuthService {
 
           reject(new UnauthorizedError());
         })
-        .catch(() => {
+        .catch((e: Error) => {
+          if (e.message == '[permission_denied] invalid email or password') {
+            reject(new UnauthorizedError());
+          }
+
           reject(new InternalServerError());
         });
     });
@@ -152,6 +156,32 @@ export class AuthService {
           reject(new UnauthorizedError());
         })
         .catch(() => reject(new InternalServerError()));
+    });
+  }
+
+  Register(
+    firstName: string,
+    lastName: string,
+    email: string,
+    username: string,
+    password: string
+  ) {
+    return new Promise<void>((resolve, reject) => {
+      this.client
+        .register({
+          name: firstName,
+          lastName,
+          username,
+          email,
+          password,
+          verifyEmailRedirectUrl: '',
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch(() => {
+          reject(new InternalServerError());
+        });
     });
   }
 }
