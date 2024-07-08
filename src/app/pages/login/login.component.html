@@ -7,10 +7,11 @@
             <section class="menu-section">
                 <ul class="menu-items">
                     @for (item of accountsList; track $index) {
-                    <li track class="menu-item menu-item-no-animation hover:bg-transparent">
-                        <input type="radio" class="radio-primary radio" checked />
+                    <a (click)="activateAccount(item.userId)" track
+                        class="menu-item menu-item-no-animation hover:bg-transparent">
+                        <input type="radio" class="radio-primary radio" [checked]="item.userId === activeAccountId" />
                         {{item.email}}
-                    </li>
+                    </a>
                     }
 
                     <button (click)="showSelectAccount = false" class="btn btn-primary mt-2">

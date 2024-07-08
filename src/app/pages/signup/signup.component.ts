@@ -59,6 +59,8 @@ export class SignupComponent {
       .then(() => {
         this.router.navigate(['/auth/account_created']);
       })
-      .catch(() => {});
+      .catch((e: Error) => {
+        this.formErrors.push(e.message);
+      });
   }
 }

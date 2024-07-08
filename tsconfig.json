@@ -30,6 +30,7 @@
       "@services/*": ["app/services/*"],
       "@directives/*": ["app/directives/*"],
       "@components/*": ["app/components/*"],
+      "@helpers/*": ["app/helpers/*"],
       "@environments/*": ["environments/*"]
     }
   },

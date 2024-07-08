@@ -24,6 +24,7 @@ export class LoginComponent {
   rememberMeInput = true;
   formErrors: string[] = [];
   accountsList: IAccount[] | null = null;
+  activeAccountId: string = '';
 
   showSelectAccount: boolean = false;
 
@@ -39,6 +40,7 @@ export class LoginComponent {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
+      this.activeAccountId = this.authService.GetSavedActiveAccountId();
       this.accountsList = this.authService.GetSavedAccountsList();
 
       if (this.accountsList && this.accountsList.length > 0) {
@@ -83,5 +85,12 @@ export class LoginComponent {
       .catch((err: Error) => {
         this.addNewFormError(err.message);
       });
+  }
+
+  activateAccount(accountId: string) {
+    const isActivated = this.authService.ActivateAccount(accountId);
+    if (isActivated) {
+      this.router.navigate(['/']);
+    }
   }
 }

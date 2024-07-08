@@ -3,9 +3,10 @@ import { GrpcTransportService } from '@app/services/grpc-transport.service';
 import { createPromiseClient, PromiseClient } from '@connectrpc/connect';
 import { isAccountAlreadyExist } from '@app/store/auth/auth.reducer';
 import { IAccount } from '@app/models/auth';
+import { GetErrorMessage } from '@helpers/grpc_response';
 
 import { AuthService as KavkaAuthService } from 'kavka-core/auth/v1/auth_connect';
-import { LoginResponse, RegisterResponse } from 'kavka-core/auth/v1/auth_pb';
+import { LoginResponse } from 'kavka-core/auth/v1/auth_pb';
 
 class UnauthorizedError extends Error {
   constructor() {
@@ -17,6 +18,12 @@ class InternalServerError extends Error {
   constructor() {
     super();
     this.message = 'Internal server error!';
+  }
+}
+class UniqueConstraintViolationError extends Error {
+  constructor(field: string) {
+    super();
+    this.message = `${field} already exists.`;
   }
 }
 
@@ -87,6 +94,26 @@ export class AuthService {
     }
   }
 
+  ActivateAccount(accountId: string): boolean {
+    let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
+
+    const accounts = JSON.parse(accountsString || '[]');
+
+    const account = accounts.filter(
+      (_account) => _account.userId == accountId
+    )[0];
+    if (!account) {
+      return false;
+    }
+
+    if (isAccountAlreadyExist(accounts, account)) {
+      localStorage.setItem(localStorageKeys.ActiveAccountKey, accountId);
+      return true;
+    }
+
+    return false;
+  }
+
   Login(email: string, password: string) {
     return new Promise((resolve: (resp: LoginResponse) => void, reject) => {
       this.client
@@ -112,7 +139,7 @@ export class AuthService {
             return resolve(response);
           }
 
-          reject(new UnauthorizedError());
+          reject(new InternalServerError());
         })
         .catch((e: Error) => {
           if (e.message == '[permission_denied] invalid email or password') {
@@ -166,7 +193,7 @@ export class AuthService {
     username: string,
     password: string
   ) {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject: (reason: Error) => void) => {
       this.client
         .register({
           name: firstName,
@@ -179,8 +206,19 @@ export class AuthService {
         .then(() => {
           resolve();
         })
-        .catch(() => {
-          reject(new InternalServerError());
+        .catch((e: Error) => {
+          switch (GetErrorMessage(e)) {
+            case 'email already exists':
+              reject(new UniqueConstraintViolationError('Email'));
+              break;
+            case 'username already exists':
+              reject(new UniqueConstraintViolationError('Username'));
+              break;
+            default:
+              console.error('[AuthService][Register]', e.message);
+              reject(new InternalServerError());
+              break;
+          }
         });
     });
   }
