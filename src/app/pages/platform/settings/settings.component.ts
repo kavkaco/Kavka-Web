@@ -3,11 +3,12 @@ import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { IAccount } from '@app/models/auth';
 import { Store } from '@ngrx/store';
 import * as AuthSelectors from '@app/store/auth/auth.selectors';
+import { NgScrollbar } from 'ngx-scrollbar';
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [],
+  imports: [NgScrollbar],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })

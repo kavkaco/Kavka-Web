@@ -86,7 +86,7 @@ export class AccountManagerService {
 
   GetActiveAccountsTokens() {
     const activeAccountId = this.GetSavedActiveAccountId();
-    if (activeAccountId.trim() == '') {
+    if (activeAccountId == null || activeAccountId.trim() == '') {
       return undefined;
     }
 

@@ -20,6 +20,16 @@ export const authGuard: CanActivateFn = async (route, state) => {
     const accountId = accountManagerService.GetSavedActiveAccountId();
     const tokens = accountManagerService.GetActiveAccountsTokens();
 
+    if (
+      accountId == null ||
+      tokens.refreshToken == null ||
+      tokens.accessToken == null
+    ) {
+      console.info('[AuthGuard]', 'Unauthorized');
+      router.navigate(['/auth/login']);
+      return true;
+    }
+
     await authService
       .Authenticate(tokens.accessToken)
       .then((account: IAccount) => {
