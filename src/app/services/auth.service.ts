@@ -7,30 +7,32 @@ import { GetErrorMessage } from '@helpers/grpc_response';
 
 import { AuthService as KavkaAuthService } from 'kavka-core/auth/v1/auth_connect';
 import { LoginResponse } from 'kavka-core/auth/v1/auth_pb';
+import { AccountManagerService } from '@app/services/account-manager.service';
 
-class UnauthorizedError extends Error {
+export class UnauthorizedError extends Error {
   constructor() {
     super();
     this.message = 'Invalid email or password';
   }
 }
-class InternalServerError extends Error {
+export class InternalServerError extends Error {
   constructor() {
     super();
     this.message = 'Internal server error!';
   }
 }
-class UniqueConstraintViolationError extends Error {
+export class UniqueConstraintViolationError extends Error {
   constructor(field: string) {
     super();
-    this.message = `${field} already exists.`;
+    this.message = `${field} already taken.`;
   }
 }
-
-const localStorageKeys = {
-  ActiveAccountKey: 'active_account',
-  AccountsKey: 'accounts',
-};
+export class EmailNotVerifiedError extends Error {
+  constructor() {
+    super();
+    this.message = `Your email is not verified!`;
+  }
+}
 
 @Injectable({
   providedIn: 'root',
@@ -38,80 +40,10 @@ const localStorageKeys = {
 export class AuthService {
   private transport = new GrpcTransportService().transport;
   private client: PromiseClient<typeof KavkaAuthService>;
+  private accountManagerService = inject(AccountManagerService);
 
   constructor() {
     this.client = createPromiseClient(KavkaAuthService, this.transport);
-  }
-
-  GetSavedActiveAccountId() {
-    return localStorage.getItem(localStorageKeys.ActiveAccountKey);
-  }
-
-  SaveAccount(account: IAccount) {
-    let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
-
-    const accounts = JSON.parse(accountsString || '[]');
-
-    if (!isAccountAlreadyExist(accounts, account)) {
-      accounts.push(account);
-    }
-
-    accountsString = JSON.stringify(accounts);
-
-    localStorage.setItem(localStorageKeys.AccountsKey, accountsString);
-    localStorage.setItem(localStorageKeys.ActiveAccountKey, account.userId);
-  }
-
-  RemoveAccount(accountId: string) {
-    let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
-    if (accountsString == null || accountsString!.trim().length == 0) {
-      return false;
-    }
-
-    let accounts: IAccount[] = JSON.parse(accountsString);
-
-    accounts = accounts.filter((_account) => _account.userId !== accountId);
-
-    accountsString = JSON.stringify(accounts);
-
-    localStorage.setItem(localStorageKeys.AccountsKey, accountsString);
-
-    return true;
-  }
-
-  GetSavedAccountsList() {
-    const accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
-    if (accountsString == null || accountsString!.trim().length == 0) {
-      return null;
-    }
-
-    try {
-      const accounts = JSON.parse(accountsString);
-
-      return accounts as IAccount[];
-    } catch (_) {
-      return null;
-    }
-  }
-
-  ActivateAccount(accountId: string): boolean {
-    let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
-
-    const accounts = JSON.parse(accountsString || '[]');
-
-    const account = accounts.filter(
-      (_account) => _account.userId == accountId
-    )[0];
-    if (!account) {
-      return false;
-    }
-
-    if (isAccountAlreadyExist(accounts, account)) {
-      localStorage.setItem(localStorageKeys.ActiveAccountKey, accountId);
-      return true;
-    }
-
-    return false;
   }
 
   Login(email: string, password: string) {
@@ -132,9 +64,10 @@ export class AuthService {
               email: user.email,
               username: user.username,
               accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
             };
 
-            this.SaveAccount(account);
+            this.accountManagerService.SaveAccount(account);
 
             return resolve(response);
           }
@@ -142,48 +75,68 @@ export class AuthService {
           reject(new InternalServerError());
         })
         .catch((e: Error) => {
-          if (e.message == '[permission_denied] invalid email or password') {
+          if (GetErrorMessage(e) == 'invalid email or password') {
             reject(new UnauthorizedError());
+            return;
+          } else if (GetErrorMessage(e) == 'email not verified') {
+            reject(new EmailNotVerifiedError());
+            return;
           }
+
+          console.error('[AuthService][Login]', e.message);
 
           reject(new InternalServerError());
         });
     });
   }
 
-  Authenticate() {
-    return new Promise((resolve: (resp: IAccount) => void, reject) => {
-      const activeAccountId = this.GetSavedActiveAccountId();
-      if (!activeAccountId) {
-        reject();
-        return;
-      }
-
-      const savedAccountsList = this.GetSavedAccountsList();
-      if (!activeAccountId) {
-        reject();
-        return;
-      }
-
-      const account = savedAccountsList!.find(
-        ({ userId }) => userId === activeAccountId
-      );
-      if (!account) {
-        reject();
-        return;
-      }
-
+  Authenticate(accessToken: string) {
+    return new Promise((resolve, reject) => {
       this.client
-        .authenticate({ accessToken: account!.accessToken })
+        .authenticate({ accessToken })
         .then((response) => {
           if (response.user) {
-            return resolve(account);
+            resolve(response.user);
+            return;
           }
 
           reject(new UnauthorizedError());
         })
-        .catch(() => reject(new InternalServerError()));
+        .catch((e) => {
+          if (GetErrorMessage(e) == 'access denied') {
+            reject(new UnauthorizedError());
+            return;
+          }
+
+          console.error('[AuthService][Authenticate]', e.message);
+          reject(new InternalServerError());
+        });
     });
+  }
+
+  RefreshToken(refreshToken: string, accessToken: string) {
+    return new Promise<string>(
+      (resolve: (newAccessToken: string) => void, reject) => {
+        this.client
+          .refreshToken({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+          })
+          .then((response) => {
+            if (response.accessToken) {
+              resolve(response.accessToken);
+              return;
+            }
+
+            reject(new InternalServerError());
+          })
+          .catch((e) => {
+            console.error('[AuthService][RefreshToken]', e.message);
+
+            reject(new UnauthorizedError());
+          });
+      }
+    );
   }
 
   Register(

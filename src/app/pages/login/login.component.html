@@ -38,14 +38,16 @@
 
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl">Login</h2>
+            @if (showSelectAccount) {
             <a (click)="showSelectAccount = true" class="link link-underline-hover link-primary text-sm">Select
                 account</a>
+            }
         </div>
-        <div class="form-group">
+        <form [formGroup]="loginForm" class="form-group">
             <div class="form-field">
                 <label class="form-label">Email</label>
 
-                <input [(ngModel)]="emailInput" placeholder="mail@kavka.org" type="email" class="input max-w-full" />
+                <input formControlName="email" placeholder="mail@kavka.org" type="email" class="input max-w-full" />
                 <label class="form-label">
                     <span class="form-label-alt">Please enter a valid email.</span>
                 </label>
@@ -55,7 +57,7 @@
                     <span>Password</span>
                 </label>
                 <div class="form-control">
-                    <input [(ngModel)]="passwordInput" placeholder="Secure password" type="password"
+                    <input formControlName="password" placeholder="Secure password" type="password"
                         class="input max-w-full" />
                 </div>
                 <div class="form-label">
@@ -65,7 +67,7 @@
             <div class="form-field mt-4">
                 <div class="form-control justify-between">
                     <div class="flex gap-2">
-                        <input [(ngModel)]="rememberMeInput" id="remember-me" type="checkbox" class="checkbox" />
+                        <input formControlName="rememberMe" id="remember-me" type="checkbox" class="checkbox" />
                         <label class="cursor-pointer" for="remember-me">Remember me</label>
                     </div>
                     <label class="form-label">
@@ -77,7 +79,8 @@
             </div>
             <div class="form-field pt-5">
                 <div class="form-control justify-between">
-                    <button (click)="submitLogin()" type="button" class="btn btn-primary w-full">Submit</button>
+                    <button (click)="submitLogin()" [disabled]="!loginForm.valid" type="button"
+                        class="btn btn-primary w-full">Submit</button>
                 </div>
             </div>
 
@@ -88,7 +91,7 @@
                         Signup!</a>
                 </div>
             </div>
-        </div>
+        </form>
         }
     </div>
 </div>

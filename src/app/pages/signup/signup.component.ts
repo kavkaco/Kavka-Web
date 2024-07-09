@@ -48,6 +48,8 @@ export class SignupComponent {
   formErrors: string[] = [];
 
   submitSignup() {
+    this.formErrors = [];
+
     this.authService
       .Register(
         this.signupForm.controls.firstName.value,

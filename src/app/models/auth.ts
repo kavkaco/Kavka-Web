@@ -5,6 +5,7 @@ export interface IAccount {
   username: string;
   email: string;
   accessToken: string;
+  refreshToken: string;
 }
 
 export interface IAccountUpdatableFields {
