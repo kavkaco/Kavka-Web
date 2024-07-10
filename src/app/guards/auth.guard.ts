@@ -48,6 +48,7 @@ export const authGuard: CanActivateFn = async (route, state) => {
           .RefreshToken(tokens.refreshToken, tokens.accessToken)
           .then((newAccessToken) => {
             // accountManagerService.
+            // ANCHOR
 
             authService
               .Authenticate(tokens.accessToken)

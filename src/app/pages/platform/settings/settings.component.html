@@ -1,7 +1,35 @@
 <ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden" [visibility]="'hover'" [appearance]="'compact'">
     <div class="settings-container pl-3 pr-5 pt-5 mb-10">
         <div class="container mx-auto mt-0 md:mt-3">
-            <div class="settings-container-banner mb-10 rounded-lg text-center justify-center items-center flex"></div>
+            <div class="relative mb-14 rounded-xl">
+                <img class="object-cover border border-border w-full md:h-64 lg:h-72 rounded-xl"
+                    src="/assets/img/settings_intro_banner.png">
+
+                <div class="avatar size-24 bottom-5 sm:-bottom-11 xl:-bottom-16 right-5 absolute lg:size-32 xl:size-48">
+                    <img src="https://avatars.githubusercontent.com/u/72092675?v=4" alt="avatar" />
+                </div>
+
+                <div class="sm:absolute sm:mt-0 mt-3 left-4 bottom-4 flex flex-col gap-1">
+                    <div class="flex flex-row gap-1">
+                        <h2 class="text-2xl w-max border border-border bg-backgroundPrimary rounded-md px-1">
+                            {{activeAccount.name + ' ' +
+                            activeAccount.lastName}}</h2>
+                        <span
+                            class="text-md text-white border border-border bg-backgroundPrimary items-center flex w-max rounded-md px-3">
+                            # Free
+                        </span>
+                    </div>
+                    <div class="flex flex-row gap-1">
+                        <h3
+                            class="text-md text-content2 w-max border border-border bg-backgroundPrimary rounded-md px-1">
+                            {{activeAccount.username}}</h3>
+                        <h4
+                            class="text-md text-content2 w-max border border-border bg-backgroundPrimary rounded-md px-1">
+                            {{activeAccount.email}}
+                        </h4>
+                    </div>
+                </div>
+            </div>
 
             <div>
                 <h2 class="pl-3 text-sm mb-2">User Experience</h2>
