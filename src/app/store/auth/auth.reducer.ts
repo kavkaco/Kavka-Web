@@ -22,8 +22,8 @@ export function isAccountAlreadyExist(
     const _account = accounts[i];
 
     if (
-      _account.username == account.username ||
-      _account.email == account.email
+      _account?.username == account.username ||
+      _account?.email == account.email
     ) {
       exists = true;
       break;

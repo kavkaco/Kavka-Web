@@ -7,5 +7,5 @@
     "preserveSymlinks": true
   },
   "files": ["src/main.ts", "src/main.server.ts", "server.ts"],
-  "include": ["./node_modules/kavka-core/**/*.ts", "src/**/*.d.ts"]
+  "include": ["src/**/*.d.ts", "./node_modules/kavka-core/**/*.ts"]
 }
