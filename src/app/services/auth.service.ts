@@ -99,7 +99,7 @@ export class AuthService {
   static isAccessTokenExpired(accessToken: string): boolean {
     try {
       const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
-      const expiry = decodedToken.exp;
+      const expiry = decodedToken.exp - 80;
       return Date.now() / 1000 >= expiry
     } catch (err) {
       return true;
