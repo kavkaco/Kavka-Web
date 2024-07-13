@@ -1,14 +1,10 @@
-export interface IAccount {
-  userId: string;
-  name: string;
-  lastName: string;
-  username: string;
+export interface ILocalStorageAccount {
+  accountId: string;
   email: string;
   accessToken: string;
   refreshToken: string;
 }
-
-export interface IAccountUpdatableFields {
+export interface IUserUpdatableFields {
   name?: string;
   lastName?: string;
   username?: string;
@@ -17,6 +13,9 @@ export interface IAccountUpdatableFields {
 }
 
 export interface IUser {
+  userId: string;
   name: string;
   lastName: string;
+  username: string;
+  email: string;
 }

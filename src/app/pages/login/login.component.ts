@@ -8,14 +8,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { IAccount } from '@app/models/auth';
 import { AuthService } from '@app/services/auth.service';
 import { AuthActions } from '@store/auth/auth.actions';
 import * as AuthSelectors from '@app/store/auth/auth.selectors';
-import { isAccountAlreadyExist } from '@app/store/auth/auth.reducer';
+import { isUserAlreadyExist } from '@app/store/auth/auth.reducer';
 import { take } from 'rxjs';
 import { AsyncPipe, isPlatformBrowser } from '@angular/common';
 import { AccountManagerService } from '@app/services/account-manager.service';
+import { GrpcTransportService } from '@app/services/grpc-transport.service';
+import { ILocalStorageAccount } from '@app/models/auth';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,7 @@ import { AccountManagerService } from '@app/services/account-manager.service';
 })
 export class LoginComponent {
   platformId = inject(PLATFORM_ID);
-  accountsList: IAccount[] | null = null;
+  accountsList: ILocalStorageAccount[] | null = null;
   activeAccountId: string = '';
 
   loginForm = new FormGroup({
@@ -44,16 +45,17 @@ export class LoginComponent {
     if (i === -1) this.formErrors.push(msg);
   }
 
-  private authService = inject(AuthService);
+  private transport = inject(GrpcTransportService).transport;
+  private authService = new AuthService();
   private accountManagerService = inject(AccountManagerService);
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private store: Store) { }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.activeAccountId =
-        this.accountManagerService.GetSavedActiveAccountId();
-      this.accountsList = this.accountManagerService.GetSavedAccountsList();
+        this.accountManagerService.GetActiveAccountId();
+      this.accountsList = this.accountManagerService.GetAccountsList();
 
       if (this.accountsList && this.accountsList.length > 0) {
         this.showSelectAccount = true;
@@ -69,33 +71,26 @@ export class LoginComponent {
         this.loginForm.controls.email.value,
         this.loginForm.controls.password.value
       )
-      .then((response) => {
-        const user = response.user!;
-
-        const account: IAccount = {
-          userId: user.userId,
-          name: user.name,
-          lastName: user.lastName,
-          email: user.email,
-          username: user.username,
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
-        };
-
+      .then(({ user, accessToken, refreshToken }) => {
         this.store
-          .select(AuthSelectors.selectAccountsList)
+          .select(AuthSelectors.selectUsers)
           .pipe(take(1))
-          .subscribe((accountsList) => {
-            if (isAccountAlreadyExist(accountsList, account)) {
+          .subscribe((users) => {
+            if (isUserAlreadyExist(users, user)) {
               this.addNewFormError('This account already exists!');
               return;
             }
 
-            this.store.dispatch(
-              AuthActions.add({
-                account,
-              })
-            );
+            // Add tokens to local storage
+            this.accountManagerService.SaveAccount({
+              accountId: user.userId,
+              email: user.email,
+              accessToken,
+              refreshToken,
+            })
+
+            // Update the ngrx store and add user
+            this.store.dispatch(AuthActions.add({ user }));
 
             this.router.navigate(['/']);
           });

@@ -3,18 +3,18 @@ import { AuthState } from '@app/store/auth/auth.reducer';
 
 export const selectAuthState = createFeatureSelector<AuthState>('auth');
 
-export const selectAccountsList = createSelector(
+export const selectUsers = createSelector(
   selectAuthState,
   (state: AuthState) => {
-    return state.accountsList;
+    return state.users;
   }
 );
 
-export const selectActiveAccount = createSelector(
+export const selectActiveUser = createSelector(
   selectAuthState,
   (state: AuthState) => {
-    return state.accountsList.filter(
-      (_account) => _account.userId === state.activeAccountId
+    return state.users.filter(
+      (_user) => _user.userId === state.activeUserId
     )[0];
   }
 );

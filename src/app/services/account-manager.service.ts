@@ -1,23 +1,41 @@
 import { Injectable } from '@angular/core';
-import { IAccount } from '@app/models/auth';
-import { isAccountAlreadyExist } from '@app/store/auth/auth.reducer';
+import { ILocalStorageAccount } from '@app/models/auth';
+import { isUserAlreadyExist } from '@app/store/auth/auth.reducer';
 
 const localStorageKeys = {
   ActiveAccountKey: 'active_account',
   AccountsKey: 'accounts',
 };
 
+export function isAccountAlreadyExist(
+  accounts: ILocalStorageAccount[],
+  account: ILocalStorageAccount
+): boolean {
+  let exists = false;
+
+  for (let i = 0; i < accounts.length; i++) {
+    const _account = accounts[i];
+
+    if (_account?.accountId == account.accountId) {
+      exists = true;
+      break;
+    }
+  }
+
+  return exists;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AccountManagerService {
-  constructor() {}
+  constructor() { }
 
-  GetSavedActiveAccountId() {
+  GetActiveAccountId() {
     return localStorage.getItem(localStorageKeys.ActiveAccountKey);
   }
 
-  SaveAccount(account: IAccount) {
+  SaveAccount(account: ILocalStorageAccount) {
     let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
 
     const accounts = JSON.parse(accountsString || '[]');
@@ -29,18 +47,40 @@ export class AccountManagerService {
     accountsString = JSON.stringify(accounts);
 
     localStorage.setItem(localStorageKeys.AccountsKey, accountsString);
-    localStorage.setItem(localStorageKeys.ActiveAccountKey, account.userId);
+    localStorage.setItem(localStorageKeys.ActiveAccountKey, account.accountId);
   }
 
-  RemoveAccount(accountId: string) {
+  UpdateAccessToken(accountId, newAccessToken): boolean {
     let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
+
+    const accounts = JSON.parse(accountsString || '[]');
+
+    const account: ILocalStorageAccount = accounts!.find(
+      ({ accountId }) => accountId === accountId
+    );
+    if (account == null || account == undefined) {
+      return false;
+    }
+
+    account.accessToken = newAccessToken;
+
+    accountsString = JSON.stringify(accounts);
+
+    localStorage.setItem(localStorageKeys.AccountsKey, accountsString);
+
+    return true
+  }
+
+  RemoveAccount(accountId: string): boolean {
+    let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
+
     if (accountsString == null || accountsString!.trim().length == 0) {
       return false;
     }
 
-    let accounts: IAccount[] = JSON.parse(accountsString);
+    let accounts: ILocalStorageAccount[] | null = JSON.parse(accountsString);
 
-    accounts = accounts.filter((_account) => _account.userId !== accountId);
+    accounts = accounts.filter((_account) => _account.accountId !== accountId);
 
     accountsString = JSON.stringify(accounts);
 
@@ -49,7 +89,7 @@ export class AccountManagerService {
     return true;
   }
 
-  GetSavedAccountsList() {
+  GetAccountsList(): ILocalStorageAccount[] | null {
     const accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
     if (accountsString == null || accountsString!.trim().length == 0) {
       return null;
@@ -58,10 +98,32 @@ export class AccountManagerService {
     try {
       const accounts = JSON.parse(accountsString);
 
-      return accounts as IAccount[];
+      return accounts as ILocalStorageAccount[];
     } catch (_) {
       return null;
     }
+  }
+
+  GetActiveAccount(): ILocalStorageAccount | undefined {
+    const activeAccountId = this.GetActiveAccountId();
+    if (activeAccountId == null || activeAccountId.trim() == '') {
+      return undefined;
+    }
+
+    const accountsList = this.GetAccountsList();
+    if (activeAccountId.length == 0) {
+      return undefined;
+    }
+
+    const account = accountsList!.find(
+      ({ accountId }) => accountId === activeAccountId
+    );
+
+    if (account == null || account == undefined) {
+      return undefined;
+    }
+
+    return account;
   }
 
   ActivateAccount(accountId: string): boolean {
@@ -70,7 +132,7 @@ export class AccountManagerService {
     const accounts = JSON.parse(accountsString || '[]');
 
     const account = accounts.filter(
-      (_account) => _account.userId == accountId
+      (_account: ILocalStorageAccount) => _account.accountId == accountId
     )[0];
     if (!account) {
       return false;
@@ -82,30 +144,5 @@ export class AccountManagerService {
     }
 
     return false;
-  }
-
-  GetActiveAccountsTokens() {
-    const activeAccountId = this.GetSavedActiveAccountId();
-    if (activeAccountId == null || activeAccountId.trim() == '') {
-      return undefined;
-    }
-
-    const savedAccountsList = this.GetSavedAccountsList();
-    if (activeAccountId.length == 0) {
-      return undefined;
-    }
-
-    const account = savedAccountsList!.find(
-      ({ userId }) => userId === activeAccountId
-    );
-
-    if (account == null || account == undefined) {
-      return undefined;
-    }
-
-    return {
-      accessToken: account.accessToken,
-      refreshToken: account.refreshToken,
-    };
   }
 }

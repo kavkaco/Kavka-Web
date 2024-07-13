@@ -4,17 +4,17 @@ import {
   emptyProps,
   props,
 } from '@ngrx/store';
-import { IAccount, IAccountUpdatableFields } from '@models/auth';
+import { IUserUpdatableFields, IUser } from '@models/auth';
 
 export const AuthActions = createActionGroup({
   source: 'auth',
   events: {
-    Add: props<{ account: IAccount }>(),
-    Remove: props<{ accountId: string }>(),
+    Add: props<{ user: IUser }>(),
+    Remove: props<{ userId: string }>(),
     Update: props<{
-      accountId: string;
-      updates: { account: IAccountUpdatableFields };
+      userId: string;
+      updates: { user: IUserUpdatableFields };
     }>(),
-    SetActiveAccount: props<{ accountId: string }>(),
+    SetActiveUser: props<{ userId: string }>(),
   },
 });

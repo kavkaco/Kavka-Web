@@ -1,46 +1,35 @@
 import { inject, Injectable } from '@angular/core';
 import { AccountManagerService } from '@app/services/account-manager.service';
 import { AuthService } from '@app/services/auth.service';
-import { Interceptor, Transport } from '@connectrpc/connect';
+import { useAuthInterceptorFactory, useRefreshTokenInterceptorFactory } from '@app/services/grpc-interceptors.service';
+import { Transport } from '@connectrpc/connect';
 import {
   ConnectTransportOptions,
   createConnectTransport,
 } from '@connectrpc/connect-web';
 import { environment } from '@environments/environment.development';
-import { Store } from '@ngrx/store';
-import * as AuthSelectors from '@store/auth/auth.selectors';
-import { take } from 'rxjs';
 
-function useAuthInterceptorFactory(store: Store) {
-  const authInterceptor: Interceptor = (next) => async (req) => {
-    await store
-      .select(AuthSelectors.selectActiveAccount)
-      .pipe(take(1))
-      .subscribe((activeAccount) => {
-        console.info('[AuthInterceptor]', 'Set X-Access-Token');
-
-        req.header.set('X-Access-Token', activeAccount?.accessToken);
-      });
-
-    return await next(req);
-  };
-
-  return authInterceptor;
-}
-
+// Used for non-auth services! 
+// AuthService has it's own transport client...
 @Injectable({ providedIn: 'root' })
 export class GrpcTransportService {
   private _transport: Transport;
-  private store = inject(Store);
 
-  private options: ConnectTransportOptions = {
-    baseUrl: environment.grpcTransportBaseUrl,
-    defaultTimeoutMs: 7000,
-    interceptors: [useAuthInterceptorFactory(this.store)],
-  };
+  private authService: AuthService;
+  private accountManagerService = inject(AccountManagerService);
 
   constructor() {
-    this._transport = createConnectTransport(this.options);
+    const options: ConnectTransportOptions = {
+      baseUrl: environment.grpcTransportBaseUrl,
+      defaultTimeoutMs: 7000,
+      interceptors: [
+        useRefreshTokenInterceptorFactory(this.accountManagerService, this.authService),
+        useAuthInterceptorFactory(this.accountManagerService)
+      ]
+    };
+
+    this._transport = createConnectTransport(options);
+    this.authService = new AuthService()
   }
 
   get transport() {

@@ -1,9 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID } from '@angular/core';
-import { IAccount } from '@app/models/auth';
 import { Store } from '@ngrx/store';
 import * as AuthSelectors from '@app/store/auth/auth.selectors';
 import { NgScrollbar } from 'ngx-scrollbar';
+import { IUser } from '@app/models/auth';
 
 @Component({
   selector: 'app-settings',
@@ -14,23 +14,23 @@ import { NgScrollbar } from 'ngx-scrollbar';
 })
 export class SettingsComponent {
   platformId = inject(PLATFORM_ID);
-  activeAccount: IAccount | undefined;
-  accountsList: IAccount[] | undefined;
+  user: IUser | undefined;
+  users: IUser[] | undefined;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.store
-        .select(AuthSelectors.selectAccountsList)
-        .subscribe((_accountsList) => {
-          this.accountsList = _accountsList;
+        .select(AuthSelectors.selectActiveUser)
+        .subscribe((user) => {
+          this.user = user;
         });
 
       this.store
-        .select(AuthSelectors.selectActiveAccount)
-        .subscribe((_activeAccount) => {
-          this.activeAccount = _activeAccount;
+        .select(AuthSelectors.selectUsers)
+        .subscribe((users) => {
+          this.users = users;
         });
     }
   }

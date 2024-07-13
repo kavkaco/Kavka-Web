@@ -1,29 +1,29 @@
 import { createReducer, on } from '@ngrx/store';
 import { AuthActions } from './auth.actions';
-import { IAccount } from '@models/auth';
+import { IUser } from '@app/models/auth';
 
 export interface AuthState {
-  activeAccountId: string | undefined;
-  accountsList: IAccount[];
+  activeUserId: string | undefined;
+  users: IUser[];
 }
 
 const initialState: AuthState = {
-  activeAccountId: undefined,
-  accountsList: [],
+  activeUserId: undefined,
+  users: [],
 };
 
-export function isAccountAlreadyExist(
-  accounts: IAccount[],
-  account: IAccount
+export function isUserAlreadyExist(
+  users: IUser[],
+  user: IUser
 ): boolean {
   let exists = false;
 
-  for (let i = 0; i < accounts.length; i++) {
-    const _account = accounts[i];
+  for (let i = 0; i < users.length; i++) {
+    const _user = users[i];
 
     if (
-      _account?.username == account.username ||
-      _account?.email == account.email
+      _user?.username == user.username ||
+      _user?.email == user.email
     ) {
       exists = true;
       break;
@@ -35,48 +35,67 @@ export function isAccountAlreadyExist(
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.add, (state, { account }) => {
-    return {
-      ...state,
-      accountsList: [...state.accountsList, account],
-      activeAccountId: account.userId,
-    };
-  }),
-  on(AuthActions.remove, (state, { accountId }) => {
-    return {
-      accountsList: state.accountsList.filter(
-        (_account) => _account.userId !== accountId
-      ),
-      activeAccountId: undefined,
-    };
-  }),
-  on(AuthActions.update, (state, { accountId, updates }) => {
-    const existingAccountIndex = state.accountsList.findIndex(
-      (account) => account.userId === accountId
-    );
+  // Update user if it already exists on the store, if not... adds it to the list of the users.
+  on(AuthActions.add, (state, { user }) => {
+    const existingUserIndex = state.users.findIndex((_user) => _user.userId === user.userId);
 
-    if (existingAccountIndex !== -1) {
-      const updatedAccount = {
-        ...state.accountsList[existingAccountIndex],
-        ...updates,
+    if (existingUserIndex !== -1) {
+      const updatedUser = {
+        ...state.users[existingUserIndex],
+        ...user,
       };
 
       return {
         ...state,
-        accountsList: [
-          ...state.accountsList.slice(0, existingAccountIndex),
-          updatedAccount,
-          ...state.accountsList.slice(existingAccountIndex + 1),
+        users: [
+          ...state.users.slice(0, existingUserIndex),
+          updatedUser,
+          ...state.users.slice(existingUserIndex + 1),
         ],
       };
     }
 
-    return state;
-  }),
-  on(AuthActions.setActiveAccount, (state, { accountId }) => {
     return {
       ...state,
-      activeAccountId: accountId,
+      users: [...state.users, user],
+      activeUserId: user.userId,
+    };
+  }),
+  on(AuthActions.remove, (state, { userId }) => {
+    return {
+      users: state.users.filter(
+        (_user) => _user.userId !== userId
+      ),
+      activeUserId: undefined,
+    };
+  }),
+  // on(AuthActions.update, (state, { userId, updates }) => {
+  //   const existingUserIndex = state.users.findIndex(
+  //     (_user) => _user.userId === userId
+  //   );
+
+  //   if (existingUserIndex !== -1) {
+  //     const updatedUser = {
+  //       ...state.users[existingUserIndex],
+  //       ...updates,
+  //     };
+
+  //     return {
+  //       ...state,
+  //       users: [
+  //         ...state.users.slice(0, existingUserIndex),
+  //         updatedUser,
+  //         ...state.users.slice(existingUserIndex + 1),
+  //       ],
+  //     };
+  //   }
+
+  //   return state;
+  // }),
+  on(AuthActions.setActiveUser, (state, { userId }) => {
+    return {
+      ...state,
+      activeUserId: userId,
     };
   })
 );

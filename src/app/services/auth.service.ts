@@ -1,15 +1,28 @@
-import { Inject, inject, Injectable } from '@angular/core';
-import { GrpcTransportService } from '@app/services/grpc-transport.service';
-import { createPromiseClient, PromiseClient } from '@connectrpc/connect';
-import { isAccountAlreadyExist } from '@app/store/auth/auth.reducer';
-import { IAccount } from '@app/models/auth';
+import { inject } from '@angular/core';
+import {
+  createPromiseClient,
+  PromiseClient,
+  Transport,
+} from '@connectrpc/connect';
 import { GetErrorMessage } from '@helpers/grpc_response';
-
 import { AuthService as KavkaAuthService } from 'kavka-core/auth/v1/auth_connect';
-import { LoginResponse } from 'kavka-core/auth/v1/auth_pb';
 import { AccountManagerService } from '@app/services/account-manager.service';
+import { IUser } from '@app/models/auth';
+import { Store } from '@ngrx/store';
+import { AuthActions } from '@app/store/auth/auth.actions';
+import jwt from "jsonwebtoken"
+import { ConnectTransportOptions, createGrpcWebTransport } from '@connectrpc/connect-web';
+import { environment } from '@environments/environment.development';
+import { useRefreshTokenInterceptorFactory } from '@app/services/grpc-interceptors.service';
+
 
 export class UnauthorizedError extends Error {
+  constructor() {
+    super();
+    this.message = 'Unauthorized';
+  }
+}
+export class InvalidEmailOrPasswordError extends Error {
   constructor() {
     super();
     this.message = 'Invalid email or password';
@@ -34,56 +47,121 @@ export class EmailNotVerifiedError extends Error {
   }
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+// Only auth services creates it's own grpc transport client!
 export class AuthService {
-  private transport = new GrpcTransportService().transport;
   private client: PromiseClient<typeof KavkaAuthService>;
   private accountManagerService = inject(AccountManagerService);
+  private store = inject(Store);
 
   constructor() {
-    this.client = createPromiseClient(KavkaAuthService, this.transport);
+    const options: ConnectTransportOptions = {
+      baseUrl: environment.grpcTransportBaseUrl,
+      defaultTimeoutMs: 7000,
+    };
+
+    const transport = createGrpcWebTransport(options)
+    this.client = createPromiseClient(KavkaAuthService, transport);
+  }
+
+  static refreshTokenIfExpired(authService: AuthService, accountManagerService: AccountManagerService) {
+    return new Promise(async (resolve, reject) => {
+      const activeAccount = accountManagerService.GetActiveAccount();
+      if (activeAccount.accessToken && activeAccount.refreshToken) {
+        const isAccessTokenExpired = AuthService.isAccessTokenExpired(activeAccount.accessToken);
+
+        if (isAccessTokenExpired) {
+          // Refresh access token and update on storage
+          await authService.RefreshToken(activeAccount.refreshToken, activeAccount.accountId).then((newAccessToken) => {
+            console.log("[AccessTokenProtector] Refreshed");
+
+            activeAccount.accessToken = newAccessToken;
+
+            if (!accountManagerService.UpdateAccessToken(activeAccount.accountId, newAccessToken)) {
+              console.error("[AccessTokenProtector][UpdateAccessToken] Failed");
+              reject();
+            }
+
+            resolve(undefined)
+          }).catch((e) => {
+            console.error(["[AccessTokenProtector]", "Refreshing token failed:", e]);
+            reject();
+          })
+        }
+
+        resolve(undefined);
+      } else {
+        console.error(["[RefreshTokenInterceptor]", "Unable to get refreshToken or accessToken of active account!"]);
+        reject();
+      }
+    })
+  }
+
+  static isAccessTokenExpired(accessToken: string): boolean {
+    try {
+      const decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+      const expiry = decodedToken.exp;
+      return Date.now() / 1000 >= expiry
+    } catch (err) {
+      return true;
+    }
+  }
+
+  loadUser() {
+    return new Promise((resolve: ({ user, accessToken }: { user: IUser, accessToken: string }) => void, reject) => {
+      // Get the tokens of active account from local storage
+      const activeAccount = this.accountManagerService.GetActiveAccount()
+
+      if (activeAccount) {
+        this
+          .Authenticate(activeAccount.accessToken)
+          .then((user: IUser) => {
+            // Update state for user
+            this.store.dispatch(
+              AuthActions.add({
+                user,
+              })
+            );
+
+            resolve({ user, accessToken: activeAccount.accessToken });
+
+            console.info('[AuthService][LoadUser]', 'Authenticated');
+          })
+          .catch(async (e: Error) => {
+            console.error('[AuthService][LoadUser][Authenticate]', e.message);
+
+            reject();
+          });
+      } else {
+        reject();
+        console.warn("[AuthService][LoadUser] No active account recognized");
+      }
+    })
   }
 
   Login(email: string, password: string) {
-    return new Promise((resolve: (resp: LoginResponse) => void, reject) => {
+    return new Promise((resolve: (resp: { user: IUser, accessToken: string, refreshToken: string }) => void, reject) => {
       this.client
         .login({
           email,
           password,
         })
         .then((response) => {
-          const user = response.user!;
-
           if (response.accessToken != '' && response.user) {
-            const account: IAccount = {
-              userId: user.userId,
-              name: user.name,
-              lastName: user.lastName,
-              email: user.email,
-              username: user.username,
-              accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
-            };
-
-            this.accountManagerService.SaveAccount(account);
-
-            return resolve(response);
+            return resolve({ user: response.user, accessToken: response.accessToken, refreshToken: response.refreshToken });
           }
 
           reject(new InternalServerError());
         })
         .catch((e: Error) => {
           if (GetErrorMessage(e) == 'invalid email or password') {
-            reject(new UnauthorizedError());
+            reject(new InvalidEmailOrPasswordError());
             return;
           } else if (GetErrorMessage(e) == 'email not verified') {
             reject(new EmailNotVerifiedError());
             return;
           }
 
-          console.error('[AuthService][Login]', e.message);
+          console.error('[AuthService][Login]', e);
 
           reject(new InternalServerError());
         });
@@ -108,18 +186,18 @@ export class AuthService {
             return;
           }
 
-          console.error('[AuthService][Authenticate]', e.message);
+          console.error('[AuthService][Authenticate]', e);
           reject(new InternalServerError());
         });
     });
   }
 
-  RefreshToken(refreshToken: string, accessToken: string) {
+  RefreshToken(refreshToken: string, userId: string) {
     return new Promise<string>(
       (resolve: (newAccessToken: string) => void, reject) => {
         this.client
           .refreshToken({
-            accessToken: accessToken,
+            userId: userId,
             refreshToken: refreshToken,
           })
           .then((response) => {
@@ -131,7 +209,7 @@ export class AuthService {
             reject(new InternalServerError());
           })
           .catch((e) => {
-            console.error('[AuthService][RefreshToken]', e.message);
+            console.error('[AuthService][RefreshToken]', e);
 
             reject(new UnauthorizedError());
           });
@@ -168,7 +246,7 @@ export class AuthService {
               reject(new UniqueConstraintViolationError('Username'));
               break;
             default:
-              console.error('[AuthService][Register]', e.message);
+              console.error('[AuthService][Register]', e);
               reject(new InternalServerError());
               break;
           }

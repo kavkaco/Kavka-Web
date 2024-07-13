@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@app/services/auth.service';
+import { GrpcTransportService } from '@app/services/grpc-transport.service';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -17,9 +18,10 @@ import { Store } from '@ngrx/store';
   styleUrl: './signup.component.scss',
 })
 export class SignupComponent {
-  private authService = inject(AuthService);
+  private transport = inject(GrpcTransportService).transport;
+  private authService = new AuthService();
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private store: Store) { }
 
   signupForm = new FormGroup({
     firstName: new FormControl('', [
