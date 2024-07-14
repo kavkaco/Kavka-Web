@@ -1,3 +1,15 @@
+$mobile-break-point: 900px;
+
+.back-chat-button {
+  display: none;
+}
+
+@media screen and (max-width: $mobile-break-point) {
+  .back-chat-button {
+    display: flex;
+  }
+}
+
 .active-chat {
   --head-size: 65px;
   --input-section-size: 40px;

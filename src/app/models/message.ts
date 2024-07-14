@@ -1,4 +1,4 @@
-enum MessageType {
+export enum MessageType {
     Text,
     Image,
     Voice,
@@ -6,7 +6,7 @@ enum MessageType {
     Sticker
 }
 
-export interface IMessage {};
+export interface IMessage { };
 export interface ILastMessage {
     type: MessageType,
     caption: string;

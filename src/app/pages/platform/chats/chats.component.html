@@ -14,9 +14,8 @@
             <ng-scrollbar [visibility]="'hover'" [sensorThrottleTime]="20" [appearance]="'compact'"
                 class="transparent-scrollbar overflow-x-hidden">
                 @for (item of chatItems; track $index) {
-                <app-chat-item [isActive]="item.isActive" [chatId]="item.chatId" [avatar]="item.avatar"
-                    [title]="item.title" [lastMessageType]="item.lastMessageType"
-                    [lastMessageCaption]="item.lastMessageCaption"></app-chat-item>
+                <app-chat-item (click)="activateChat(item.chatId)" [chatId]="item.chatId" [avatar]="item.avatar"
+                    [title]="item.title" [lastMessage]="item.lastMessage"></app-chat-item>
                 }
             </ng-scrollbar>
             }
@@ -32,7 +31,14 @@
         </div>
     </div>
 
-    <div class="platform-chats--viewbox">
+    <div [className]="'platform-chats--viewbox ' + (showActiveChat ? 'chat-activated' : '')">
+        @if (showActiveChat) {
         <app-active-chat></app-active-chat>
+        }
+        @else {
+        <div class="no-chat-selected w-full h-full flex justify-center items-center">
+            <span class="border border-border px-3 py-1 rounded-full">No chat selected</span>
+        </div>
+        }
     </div>
 </div>

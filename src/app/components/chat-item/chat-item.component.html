@@ -1,10 +1,10 @@
-<div (click)="submitActivateChat()"
+<div
     [classList]="'platform-chats--item mr-2 rounded-xl flex flex-row-reverse items-center cursor-pointer gap-3 px-2 py-1 overflow-hidden ' + (isActive ? 'platform-chats--active-item' : '')">
     <div>
         <h2 class="card-header mb-1 text-sm">{{ title }}</h2>
         <div class="platform-chats--item--caption text-content2 overflow-hidden flex flex-row gap-2">
-            @switch (lastMessageType) {
-            @case ('text') {}
+            @switch (lastMessage.type.toString()) {
+            @case ("text") {}
             @case ('image') {
             <svg class="w-4 fill-content2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
@@ -27,18 +27,23 @@
             }
             }
 
-            @if (lastMessageCaption) {
+            @if (lastMessage.caption) {
             <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                {{lastMessageCaption}}
+                {{lastMessage.caption}}
             </p>
             }
         </div>
     </div>
     <div>
+        @if (avatar) {
         <div class="avatar">
-            @if (avatar) {
             <img [src]="avatar" alt="avatar" />
-            }
         </div>
+        }
+        @else {
+        <div class="avatar flex items-center justify-center bg-primary">
+            {{ title[0].toUpperCase() }}
+        </div>
+        }
     </div>
 </div>

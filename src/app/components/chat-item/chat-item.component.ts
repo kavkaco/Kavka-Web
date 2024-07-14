@@ -1,5 +1,7 @@
-import { Component, Input, output, Output } from '@angular/core';
-
+import { Component, inject, Input, output, Output } from '@angular/core';
+import { ILastMessage } from '@app/models/message';
+import { Store } from '@ngrx/store';
+import * as ChatSelector from "@app/store/chat/chat.selectors"
 @Component({
   selector: 'app-chat-item',
   standalone: true,
@@ -8,14 +10,22 @@ import { Component, Input, output, Output } from '@angular/core';
   styleUrl: './chat-item.component.scss',
 })
 export class ChatItemComponent {
-  @Input() isActive: boolean = false;
+  private store = inject(Store);
+
   @Input({ required: true }) chatId!: string;
   @Input({ required: true }) title!: string;
   @Input() avatar: string | undefined;
-  @Input({ required: true }) lastMessageType!: string;
-  @Input() lastMessageCaption?: string;
+  @Input({ required: true }) lastMessage!: ILastMessage;
+  isActive: boolean = false;
 
-  submitActivateChat() {
-    alert(this.chatId);
+  constructor() {
+    this.store.select(ChatSelector.selectLastActiveChat).subscribe((chat) => {
+      if (chat && chat.chatId == this.chatId) {
+        this.isActive = true;
+        return
+      }
+
+      this.isActive = false;
+    })
   }
 }

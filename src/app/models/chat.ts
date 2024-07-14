@@ -2,25 +2,24 @@ import { IUser } from './auth';
 import { ILastMessage } from './message';
 
 export interface IChatItem {
-  isActive: boolean;
   chatId: string;
   title: string;
-  avatar: string | undefined;
-  lastMessageType: string;
-  lastMessageCaption?: string;
+  avatar?: string | undefined;
+  lastMessage: ILastMessage;
 }
 
 export interface IChat {
   chatId: string;
-  chatType: string;
-  chatDetail: ChatDetail;
-  lastMessageType: ILastMessage;
+  chatType: ChatType;
+  chatDetail: ChatDetail_Channel | ChatDetail_Group | ChatDetail_Direct;
+  lastMessage: ILastMessage;
+  avatar?: string | undefined;
 }
 
-enum ChatDetail {
-  ChatDetail_Channel,
-  ChatDetail_Group,
-  ChatDetail_Direct,
+export enum ChatType {
+  Channel,
+  Group,
+  Direct,
 }
 
 export interface ChatDetail_Channel {
