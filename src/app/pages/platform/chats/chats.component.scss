@@ -23,34 +23,42 @@ $mobile-break-point: 900px;
     }
 
     .platform-chats--list {
-      height: calc(100vh - 230px);
+      height: calc(100vh - 169px);
     }
 
     .platform-chats--viewbox {
-      // FIXME - after designing active-chat section
-      display: none;
+      position: fixed;
+      left: 100%;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(var(--backgroundPrimary));
+      z-index: 95;
+      transition: 0.3s ease;
     }
   }
 }
 
-.platform--mobile-header {
-  display: none;
+.platform--header {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   text-align: center;
+  gap: 15px;
   width: 100%;
 
-  padding: 0 10px;
   margin-bottom: 10px;
 
-  .platform-mobile-header--icon {
+  .platform-header--icon {
     width: 40px;
   }
 
-  // Enable only for Mobile Mode
-  @media screen and (max-width: $mobile-break-point) {
+  // Enable only for Desktop Mode
+  @media screen and (min-width: $mobile-break-point) {
     & {
-      display: flex;
+      gap: 0;
+    }
+    .platform-header--icon {
+      display: none;
     }
   }
 }

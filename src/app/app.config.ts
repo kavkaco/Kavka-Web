@@ -12,6 +12,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { authReducer } from './store/auth/auth.reducer';
+import { chatReducer } from '@app/store/chat/chat.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -29,5 +30,6 @@ export const appConfig: ApplicationConfig = {
     provideStore(),
     provideStoreDevtools({}),
     provideState('auth', authReducer),
+    provideState('chat', chatReducer),
   ],
 };

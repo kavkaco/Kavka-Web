@@ -5,7 +5,8 @@ import { ILastMessage } from '@models//message';
 export const ChatActions = createActionGroup({
   source: 'Chat',
   events: {
-    Add: props<{ chat: IChat }>(),
+    SetActiveChat: props<{ chatId: string }>(),
+    Add: props<{ chats: IChat[] }>(),
     Remove: props<{ chatId: string }>(),
     Update: props<{
       chatId: string;

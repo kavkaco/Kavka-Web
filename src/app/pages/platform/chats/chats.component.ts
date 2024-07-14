@@ -3,9 +3,8 @@ import { ActiveChatComponent } from '@components/active-chat/active-chat.compone
 import { ChatDetailDrawerComponent } from '@components/chat-detail-drawer/chat-detail-drawer.component';
 import { ChatItemComponent } from '@components/chat-item/chat-item.component';
 import { IChatItem } from '@models/chat';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { UserAvatarDropdownComponent } from '@components/user-avatar-dropdown/user-avatar-dropdown.component';
 
 @Component({
   selector: 'app-chats',
@@ -17,7 +16,6 @@ import { UserAvatarDropdownComponent } from '@components/user-avatar-dropdown/us
     ActiveChatComponent,
     ChatItemComponent,
     NgScrollbarModule,
-    UserAvatarDropdownComponent,
   ],
   templateUrl: './chats.component.html',
   styleUrl: './chats.component.scss',
@@ -25,80 +23,49 @@ import { UserAvatarDropdownComponent } from '@components/user-avatar-dropdown/us
 export class ChatsComponent {
   searchText = '';
 
-  // FIXME - mode to ngrx
-  chatsListOfStore: IChatItem[] = [
-    {
-      isActive: true,
-      title: 'Amupxm',
-      chatId: '1',
-      lastMessageType: 'video',
-      lastMessageCaption: 'Hi Taha! How is it going on?',
-      avatar:
-        'https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp',
-    },
-    {
-      isActive: false,
-      title: 'Taha Dostifam',
-      chatId: '5',
-      lastMessageType: 'text',
-      lastMessageCaption: 'Kavka is awesome!',
-      avatar: 'https://avatars.githubusercontent.com/u/72092675?v=4',
-    },
-    {
-      isActive: false,
-      title: 'Darling',
-      chatId: '2',
-      lastMessageType: 'file',
-      lastMessageCaption: 'Please print this when you coming back',
-      avatar:
-        'https://play-lh.googleusercontent.com/jInS55DYPnTZq8GpylyLmK2L2cDmUoahVacfN_Js_TsOkBEoizKmAl5-p8iFeLiNjtE=w526-h296-rw',
-    },
-    {
-      isActive: false,
-      title: 'Bob',
-      chatId: '3',
-      lastMessageType: 'file',
-      lastMessageCaption: 'Good night dude.',
-      avatar:
-        'https://images.sftcdn.net/images/t_app-cover-l,f_auto/p/e76d4296-43f3-493b-9d50-f8e5c142d06c/2117667014/boys-profile-picture-screenshot.png',
-    },
-    {
-      isActive: false,
-      title: 'Amupxm',
-      chatId: '1',
-      lastMessageType: 'video',
-      lastMessageCaption: 'Hi Taha! How is it going on?',
-      avatar:
-        'https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp',
-    },
-    {
-      isActive: false,
-      title: 'Taha Dostifam',
-      chatId: '5',
-      lastMessageType: 'text',
-      lastMessageCaption: 'Kavka is awesome!',
-      avatar: 'https://avatars.githubusercontent.com/u/72092675?v=4',
-    },
-    {
-      isActive: false,
-      title: 'Darling',
-      chatId: '2',
-      lastMessageType: 'file',
-      lastMessageCaption: 'Please print this when you coming back',
-      avatar:
-        'https://play-lh.googleusercontent.com/jInS55DYPnTZq8GpylyLmK2L2cDmUoahVacfN_Js_TsOkBEoizKmAl5-p8iFeLiNjtE=w526-h296-rw',
-    },
-    {
-      isActive: false,
-      title: 'Bob',
-      chatId: '3',
-      lastMessageType: 'file',
-      lastMessageCaption: 'Good night dude.',
-      avatar:
-        'https://images.sftcdn.net/images/t_app-cover-l,f_auto/p/e76d4296-43f3-493b-9d50-f8e5c142d06c/2117667014/boys-profile-picture-screenshot.png',
-    },
-  ];
-  chatsList: IChatItem[] = this.chatsListOfStore;
+  chatItems: IChatItem[] = []
+  // chatItems: IChatItem[] = [
+  //   {
+  //     isActive: true,
+  //     title: 'Amupxm',
+  //     chatId: '1',
+  //     lastMessageType: 'video',
+  //     lastMessageCaption: 'Hi Taha! How is it going on?',
+  //     avatar:
+  //       'https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp',
+  //   },
+  //   {
+  //     isActive: false,
+  //     title: 'Taha Dostifam',
+  //     chatId: '5',
+  //     lastMessageType: 'text',
+  //     lastMessageCaption: 'Kavka is awesome!',
+  //     avatar: 'https://avatars.githubusercontent.com/u/72092675?v=4',
+  //   },
+  //   {
+  //     isActive: false,
+  //     title: 'Darling',
+  //     chatId: '2',
+  //     lastMessageType: 'file',
+  //     lastMessageCaption: 'Please print this when you coming back',
+  //     avatar:
+  //       'https://play-lh.googleusercontent.com/jInS55DYPnTZq8GpylyLmK2L2cDmUoahVacfN_Js_TsOkBEoizKmAl5-p8iFeLiNjtE=w526-h296-rw',
+  //   },
+  //   {
+  //     isActive: false,
+  //     title: 'Bob',
+  //     chatId: '3',
+  //     lastMessageType: 'file',
+  //     lastMessageCaption: 'Good night dude.',
+  //     avatar:
+  //       'https://images.sftcdn.net/images/t_app-cover-l,f_auto/p/e76d4296-43f3-493b-9d50-f8e5c142d06c/2117667014/boys-profile-picture-screenshot.png',
+  //   },
+  // ];
+
+  constructor() {
+
+    // this.chatItems
+  }
 
   filterChatsList(input: string, sourceList: IChatItem[]): IChatItem[] {
     if (input.trim().length == 0) {
@@ -117,9 +84,9 @@ export class ChatsComponent {
   }
 
   onSearchInputChange() {
-    this.chatsList = this.filterChatsList(
+    this.chatItems = this.filterChatsList(
       this.searchText,
-      this.chatsListOfStore
+      this.chatItems
     );
   }
 }

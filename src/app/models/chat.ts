@@ -10,11 +10,6 @@ export interface IChatItem {
   lastMessageCaption?: string;
 }
 
-// FIXME - remove this
-export interface IActiveChat {
-  chatId: string;
-}
-
 export interface IChat {
   chatId: string;
   chatType: string;

@@ -1,6 +1,4 @@
 import { Component, Input, output, Output } from '@angular/core';
-import { IActiveChat } from '@models/chat';
-import { ILastMessage } from '@models/message';
 
 @Component({
   selector: 'app-chat-item',
