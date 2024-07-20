@@ -1,4 +1,4 @@
-import { ChatType, IChat } from "@app/models/chat";
+import { IChat } from "@app/models/chat";
 import { createReducer, on } from "@ngrx/store";
 import { ILastMessage, MessageType } from "@app/models/message";
 import { ChatActions } from "@app/store/chat/chat.actions";
@@ -7,28 +7,30 @@ export interface ChatState {
     chats: IChat[];
 }
 
+// Sample chat instance
+// 
+// {
+//     chatId: "chat1",
+//     chatType: "channel",
+//     chatDetail: {
+//         title: "My Channel Name",
+//         members: [],
+//         admins: [],
+//         removedUsers: [],
+//         owner: "user123",
+//         username: "channel_username",
+//         description: "This is a channel description",
+//     },
+//     lastMessage: {
+//         caption: "Hi!",
+//         type: MessageType.Text
+//     } as ILastMessage,
+//     avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq2q83JcZgPQfNlAnwAJkBJ-eS9OK7UUzJ5Q&s"
+// }
+// END
 const initialState: ChatState = {
     activeChats: [],
-    chats: [
-        {
-            chatId: "chat1",
-            chatType: ChatType.Channel,
-            chatDetail: {
-                title: "My Channel Name",
-                members: [],
-                admins: [],
-                removedUsers: [],
-                owner: "user123",
-                username: "channel_username",
-                description: "This is a channel description",
-            },
-            lastMessage: {
-                caption: "Hi!",
-                type: MessageType.Text
-            } as ILastMessage,
-            avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq2q83JcZgPQfNlAnwAJkBJ-eS9OK7UUzJ5Q&s"
-        },
-    ],
+    chats: [],
 };
 
 export const chatReducer = createReducer(

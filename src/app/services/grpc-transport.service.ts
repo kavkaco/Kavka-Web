@@ -21,7 +21,6 @@ export class GrpcTransportService {
   constructor() {
     const options: ConnectTransportOptions = {
       baseUrl: environment.grpcTransportBaseUrl,
-      defaultTimeoutMs: 7000,
       interceptors: [
         useRefreshTokenInterceptorFactory(this.accountManagerService, this.authService),
         useAuthInterceptorFactory(this.accountManagerService)

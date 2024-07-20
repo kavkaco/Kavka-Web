@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { ChatState } from '@app/store/chat/chat.reducers';
-import { ChatDetail_Channel, ChatDetail_Direct, ChatDetail_Group, ChatType, IChat, IChatItem } from '@app/models/chat';
+import { ChatDetail_Channel, ChatDetail_Direct, ChatDetail_Group, IChat, IChatItem } from '@app/models/chat';
 import { MessageType } from '@app/models/message';
 
 export const selectChatState = createFeatureSelector<ChatState>('chat');
@@ -35,13 +35,13 @@ export const selectChatItems = createSelector(
             let title: string;
 
             switch (chat.chatType) {
-                case ChatType.Channel:
+                case "channel":
                     title = ((chat.chatDetail) as ChatDetail_Channel).title
                     break;
-                case ChatType.Group:
+                case "group":
                     title = ((chat.chatDetail) as ChatDetail_Group).title
                     break;
-                case ChatType.Direct:
+                case "direct":
                     const userInfo = ((chat.chatDetail) as ChatDetail_Direct).userInfo
                     title = `${userInfo.name} ${userInfo.lastName}`
                     break;

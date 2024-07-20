@@ -10,17 +10,12 @@ export interface IChatItem {
 
 export interface IChat {
   chatId: string;
-  chatType: ChatType;
+  chatType: string;
   chatDetail: ChatDetail_Channel | ChatDetail_Group | ChatDetail_Direct;
   lastMessage: ILastMessage;
   avatar?: string | undefined;
 }
 
-export enum ChatType {
-  Channel,
-  Group,
-  Direct,
-}
 
 export interface ChatDetail_Channel {
   title: string;

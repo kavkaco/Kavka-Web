@@ -2,7 +2,6 @@ import { inject } from '@angular/core';
 import {
   createPromiseClient,
   PromiseClient,
-  Transport,
 } from '@connectrpc/connect';
 import { GetErrorMessage } from '@helpers/grpc_response';
 import { AuthService as KavkaAuthService } from 'kavka-core/auth/v1/auth_connect';
@@ -10,10 +9,8 @@ import { AccountManagerService } from '@app/services/account-manager.service';
 import { IUser } from '@app/models/auth';
 import { Store } from '@ngrx/store';
 import { AuthActions } from '@app/store/auth/auth.actions';
-import jwt from "jsonwebtoken"
 import { ConnectTransportOptions, createGrpcWebTransport } from '@connectrpc/connect-web';
 import { environment } from '@environments/environment.development';
-import { useRefreshTokenInterceptorFactory } from '@app/services/grpc-interceptors.service';
 
 
 export class UnauthorizedError extends Error {

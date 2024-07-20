@@ -8,6 +8,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Store } from '@ngrx/store';
 import * as ChatSelector from "@store/chat/chat.selectors"
 import { ChatActions } from '@app/store/chat/chat.actions';
+import { ChatService } from "@services/chat.service"
 
 @Component({
   selector: 'app-chats',
@@ -24,6 +25,7 @@ import { ChatActions } from '@app/store/chat/chat.actions';
   styleUrl: './chats.component.scss',
 })
 export class ChatsComponent {
+  private chatService = inject(ChatService);
   private store = inject(Store);
   activeChat: IChat | undefined;
   searchText = '';
@@ -31,6 +33,13 @@ export class ChatsComponent {
   chatItems: IChatItem[] = []
   filteredChatItems: IChatItem[] = []
   showActiveChat = false;
+
+  @ViewChild('createChatModal') createChatModalRef;
+  createChatMenuActiveTab: string | undefined;
+  channelTitleInput: string = "";
+  channelUsernameInput: string = "";
+  groupTitleInput: string = "";
+  groupUsernameInput: string = "";
 
   constructor() {
     this.store.select(ChatSelector.selectLastActiveChat).subscribe((chat) => {
@@ -45,7 +54,11 @@ export class ChatsComponent {
       this.showActiveChat = chat !== undefined;
     })
 
-    // this.viewBoxRef.nativeElement
+    this.chatService.GetUserChats().then((chats) => {
+      this.store.dispatch(ChatActions.add({
+        chats
+      }))
+    });
   }
 
   activateChat(chatId: string) {
@@ -68,6 +81,25 @@ export class ChatsComponent {
     });
 
     return temp;
+  }
+
+  submitCreateChannel() {
+    this.chatService.CreateChannel(this.channelTitleInput, this.channelUsernameInput)
+    this.closeCreateChatModal()
+  }
+
+  submitCreateGroup() {
+    this.createChatMenuActiveTab = undefined;
+    this.closeCreateChatModal()
+  }
+
+  closeCreateChatModal() {
+    this.createChatModalRef.nativeElement.querySelector('.modal-overlay').click()
+    this.createChatMenuActiveTab = undefined;
+    this.channelTitleInput = ""
+    this.channelUsernameInput = ""
+    this.groupTitleInput = ""
+    this.groupUsernameInput = ""
   }
 
   onSearchInputChange() {

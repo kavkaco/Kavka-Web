@@ -26,7 +26,7 @@ export function useRefreshTokenInterceptorFactory(
     authService: AuthService
 ) {
     const refreshTokenInterceptor: Interceptor = (next) => async (req) => {
-        console.log(["[RefreshTokenInterceptor] Refresh token interceptor called"]);
+        console.log("[RefreshTokenInterceptor] Refresh token interceptor called");
 
         AuthService.refreshTokenIfExpired(authService, accountManagerService)
 
