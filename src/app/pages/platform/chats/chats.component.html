@@ -14,8 +14,9 @@
             <div class="flex flex-col gap-3 items-end">
                 <input [(ngModel)]="channelTitleInput" class="bg-transparent border-1 border-border input input-solid"
                     placeholder="Title" type="text" />
-                <input [(ngModel)]="channelUsernameInput" class="bg-transparent border-border input input-solid"
-                    placeholder="Username" type="text" />
+                <input [(ngModel)]="channelUsernameInput"
+                    class="bg-transparent border-1 border-border input input-solid" placeholder="Username"
+                    type="text" />
                 <div class="flex flex-row gap-2">
                     <button (click)="createChatMenuActiveTab = undefined"
                         class="btn btn-sm bg-transparent border border-border w-max">Cancel</button>
@@ -35,7 +36,7 @@
             <div class="flex flex-col gap-3 items-end">
                 <input [(ngModel)]="groupTitleInput" class="bg-transparent border-1 border-border input input-solid"
                     placeholder="Title" type="text" />
-                <input [(ngModel)]="groupUsernameInput" class="bg-transparent border-border input input-solid"
+                <input [(ngModel)]="groupUsernameInput" class="bg-transparent border-1 border-border input input-solid"
                     placeholder="Username" type="text" />
                 <div class="flex flex-row gap-2">
                     <button (click)="createChatMenuActiveTab = undefined"
@@ -102,9 +103,9 @@
         </div>
     </div>
 
-    <div [className]="'platform-chats--viewbox ' + (showActiveChat ? 'chat-activated' : '')">
-        @if (showActiveChat) {
-        <app-active-chat></app-active-chat>
+    <div [className]="'platform-chats--viewbox ' + (activeChat ? 'chat-activated' : '')">
+        @if (activeChat) {
+        <app-active-chat [activeChat]="activeChat"></app-active-chat>
         }
         @else {
         <div class="no-chat-selected w-full h-full flex justify-center items-center">

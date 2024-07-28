@@ -23,7 +23,6 @@ export class PlatformComponent {
   private store = inject(Store);
   private router = inject(Router);
   private eventsService = inject(EventsService);
-  private chatService = inject(ChatService);
 
   constructor() {
     this.eventsService.SubscribeEventsStream()
@@ -32,8 +31,8 @@ export class PlatformComponent {
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
-      this.store.select(ChatSelector.selectActiveChats).pipe(take(1)).subscribe((activeChats: string[]) => {
-        if (activeChats && activeChats.length > 0) {
+      this.store.select(ChatSelector.selectActiveChat).pipe(take(1)).subscribe((activeChat) => {
+        if (activeChat) {
           this.store.dispatch(ChatActions.removeActiveChat())
           return
         }

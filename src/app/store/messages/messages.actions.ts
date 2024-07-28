@@ -1,15 +1,16 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { IMessage } from '@models//message';
+import { Message } from '../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/message/v1/message_pb';
 
-export const ChatActions = createActionGroup({
-  source: 'Chat',
+export const MessageActions = createActionGroup({
+  source: 'Message',
   events: {
-    Add: props<{ chatId: string; message: IMessage }>(),
-    Remove: props<{ chatId: string }>(),
+    Set: props<{ chatId: string, messagesList: Message[] }>(),
+    Add: props<{ chatId: string; message: Message }>(),
+    Remove: props<{ chatId: string, messageId: string }>(),
     Update: props<{
       chatId: string;
       messageId: string;
-      changes: { message: IMessage };
+      changes: { message: Message };
     }>(),
   },
 });

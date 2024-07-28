@@ -19,7 +19,7 @@ export class ChatItemComponent {
   isActive: boolean = false;
 
   constructor() {
-    this.store.select(ChatSelector.selectLastActiveChat).subscribe((chat) => {
+    this.store.select(ChatSelector.selectActiveChat).subscribe((chat) => {
       if (chat && chat.chatId == this.chatId) {
         this.isActive = true;
         return

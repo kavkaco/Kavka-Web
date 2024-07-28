@@ -9,14 +9,25 @@
                 </svg>
             </button>
             <div class="flex items-center gap-2">
+                @if (avatar) {
                 <div class="avatar">
                     <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
                 </div>
+                } @else {
+                <div class="avatar items-center justify-center bg-primary">{{ title[0].toUpperCase() }}</div>
+                }
                 <div class="flex flex-col">
-                    <h1 class="text-md">Go Engineers</h1>
-                    <span class="text-xs text-content2">20k members</span>
-                    <!-- <span class="text-xs text-green-600">Online</span> -->
-                    <!-- <span class="text-xs text-content2">Offline</span> -->
+                    <h1 class="text-md">{{title}}</h1>
+                    @if (membersCount) {
+                    <span class="text-xs text-content2">{{membersCount}} members</span>
+                    }
+                    @else if (online != undefined) {
+                    @if (online == true) {
+                    <span class="text-xs text-green-600">Online</span>
+                    } @else {
+                    <span class="text-xs text-content2">Offline</span>
+                    }
+                    }
                 </div>
             </div>
         </div>
@@ -57,7 +68,22 @@
         <div class="active-chat--body--messages-list">
             <ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden">
 
-                <app-message-bubble></app-message-bubble>
+                @for (item of messages; track $index) {
+                @switch (item.payload.case) {
+                @case ("textMessage") {
+                <app-message-bubble track [messageCaption]="item.payload.value.text" messageType="label"
+                    [senderTitle]="item.senderId"
+                    [selfMessage]="item.senderId === activeUser.userId"></app-message-bubble>
+                }
+                @case ("labelMessage") {
+                <div class="flex items-center justify-center text-center">
+                    <div class="text-xs my-2 text-gray-200 bg-backgroundSecondary py-1 px-2 w-max rounded-full">
+                        {{ item.payload.value.text }}
+                    </div>
+                </div>
+                }
+                }
+                }
 
             </ng-scrollbar>
         </div>

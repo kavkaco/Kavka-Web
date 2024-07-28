@@ -13,6 +13,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { authReducer } from './store/auth/auth.reducer';
 import { chatReducer } from '@app/store/chat/chat.reducers';
+import { messageReducer } from '@app/store/messages/messages.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,5 +32,6 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({}),
     provideState('auth', authReducer),
     provideState('chat', chatReducer),
+    provideState('message', messageReducer),
   ],
 };

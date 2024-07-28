@@ -28,12 +28,11 @@ import { IChatItem } from '@app/models/chat';
 export class ChatsComponent {
   private chatService = inject(ChatService);
   private store = inject(Store);
-  activeChat: Chat | undefined;
+  activeChat: Chat | null;
   searchText = '';
 
   chatItems: IChatItem[] = []
   filteredChatItems: IChatItem[] = []
-  showActiveChat = false;
 
   @ViewChild('createChatModal') createChatModalRef;
   createChatMenuActiveTab: string | undefined;
@@ -43,18 +42,17 @@ export class ChatsComponent {
   groupUsernameInput: string = "";
 
   constructor() {
-    this.store.select(ChatSelector.selectLastActiveChat).subscribe((chat) => {
-      this.activeChat = chat;
-    })
+    this.store.select(ChatSelector.selectActiveChat).subscribe((chat) => {
+      if (chat !== null || chat !== undefined) {
+        this.activeChat = chat;
+        return
+      }
 
-    this.store.select(ChatSelector.selectLastActiveChat).subscribe((chat) => {
-      this.showActiveChat = chat !== undefined;
+      this.activeChat = null;
     })
 
     this.chatService.GetUserChats().then((chats) => {
-      this.store.dispatch(ChatActions.add({
-        chats
-      }))
+      this.store.dispatch(ChatActions.set({ chats }))
 
       chats.forEach(chat => {
         let title;
@@ -77,9 +75,7 @@ export class ChatsComponent {
   }
 
   activateChat(chatId: string) {
-    this.store.dispatch(ChatActions.setActiveChat({
-      chatId: chatId
-    }))
+    this.store.dispatch(ChatActions.setActiveChat({ chatId }))
   }
 
   filterChatsList(input: string, sourceList: IChatItem[]): IChatItem[] {

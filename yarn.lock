@@ -1728,10 +1728,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@ngrx/store@^18.0.1":
-  version "18.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-18.0.1.tgz#61a6fcd06d1a219f2d4d135faea23f035008d6d8"
-  integrity sha512-TxZiQz06fGSxQ0clYfzkH4NCr6tfa8A7zqzkvvOOK1ZezOHHsk0vZJJtgxQcKUqAQxPpbp5+Z7YR8P/Fuid7GQ==
+"@ngrx/store@^17.0.1":
+  version "17.2.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-17.2.0.tgz#d1a588cd8bae18a190bb71582f07e992406a76fa"
+  integrity sha512-7wKgZ59B/6yQSvvsU0DQXipDqpkAXv7LwcXLD5Ww7nvqN0fQoRPThMh4+Wv55DCJhE0bQc1NEMciLA47uRt7Wg==
   dependencies:
     tslib "^2.0.0"
 

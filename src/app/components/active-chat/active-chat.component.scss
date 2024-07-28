@@ -29,6 +29,7 @@ $mobile-break-point: 900px;
   .active-chat--body {
     display: grid;
     grid-template-rows: auto max-content;
+    align-items: end;
 
     .active-chat--body--messages-list {
       padding: 30px 20px;
