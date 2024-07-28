@@ -150,17 +150,20 @@ export class AuthService {
           reject(new InternalServerError());
         })
         .catch((e: Error) => {
-          if (GetErrorMessage(e) == 'invalid email or password') {
-            reject(new InvalidEmailOrPasswordError());
-            return;
-          } else if (GetErrorMessage(e) == 'email not verified') {
-            reject(new EmailNotVerifiedError());
-            return;
+          console.error('[AuthService][Login]', e.message);
+
+
+          switch (GetErrorMessage(e)) {
+            case 'email not verified':
+              reject(new EmailNotVerifiedError());
+              break;
+            case 'invalid email or password':
+              reject(new InvalidEmailOrPasswordError());
+              break;
+            default:
+              reject(new InternalServerError());
+              break;
           }
-
-          console.error('[AuthService][Login]', e);
-
-          reject(new InternalServerError());
         });
     });
   }
@@ -178,13 +181,16 @@ export class AuthService {
           reject(new UnauthorizedError());
         })
         .catch((e) => {
-          if (GetErrorMessage(e) == 'access denied') {
-            reject(new UnauthorizedError());
-            return;
-          }
-
           console.error('[AuthService][Authenticate]', e);
-          reject(new InternalServerError());
+
+          switch (GetErrorMessage(e)) {
+            case 'access denied':
+              reject(new UnauthorizedError());
+              break;
+            default:
+              reject(new InternalServerError());
+              break;
+          }
         });
     });
   }
@@ -235,6 +241,8 @@ export class AuthService {
           resolve();
         })
         .catch((e: Error) => {
+          console.error('[AuthService][Register]', e);
+
           switch (GetErrorMessage(e)) {
             case 'email already exists':
               reject(new UniqueConstraintViolationError('Email'));
@@ -243,7 +251,6 @@ export class AuthService {
               reject(new UniqueConstraintViolationError('Username'));
               break;
             default:
-              console.error('[AuthService][Register]', e);
               reject(new InternalServerError());
               break;
           }

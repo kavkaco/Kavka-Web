@@ -1,33 +1,11 @@
-import { IChat } from "@app/models/chat";
 import { createReducer, on } from "@ngrx/store";
-import { ILastMessage, MessageType } from "@app/models/message";
 import { ChatActions } from "@app/store/chat/chat.actions";
+import { Chat } from "../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb";
 export interface ChatState {
     activeChats: string[];
-    chats: IChat[];
+    chats: Chat[];
 }
 
-// Sample chat instance
-// 
-// {
-//     chatId: "chat1",
-//     chatType: "channel",
-//     chatDetail: {
-//         title: "My Channel Name",
-//         members: [],
-//         admins: [],
-//         removedUsers: [],
-//         owner: "user123",
-//         username: "channel_username",
-//         description: "This is a channel description",
-//     },
-//     lastMessage: {
-//         caption: "Hi!",
-//         type: MessageType.Text
-//     } as ILastMessage,
-//     avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq2q83JcZgPQfNlAnwAJkBJ-eS9OK7UUzJ5Q&s"
-// }
-// END
 const initialState: ChatState = {
     activeChats: [],
     chats: [],

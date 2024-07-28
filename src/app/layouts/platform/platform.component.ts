@@ -5,6 +5,8 @@ import { UserAvatarDropdownComponent } from '@components/user-avatar-dropdown/us
 import { Store } from '@ngrx/store';
 import * as ChatSelector from "@app/store/chat/chat.selectors"
 import { take } from 'rxjs';
+import { EventsService } from '@app/services/events.service';
+import { ChatService } from '@app/services/chat.service';
 @Component({
   selector: 'app-platform',
   standalone: true,
@@ -20,6 +22,12 @@ import { take } from 'rxjs';
 export class PlatformComponent {
   private store = inject(Store);
   private router = inject(Router);
+  private eventsService = inject(EventsService);
+  private chatService = inject(ChatService);
+
+  constructor() {
+    this.eventsService.SubscribeEventsStream()
+  }
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {

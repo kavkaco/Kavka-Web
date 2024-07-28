@@ -72,10 +72,10 @@
         <h1 class="text-xl mt-4 mb-2">Messages</h1>
 
         <div class="platform-chats--list">
-            @if (chatItems && chatItems.length > 0) {
+            @if (filteredChatItems && filteredChatItems.length > 0) {
             <ng-scrollbar [visibility]="'hover'" [sensorThrottleTime]="20" [appearance]="'compact'"
                 class="transparent-scrollbar overflow-x-hidden">
-                @for (item of chatItems; track $index) {
+                @for (item of filteredChatItems; track $index) {
                 <app-chat-item (click)="activateChat(item.chatId)" [chatId]="item.chatId" [avatar]="item.avatar"
                     [title]="item.title" [lastMessage]="item.lastMessage"></app-chat-item>
                 }

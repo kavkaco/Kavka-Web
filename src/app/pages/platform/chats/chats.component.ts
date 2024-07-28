@@ -2,13 +2,14 @@ import { Component, ElementRef, inject, input, Input, model, ViewChild, viewChil
 import { ActiveChatComponent } from '@components/active-chat/active-chat.component';
 import { ChatDetailDrawerComponent } from '@components/chat-detail-drawer/chat-detail-drawer.component';
 import { ChatItemComponent } from '@components/chat-item/chat-item.component';
-import { IChat, IChatItem } from '@models/chat';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { Store } from '@ngrx/store';
 import * as ChatSelector from "@store/chat/chat.selectors"
 import { ChatActions } from '@app/store/chat/chat.actions';
 import { ChatService } from "@services/chat.service"
+import { ChannelChatDetail, Chat, ChatType, DirectChatDetail, GroupChatDetail, LastMessage } from '../../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb';
+import { IChatItem } from '@app/models/chat';
 
 @Component({
   selector: 'app-chats',
@@ -27,7 +28,7 @@ import { ChatService } from "@services/chat.service"
 export class ChatsComponent {
   private chatService = inject(ChatService);
   private store = inject(Store);
-  activeChat: IChat | undefined;
+  activeChat: Chat | undefined;
   searchText = '';
 
   chatItems: IChatItem[] = []
@@ -46,10 +47,6 @@ export class ChatsComponent {
       this.activeChat = chat;
     })
 
-    this.store.select(ChatSelector.selectChatItems).subscribe((chatItems) => {
-      this.chatItems = chatItems
-    })
-
     this.store.select(ChatSelector.selectLastActiveChat).subscribe((chat) => {
       this.showActiveChat = chat !== undefined;
     })
@@ -58,6 +55,24 @@ export class ChatsComponent {
       this.store.dispatch(ChatActions.add({
         chats
       }))
+
+      chats.forEach(chat => {
+        let title;
+
+        if (chat.chatType == ChatType.CHANNEL) {
+          title = (chat.chatDetail.chatDetailType.value as ChannelChatDetail).title
+        } else if (chat.chatType == ChatType.GROUP) {
+          title = (chat.chatDetail.chatDetailType.value as GroupChatDetail).title
+        }
+
+        this.chatItems.push({
+          chatId: chat.chatId,
+          title: title,
+          lastMessage: chat.lastMessage
+        } as IChatItem)
+      });
+
+      this.filteredChatItems = this.chatItems
     });
   }
 
@@ -103,7 +118,7 @@ export class ChatsComponent {
   }
 
   onSearchInputChange() {
-    this.chatItems = this.filterChatsList(
+    this.filteredChatItems = this.filterChatsList(
       this.searchText,
       this.chatItems
     );

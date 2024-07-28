@@ -1,7 +1,7 @@
 import { Component, inject, Input, output, Output } from '@angular/core';
-import { ILastMessage } from '@app/models/message';
 import { Store } from '@ngrx/store';
 import * as ChatSelector from "@app/store/chat/chat.selectors"
+import { LastMessage } from '../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb';
 @Component({
   selector: 'app-chat-item',
   standalone: true,
@@ -15,7 +15,7 @@ export class ChatItemComponent {
   @Input({ required: true }) chatId!: string;
   @Input({ required: true }) title!: string;
   @Input() avatar: string | undefined;
-  @Input({ required: true }) lastMessage!: ILastMessage;
+  @Input({ required: true }) lastMessage!: LastMessage;
   isActive: boolean = false;
 
   constructor() {

@@ -7,7 +7,3 @@ export enum MessageType {
 }
 
 export interface IMessage { };
-export interface ILastMessage {
-    type: MessageType,
-    caption: string;
-};
