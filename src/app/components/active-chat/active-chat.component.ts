@@ -12,6 +12,7 @@ import { IUser } from '@app/models/auth';
 import { Store } from '@ngrx/store';
 import * as AuthSelector from "@store/auth/auth.selectors"
 import { take } from 'rxjs';
+import { ScrollDownDirective } from '@app/directives/scroll-down.directive';
 
 @Component({
   selector: 'app-active-chat',
@@ -21,6 +22,7 @@ import { take } from 'rxjs';
     AutoGrowingInputDirective,
     FormsModule,
     MessageBubbleComponent,
+    ScrollDownDirective
   ],
   templateUrl: './active-chat.component.html',
   styleUrl: './active-chat.component.scss',
