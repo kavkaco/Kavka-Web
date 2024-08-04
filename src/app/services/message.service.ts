@@ -27,5 +27,20 @@ export class MessageService {
             })
         })
     }
+
+    SendTextMessage(chatId: string, text: string) {
+        return new Promise<Message>((resolve, reject) => {
+            this.client.sendTextMessage({ chatId, text }).then((response) => {
+                resolve(response.message);
+
+                console.log("[MessageService][SendTextMessage] Message sent successfully")
+                return
+            }).catch((e: Error) => {
+                console.error("[MessageService][SendTextMessage] " + e.message);
+                reject();
+            })
+
+        })
+    }
 }
 

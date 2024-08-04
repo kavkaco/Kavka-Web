@@ -75,4 +75,11 @@ export class ActiveChatComponent {
       })
     })
   }
+
+  submitTextInput() {
+    this.messageService.SendTextMessage(this.activeChat.chatId, this.textInput.trim()).then((message) => {
+      this.textInput = "";
+      this.store.dispatch(MessageActions.add({ chatId: this.activeChat.chatId, message }))
+    })
+  }
 }

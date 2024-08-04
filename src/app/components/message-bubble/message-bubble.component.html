@@ -1,28 +1,24 @@
-<div class="message-bubble flex items-end gap-2 mb-3">
-    @if (senderAvatar) {
-    <div class="avatar">
-        <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
-    </div>
-    } @else {
-    <div class="avatar bg-primary"></div>
-    }
+<div class="flex justify-end">
+    <div class="message-bubble flex items-end gap-2 mb-3">
+        @if (!isSelfMessage) {
+        @if (senderAvatar) {
+        <div class="avatar">
+            <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
+        </div>
+        } @else {
+        <div class="avatar bg-primary flex items-center justify-center">
+            {{senderTitle[0].toUpperCase()}}
+        </div>
+        }
+        }
 
-    <div class="message-bubble--content bg-backgroundPrimary border border-border p-2 px-3 rounded-md">
-        <h1 class="text-md mb-1 text-primary">{{senderTitle}}</h1>
+        <div class="message-bubble--content bg-backgroundPrimary border border-border p-2 px-3 rounded-md">
+            @if (!isSelfMessage) {
+            <h1 class="text-md mb-1 text-primary">{{senderTitle}}</h1>
+            }
 
-        @switch (messageType) {
-        @case ("text") {
-        <div class="text-sm">
             {{messageCaption}}
         </div>
-        }
-        @default {
-        <div class="text-sm text-red-800">
-            UNSUPPORTED MESSAGE TYPE
-        </div>
-        }
-        }
-
     </div>
 </div>
 

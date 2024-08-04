@@ -66,25 +66,25 @@
     </div>
     <div class="active-chat--body">
         <div class="active-chat--body--messages-list">
-            <ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden">
-
-                @for (item of messages; track $index) {
-                @switch (item.payload.case) {
-                @case ("textMessage") {
-                <app-message-bubble track [messageCaption]="item.payload.value.text" messageType="label"
-                    [senderTitle]="item.senderId"
-                    [selfMessage]="item.senderId === activeUser.userId"></app-message-bubble>
-                }
-                @case ("labelMessage") {
-                <div class="flex items-center justify-center text-center">
-                    <div class="text-xs my-2 text-gray-200 bg-backgroundSecondary py-1 px-2 w-max rounded-full">
-                        {{ item.payload.value.text }}
+            <ng-scrollbar [appearance]="'compact'" class="ngx-custom-scrollbar overflow-x-hidden">
+                <div class="pr-4">
+                    @for (item of messages; track $index) {
+                    @switch (item.payload.case) {
+                    @case ("textMessage") {
+                    <app-message-bubble track [messageCaption]="item.payload.value.text" messageType="label"
+                        [senderTitle]="item.sender.name + ' ' + item.sender.lastName"
+                        [isSelfMessage]="item.sender.userId === activeUser.userId"></app-message-bubble>
+                    }
+                    @case ("labelMessage") {
+                    <div class="flex items-center justify-center text-center">
+                        <div class="text-xs my-2 text-gray-200 bg-backgroundSecondary py-1 px-2 w-max rounded-full">
+                            {{ item.payload.value.text }}
+                        </div>
                     </div>
+                    }
+                    }
+                    }
                 </div>
-                }
-                }
-                }
-
             </ng-scrollbar>
         </div>
 
@@ -108,7 +108,7 @@
                 </button>
 
                 @if (textInput.length > 0) {
-                <button class="btn btn-circle btn-primary fill-content2">
+                <button (click)="submitTextInput()" class="btn btn-circle btn-primary fill-content2">
                     <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <g id="_01_align_center" data-name="01 align center">
                             <path

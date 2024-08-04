@@ -7,6 +7,7 @@ import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GrpcTransportService } from "@app/services/grpc-transport.service";
 import { CreateChannelResponse } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/chat/v1/chat_pb";
 import { ChatType } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb";
+import { AddChat, SubscribeEventsStreamResponse } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/events/v1/events_pb";
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {
@@ -27,18 +28,27 @@ export class EventsService {
         const events = this.client.subscribeEventsStream({})
 
         for await (const event of events) {
-            // switch (event.name) {
-            //     case "add-chat":
-            //         console.log(event.payload);
-            //         break;
-
-            //     default:
-            //         break;
-            // }    
-
             console.log(event.name, event.payload);
+
+            switch (event.name) {
+                case "add-chat":
+                    this.addChat(event)
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 
+
+    addChat(event: SubscribeEventsStreamResponse) {
+        console.log(event);
+
+        const chat = (event.payload.value as AddChat).chat;
+
+        console.log(chat);
+
+    }
 }
 

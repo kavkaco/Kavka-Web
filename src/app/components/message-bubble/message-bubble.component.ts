@@ -8,8 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './message-bubble.component.scss'
 })
 export class MessageBubbleComponent {
-  @Input() selfMessage: boolean;
-  @Input() messageType: string;
+  @Input() isSelfMessage: boolean;
   @Input() senderTitle?: string;
   @Input() senderAvatar?: string;
   @Input() messageCaption: string;

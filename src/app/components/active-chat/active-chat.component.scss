@@ -16,15 +16,7 @@ $mobile-break-point: 900px;
 
   height: 100%;
   display: grid;
-  grid-template-rows: var(--head-size) auto;
-
-  .active-chat--head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
-    border-bottom: 1px solid rgb(var(--border));
-  }
+  grid-template-rows: var(--head-size) calc(100vh - var(--head-size));
 
   .active-chat--body {
     display: grid;
@@ -32,9 +24,11 @@ $mobile-break-point: 900px;
     align-items: end;
 
     .active-chat--body--messages-list {
-      padding: 30px 20px;
-      height: auto;
+      overflow-y: auto;
+      padding: 10px;
+      height: 100%;
     }
+
     .active-chat--body--input-section {
       display: grid;
       align-items: end;
@@ -54,5 +48,13 @@ $mobile-break-point: 900px;
         border: none;
       }
     }
+  }
+
+  .active-chat--head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    border-bottom: 1px solid rgb(var(--border));
   }
 }
