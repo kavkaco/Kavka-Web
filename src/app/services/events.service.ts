@@ -7,7 +7,9 @@ import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GrpcTransportService } from "@app/services/grpc-transport.service";
 import { CreateChannelResponse } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/chat/v1/chat_pb";
 import { ChatType } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb";
-import { AddChat, SubscribeEventsStreamResponse } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/events/v1/events_pb";
+import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/events/v1/events_pb";
+import { ChatActions } from "@app/store/chat/chat.actions";
+import { MessageActions } from "@app/store/messages/messages.actions";
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {
@@ -31,24 +33,30 @@ export class EventsService {
             console.log(event.name, event.payload);
 
             switch (event.name) {
-                case "add-chat":
-                    this.addChat(event)
+                // case "add-chat":
+                //     this.addChat(event)
+                //     break;
+                case "add-message":
+                    this.addMessage(event)
                     break;
-
                 default:
                     break;
             }
         }
     }
 
+    addMessage(ie: SubscribeEventsStreamResponse) {
+        const event = (ie.payload.value as AddMessage);
+        const message = event.message;
+        const chatId = event.chatId;
 
-    addChat(event: SubscribeEventsStreamResponse) {
-        console.log(event);
-
-        const chat = (event.payload.value as AddChat).chat;
-
-        console.log(chat);
-
+        this.store.dispatch(MessageActions.add({ chatId, message }))
     }
+
+    // addChat(ie: SubscribeEventsStreamResponse) {
+    //     const chat = (ie.payload.value as AddChat).chat;
+
+    //     // this.store.dispatch(ChatActions.)
+    // }
 }
 

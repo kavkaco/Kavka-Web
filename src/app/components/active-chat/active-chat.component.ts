@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, Input, ViewChild } from '@angular/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AutoGrowingInputDirective } from '@directives/auto-growing-input.directive';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,6 @@ import { IUser } from '@app/models/auth';
 import { Store } from '@ngrx/store';
 import * as AuthSelector from "@store/auth/auth.selectors"
 import { take } from 'rxjs';
-import { ScrollDownDirective } from '@app/directives/scroll-down.directive';
 
 @Component({
   selector: 'app-active-chat',
@@ -21,8 +20,7 @@ import { ScrollDownDirective } from '@app/directives/scroll-down.directive';
     NgScrollbarModule,
     AutoGrowingInputDirective,
     FormsModule,
-    MessageBubbleComponent,
-    ScrollDownDirective
+    MessageBubbleComponent
   ],
   templateUrl: './active-chat.component.html',
   styleUrl: './active-chat.component.scss',
@@ -30,9 +28,12 @@ import { ScrollDownDirective } from '@app/directives/scroll-down.directive';
 export class ActiveChatComponent {
   private store = inject(Store);
   private messageService = inject(MessageService);
+
   textInput: string = '';
-  @Input() activeChat: Chat
   activeUser: IUser;
+  @Input() activeChat: Chat
+  @ViewChild('messagesScrollbar') messagesScrollbarRef: ElementRef;
+  isLoading = true;
 
   title = "";
   membersCount?: number | undefined;
@@ -62,7 +63,7 @@ export class ActiveChatComponent {
 
     // Fetch messages from store or if it not exists in the local store 
     // we need to call a rpc unary from the server to get them!
-    this.store.select(MessageSelector.selectChatMessages(this.activeChat.chatId)).subscribe((_messages) => {
+    this.store.select(MessageSelector.selectChatMessages(this.activeChat.chatId)).subscribe(async (_messages) => {
       // Load messages from local store
       if (_messages) {
         this.messages = _messages
@@ -70,7 +71,7 @@ export class ActiveChatComponent {
       }
 
       // The message are not accessible form the local and here we do unary call
-      this.messageService.FetchMessages(this.activeChat.chatId).then((fetchedMessages) => {
+      await this.messageService.FetchMessages(this.activeChat.chatId).then((fetchedMessages) => {
         this.messages = fetchedMessages
 
         this.store.dispatch(MessageActions.set({ chatId: this.activeChat.chatId, messagesList: fetchedMessages }))
@@ -78,10 +79,34 @@ export class ActiveChatComponent {
     })
   }
 
-  submitTextInput() {
+  ngAfterViewInit() {
+    this.scrollToBottom(this.messagesScrollbarRef);
+  }
+
+  ngAfterContentInit() {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 250);
+  }
+
+  scrollToBottom(elRef: ElementRef) {
+    setTimeout(() => {
+      const el = elRef.nativeElement as HTMLElement;
+      el.scrollTop = el.scrollHeight;
+    }, 100);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key == 'Enter') {
+      this.submitSendTextMessage();
+    }
+  }
+
+  submitSendTextMessage() {
     this.messageService.SendTextMessage(this.activeChat.chatId, this.textInput.trim()).then((message) => {
       this.textInput = "";
-      this.store.dispatch(MessageActions.add({ chatId: this.activeChat.chatId, message }))
+      this.scrollToBottom(this.messagesScrollbarRef);
     })
   }
 }

@@ -1,13 +1,13 @@
 .ngx-custom-scrollbar .ng-scroll-content {
-  --scrollbar-offset: 10px;
+  --scrollbar-offset: 7px;
 
   .ng-scrollbar-track {
     border-radius: 50px;
-    background-color: #37373733;
+    background-color: transparent;
   }
   .ng-scrollbar-thumb {
     border-radius: 50px;
-    background-color: #3737377e;
+    background-color: #141414ea;
     opacity: 0.7;
   }
 

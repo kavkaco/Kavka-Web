@@ -46,5 +46,28 @@ export const messageReducer = createReducer(
                 ...state.messageStores.slice(messageStoreIndex + 1)
             ],
         }
+    }),
+    on(MessageActions.add, (state, { chatId, message }) => {
+        const idx = state.messageStores.findIndex((_item) => _item.chatId === chatId)
+        if (idx !== -1) {
+            const messageStore: IMessageStore = state.messageStores[idx];
+
+            return {
+                ...state,
+                messageStores: [
+                    ...state.messageStores.slice(0, idx),
+                    {
+                        chatId,
+                        messages: [
+                            ...messageStore.messages,
+                            message
+                        ]
+                    },
+                    ...state.messageStores.slice(idx + 1),
+                ]
+            }
+        }
+
+        return state
     })
 );

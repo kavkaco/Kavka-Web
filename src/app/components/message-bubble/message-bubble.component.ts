@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-message-bubble',
@@ -11,5 +12,12 @@ export class MessageBubbleComponent {
   @Input() isSelfMessage: boolean;
   @Input() senderTitle?: string;
   @Input() senderAvatar?: string;
-  @Input() messageCaption: string;
+  @Input() messageCaption: any;
+
+  constructor(private sanitizer: DomSanitizer) { }
+
+  ngOnChanges() {
+    this.messageCaption = this.messageCaption.replace(/\n\r?/g, '<br>');
+    this.messageCaption = this.sanitizer.bypassSecurityTrustHtml(this.messageCaption);
+  }
 }
