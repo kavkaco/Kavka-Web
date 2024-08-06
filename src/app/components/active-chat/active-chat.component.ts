@@ -12,6 +12,7 @@ import { IUser } from '@app/models/auth';
 import { Store } from '@ngrx/store';
 import * as AuthSelector from "@store/auth/auth.selectors"
 import { take } from 'rxjs';
+import { ChatActions } from '@app/store/chat/chat.actions';
 
 @Component({
   selector: 'app-active-chat',
@@ -36,6 +37,8 @@ export class ActiveChatComponent {
   isLoading = true;
 
   title = "";
+  username = "";
+  description = "";
   membersCount?: number | undefined;
   online?: boolean | undefined;
   avatar: string | undefined;
@@ -48,14 +51,21 @@ export class ActiveChatComponent {
   }
 
   ngOnChanges() {
+    let detail;
     switch (this.activeChat.chatType) {
       case ChatType.CHANNEL:
-        this.title = (this.activeChat.chatDetail.chatDetailType.value as ChannelChatDetail).title;
-        this.membersCount = (this.activeChat.chatDetail.chatDetailType.value as ChannelChatDetail).members.length;
+        detail = (this.activeChat.chatDetail.chatDetailType.value as ChannelChatDetail);
+        this.title = detail.title;
+        this.username = detail.username;
+        this.membersCount = detail.members.length;
+        this.description = detail.description;
         break;
       case ChatType.GROUP:
-        this.title = (this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail).title;
-        this.membersCount = (this.activeChat.chatDetail.chatDetailType.value as ChannelChatDetail).members.length;
+        detail = (this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail);
+        this.title = detail.title
+        this.username = detail.username;
+        this.membersCount = detail.members.length;
+        this.description = detail.description;
         break;
       default:
         break;
@@ -108,5 +118,9 @@ export class ActiveChatComponent {
       this.textInput = "";
       this.scrollToBottom(this.messagesScrollbarRef);
     })
+  }
+
+  submitCloseChat() {
+    this.store.dispatch(ChatActions.removeActiveChat())
   }
 }

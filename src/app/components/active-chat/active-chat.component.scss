@@ -63,10 +63,30 @@ $mobile-break-point: 900px;
   }
 
   .active-chat--head {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto max-content;
     align-items: center;
-    justify-content: space-between;
+    column-gap: 10px;
     padding: 0 10px;
     border-bottom: 1px solid rgb(var(--border));
+  }
+}
+
+.active-chat--chat-info {
+  width: 400px !important;
+  max-width: none;
+  background-color: rgb(var(--backgroundPrimary));
+  border-left: 1px solid rgb(var(--border));
+
+  @media screen and (max-width: 850px) {
+    & {
+      width: 330px !important;
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    & {
+      width: 100% !important;
+    }
   }
 }

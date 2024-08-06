@@ -74,23 +74,23 @@ export const authReducer = createReducer(
   //     (_user) => _user.userId === userId
   //   );
 
-  //   if (existingUserIndex !== -1) {
-  //     const updatedUser = {
-  //       ...state.users[existingUserIndex],
-  //       ...updates,
-  //     };
-
-  //     return {
-  //       ...state,
-  //       users: [
-  //         ...state.users.slice(0, existingUserIndex),
-  //         updatedUser,
-  //         ...state.users.slice(existingUserIndex + 1),
-  //       ],
-  //     };
+  //   if (existingUserIndex === -1) {
+  //     return state;
   //   }
 
-  //   return state;
+  //   const updatedUser = {
+  //     ...state.users[existingUserIndex],
+  //     ...updates,
+  //   };
+
+  //   return {
+  //     ...state,
+  //     chats: [
+  //       ...state.users.slice(0, existingUserIndex),
+  //       updatedUser,
+  //       ...state.users.slice(existingUserIndex + 1),
+  //     ],
+  //   };
   // }),
   on(AuthActions.setActiveUser, (state, { userId }) => {
     return {

@@ -6,10 +6,11 @@ import { EventsService as KavkaEventsService } from '/home/tahadostifam/Code/Kav
 import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GrpcTransportService } from "@app/services/grpc-transport.service";
 import { CreateChannelResponse } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/chat/v1/chat_pb";
-import { ChatType } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb";
+import { ChatType, LastMessage } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb";
 import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "../../../../Kavka-Core/protobuf/gen/es/protobuf/events/v1/events_pb";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { MessageActions } from "@app/store/messages/messages.actions";
+import { PlainMessage, BinaryReadOptions, JsonValue, JsonReadOptions, BinaryWriteOptions, JsonWriteOptions, JsonWriteStringOptions, MessageType } from "@bufbuild/protobuf";
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {
@@ -33,9 +34,9 @@ export class EventsService {
             console.log(event.name, event.payload);
 
             switch (event.name) {
-                // case "add-chat":
-                //     this.addChat(event)
-                //     break;
+                case "add-chat":
+                    this.addChat(event)
+                    break;
                 case "add-message":
                     this.addMessage(event)
                     break;
@@ -51,12 +52,22 @@ export class EventsService {
         const chatId = event.chatId;
 
         this.store.dispatch(MessageActions.add({ chatId, message }))
+
+        // Update last message of the chat
+        this.store.dispatch(ChatActions.update({
+            chatId, changes: {
+                lastMessage: {
+                    messageType: message.type,
+                    messageCaption: message.payload.value.text
+                } as any,
+            }
+        } as any))
     }
 
-    // addChat(ie: SubscribeEventsStreamResponse) {
-    //     const chat = (ie.payload.value as AddChat).chat;
+    addChat(ie: SubscribeEventsStreamResponse) {
+        const chat = (ie.payload.value as AddChat).chat;
 
-    //     // this.store.dispatch(ChatActions.)
-    // }
+        this.store.dispatch(ChatActions.add({ chat }))
+    }
 }
 

@@ -10,6 +10,7 @@ import { ChatActions } from '@app/store/chat/chat.actions';
 import { ChatService } from "@services/chat.service"
 import { ChannelChatDetail, Chat, ChatType, DirectChatDetail, GroupChatDetail, LastMessage } from '../../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb';
 import { IChatItem } from '@app/models/chat';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-chats',
@@ -54,24 +55,13 @@ export class ChatsComponent {
     this.chatService.GetUserChats().then((chats) => {
       this.store.dispatch(ChatActions.set({ chats }))
 
-      chats.forEach(chat => {
-        let title;
-
-        if (chat.chatType == ChatType.CHANNEL) {
-          title = (chat.chatDetail.chatDetailType.value as ChannelChatDetail).title
-        } else if (chat.chatType == ChatType.GROUP) {
-          title = (chat.chatDetail.chatDetailType.value as GroupChatDetail).title
-        }
-
-        this.chatItems.push({
-          chatId: chat.chatId,
-          title: title,
-          lastMessage: chat.lastMessage
-        } as IChatItem)
-      });
-
       this.filteredChatItems = this.chatItems
     });
+
+    this.store.select(ChatSelector.selectChats).subscribe((chats) => {
+      this.chatItems = chats;
+      this.filteredChatItems = this.filterChatsList(this.searchText, chats);
+    })
   }
 
   activateChat(chatId: string) {
@@ -95,7 +85,9 @@ export class ChatsComponent {
   }
 
   submitCreateChannel() {
-    this.chatService.CreateChannel(this.channelTitleInput, this.channelUsernameInput)
+    this.chatService.CreateChannel(this.channelTitleInput, this.channelUsernameInput).then((chat) => {
+      this.store.dispatch(ChatActions.add({ chat }))
+    })
     this.closeCreateChatModal()
   }
 

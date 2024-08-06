@@ -1,7 +1,100 @@
+<input type="checkbox" id="chat-detail-drawer" class="drawer-toggle" />
+
+<label class="overlay" for="chat-detail-drawer"></label>
+<div class="active-chat--chat-info drawer drawer-right">
+    <div class="drawer-content px-0 pt-10 h-full">
+
+        <label for="chat-detail-drawer" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+        <div class="flex flex-row gap-3 mb-3 px-3 pb-3">
+            <div>
+                @if (avatar) {
+                <div class="avatar">
+                    <img [src]="avatar" alt="avatar" />
+                </div>
+                } @else {
+                <div class="avatar size-20 text-xl bg-primary flex items-center justify-center">
+                    {{title[0].toUpperCase()}}
+                </div>
+                }
+            </div>
+
+            <div class="flex flex-col gap-1s">
+                <h2 class="text-xl font-medium">{{title}}</h2>
+                @if (membersCount) {
+                <span class="text-xs text-content2">{{membersCount}} members</span>
+                }
+                @else if (online != undefined) {
+                @if (online == true) {
+                <span class="text-xs text-green-600">Online</span>
+                } @else {
+                <span class="text-xs text-content2">Offline</span>
+                }
+                }
+            </div>
+        </div>
+
+        <div class="border-b border-border pb-5 px-4">
+            <div class="flex flex-row gap-5 items-start">
+                <svg class="w-5 mt-1 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
+                    <path
+                        d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
+                </svg>
+
+                <div>
+                    <h3 class="text-md">{{username}}</h3>
+                    <span class="text-sm text-content2">Username</span>
+                </div>
+            </div>
+        </div>
+
+        @if (description.trim().length> 0) {
+        <div class="border-b border-border py-5 px-4">
+            <div class="flex flex-row gap-5 items-start">
+                <svg class="w-5 mt-1 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M13.5,6.5a1.5,1.5,0,0,1-3,0A1.5,1.5,0,0,1,13.5,6.5ZM24,19V12.34A12.209,12.209,0,0,0,12.836.028,12,12,0,0,0,.029,12.854C.471,19.208,6.082,24,13.083,24H19A5.006,5.006,0,0,0,24,19ZM12.7,2.024A10.2,10.2,0,0,1,22,12.34V19a3,3,0,0,1-3,3H13.083C7.049,22,2.4,18.1,2.025,12.716A10,10,0,0,1,12.016,2C12.243,2,12.472,2.009,12.7,2.024ZM14,18V12a2,2,0,0,0-2-2H11a1,1,0,0,0,0,2h1v6a1,1,0,0,0,2,0Z" />
+                </svg>
+
+                <div>
+                    <h3 class="text-md">{{description}}</h3>
+                    <span class="text-sm text-content2">Description</span>
+                </div>
+
+            </div>
+        </div>
+        }
+
+        <div class="border-b border-border py-5 px-4">
+            <div class="flex flex-row gap-5 items-start">
+                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16Zm0-6a2,2,0,1,0,2,2A2,2,0,0,0,12,10Zm6,13A6,6,0,0,0,6,23a1,1,0,0,0,2,0,4,4,0,0,1,8,0,1,1,0,0,0,2,0ZM18,8a4,4,0,1,1,4-4A4,4,0,0,1,18,8Zm0-6a2,2,0,1,0,2,2A2,2,0,0,0,18,2Zm6,13a6.006,6.006,0,0,0-6-6,1,1,0,0,0,0,2,4,4,0,0,1,4,4,1,1,0,0,0,2,0ZM6,8a4,4,0,1,1,4-4A4,4,0,0,1,6,8ZM6,2A2,2,0,1,0,8,4,2,2,0,0,0,6,2ZM2,15a4,4,0,0,1,4-4A1,1,0,0,0,6,9a6.006,6.006,0,0,0-6,6,1,1,0,0,0,2,0Z" />
+                </svg>
+
+                <h3 class="text-md">{{membersCount}} Members</h3>
+            </div>
+        </div>
+
+        <div class="border-b border-border py-5 px-4">
+            <div class="flex flex-row gap-5 items-start">
+                <svg class="w-5 fill-error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
+                    <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
+                    <path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
+                </svg>
+
+                <h3 class="text-md text-error">Leave</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="active-chat">
-    <div class="active-chat--head">
-        <div class="flex flex-row gap-2">
-            <button
+    <div class="active-chat--head ">
+        <label for="chat-detail-drawer" class="h-full flex flex-row items-center gap-2">
+            <button (click)="submitCloseChat()"
                 class="back-chat-button ml-1 flex text-center justify-center btn btn-circle btn-ghost fill-content2">
                 <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
@@ -30,7 +123,7 @@
                     }
                 </div>
             </div>
-        </div>
+        </label>
         <div>
             <button class="btn btn-circle btn-ghost fill-content2">
                 <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -85,7 +178,8 @@
                     }
                     @case ("labelMessage") {
                     <div class="flex items-center justify-center text-center">
-                        <div class="text-xs my-2 text-gray-200 bg-backgroundSecondary py-1 px-2 w-max rounded-full">
+                        <div
+                            class="text-sm my-2 text-gray-200 border border-border bg-backgroundPrimary py-1 px-3 w-max rounded-full">
                             {{ item.payload.value.text }}
                         </div>
                     </div>

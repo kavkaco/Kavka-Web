@@ -9,20 +9,11 @@ $mobile-break-point: 900px;
   margin-bottom: 8px;
 
   &.platform-chats--active-item {
-    &,
-    &:hover {
-      background-color: rgb(var(--primary));
-    }
-
     .platform-chats--item--caption,
     .platform-chats--item--caption svg {
       color: #fff !important;
       fill: #fff !important;
     }
-  }
-
-  &:hover {
-    background-color: rgb(var(--backgroundSecondary));
   }
 
   .platform-chats--item--caption {
@@ -32,5 +23,19 @@ $mobile-break-point: 900px;
         max-width: calc(100vw - 130px);
       }
     }
+  }
+}
+
+@media screen and (min-width: $mobile-break-point) {
+  .platform-chats--active-item,
+  .platform-chats--item {
+    &:hover,
+    &:focus {
+      background-color: rgb(var(--primary));
+    }
+  }
+
+  .platform-chats--item:hover {
+    background-color: rgb(var(--backgroundSecondary));
   }
 }

@@ -7,6 +7,7 @@ export const ChatActions = createActionGroup({
     SetActiveChat: props<{ chatId: string }>(),
     RemoveActiveChat: emptyProps(),
     Set: props<{ chats: Chat[] }>(),
+    Add: props<{ chat: Chat }>(),
     Remove: props<{ chatId: string }>(),
     Update: props<{
       chatId: string;

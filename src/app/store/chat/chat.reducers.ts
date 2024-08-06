@@ -36,5 +36,31 @@ export const chatReducer = createReducer(
             ...state,
             chats
         }
+    }),
+    on(ChatActions.update, (state, { chatId, changes }) => {
+        const idx = state.chats.findIndex((_chat) => _chat.chatId === chatId);
+        if (idx === -1) {
+            return state;
+        }
+
+        const updatedChat = { ...state.chats[idx], ...changes } as Chat;
+
+        return {
+            ...state,
+            chats: [
+                ...state.chats.slice(0, idx),
+                updatedChat,
+                ...state.chats.slice(idx + 1)
+            ]
+        }
+    }),
+    on(ChatActions.add, (state, { chat }) => {
+        return {
+            ...state,
+            chats: [
+                chat,
+                ...state.chats,
+            ]
+        }
     })
 );

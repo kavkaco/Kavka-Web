@@ -16,6 +16,16 @@ export const selectActiveChat = createSelector(
 export const selectChats = createSelector(
     selectChatState,
     (state: ChatState) => {
-        return state.chats
+        return state.chats.map((chat) => {
+            let title;
+
+            if (chat.chatType == ChatType.CHANNEL) {
+                title = (chat.chatDetail.chatDetailType.value as ChannelChatDetail).title
+            } else if (chat.chatType == ChatType.GROUP) {
+                title = (chat.chatDetail.chatDetailType.value as GroupChatDetail).title
+            }
+
+            return { chatId: chat.chatId, title, lastMessage: chat.lastMessage }
+        }) as IChatItem[]
     }
 );
