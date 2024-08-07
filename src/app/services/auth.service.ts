@@ -63,7 +63,7 @@ export class AuthService {
   static refreshTokenIfExpired(authService: AuthService, accountManagerService: AccountManagerService) {
     return new Promise(async (resolve, reject) => {
       const activeAccount = accountManagerService.GetActiveAccount();
-      if (activeAccount.accessToken && activeAccount.refreshToken) {
+      if (activeAccount && activeAccount.accessToken && activeAccount.refreshToken) {
         const isAccessTokenExpired = AuthService.isAccessTokenExpired(activeAccount.accessToken);
 
         if (isAccessTokenExpired) {
@@ -87,7 +87,7 @@ export class AuthService {
 
         resolve(undefined);
       } else {
-        console.error(["[RefreshTokenInterceptor]", "Unable to get refreshToken or accessToken of active account!"]);
+        console.error("[RefreshTokenInterceptor]", "Unable to get refreshToken or accessToken of active account!");
         reject();
       }
     })

@@ -1,6 +1,6 @@
-<div class="flex justify-end">
+<div [classList]="'flex ' + (isSelfMessage ? 'justify-end' : 'justify-start')">
     <div class="message-bubble flex items-end gap-2 mb-3">
-        @if (!isSelfMessage) {
+        @if (showAvatar) {
         @if (senderAvatar) {
         <div class="avatar">
             <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
@@ -13,11 +13,20 @@
         }
 
         <div class="message-bubble--content bg-backgroundPrimary border border-border p-2 px-3 rounded-md">
-            @if (!isSelfMessage) {
+            @if (!isSelfMessage && chatTypeString !== "channel") {
             <h1 class="text-md mb-1 text-primary">{{senderTitle}}</h1>
             }
 
             <p class="break-words" [innerHTML]="messageCaption"></p>
+
+            <div class="flex flex-row justify-between items-center gap-2">
+                <span class="text-content2 text-xs">{{this.messageTimestamp}}</span>
+                <span class="text-primary text-xs text-right">{{senderTitle.slice(0, 6).trim()}}</span>
+                <svg class="w-4 fill-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path
+                        d="M 26.980469 5.9902344 A 1.0001 1.0001 0 0 0 26.292969 6.2929688 L 11 21.585938 L 4.7070312 15.292969 A 1.0001 1.0001 0 1 0 3.2929688 16.707031 L 10.292969 23.707031 A 1.0001 1.0001 0 0 0 11.707031 23.707031 L 27.707031 7.7070312 A 1.0001 1.0001 0 0 0 26.980469 5.9902344 z" />
+                </svg>
+            </div>
         </div>
     </div>
 </div>

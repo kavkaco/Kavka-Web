@@ -43,6 +43,7 @@ export class ActiveChatComponent {
   online?: boolean | undefined;
   avatar: string | undefined;
   messages: Message[]
+  userHasAccessToSendMessage = false;
 
   ngOnInit() {
     this.store.select(AuthSelector.selectActiveUser).pipe(take(1)).subscribe((activeUser) => {
@@ -94,6 +95,18 @@ export class ActiveChatComponent {
   }
 
   ngAfterContentInit() {
+    let detail;
+    switch (this.activeChat.chatType) {
+      case ChatType.CHANNEL:
+        detail = (this.activeChat.chatDetail.chatDetailType.value as ChannelChatDetail);
+        this.userHasAccessToSendMessage = (detail.admins as string[]).includes(this.activeUser.userId);
+        break;
+      case ChatType.GROUP:
+        detail = (this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail);
+        this.userHasAccessToSendMessage = true;
+        break;
+    }
+
     setTimeout(() => {
       this.isLoading = false;
     }, 250);
