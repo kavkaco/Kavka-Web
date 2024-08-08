@@ -150,7 +150,7 @@ export class ChatsComponent {
         };
     }
 
-    localAndFetchedUserChatCombiner(
+    mergeLocalAndFetchedChats(
         localChatItems: IChatItem[],
         fetchResult: { users: User[]; chats: Chat[] }
     ) {
@@ -192,9 +192,9 @@ export class ChatsComponent {
     }
 
     determineSearchResult(result: { users: User[]; chats: Chat[] }) {
-        this.localAndFetchedUserChatCombiner(this.filteredChatItems, result).then(
-            combinedResult => {
-                this.search.finalResult = combinedResult;
+        this.mergeLocalAndFetchedChats(this.filteredChatItems, result).then(
+            merged => {
+                this.search.finalResult = merged;
             }
         );
     }
@@ -208,8 +208,6 @@ export class ChatsComponent {
             this.searchService
                 .Search(this.search.input.trim())
                 .then(result => {
-                    this.search.loading = false;
-
                     this.search.chats = result.chats as any as IChatItem[];
                     this.search.users = result.users;
 
@@ -222,6 +220,8 @@ export class ChatsComponent {
             this.clearSearchResult();
         }
 
-        this.search.loading = false;
+        setTimeout(() => {
+            this.search.loading = false;
+        }, 600);
     }
 }
