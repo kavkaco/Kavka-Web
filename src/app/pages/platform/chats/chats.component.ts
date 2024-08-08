@@ -1,114 +1,240 @@
-import { Component, ElementRef, inject, input, Input, model, ViewChild, viewChild } from '@angular/core';
-import { ActiveChatComponent } from '@components/active-chat/active-chat.component';
-import { ChatDetailDrawerComponent } from '@components/chat-detail-drawer/chat-detail-drawer.component';
-import { ChatItemComponent } from '@components/chat-item/chat-item.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgScrollbarModule } from 'ngx-scrollbar';
-import { Store } from '@ngrx/store';
-import * as ChatSelector from "@store/chat/chat.selectors"
-import { ChatActions } from '@app/store/chat/chat.actions';
-import { ChatService } from "@services/chat.service"
-import { ChannelChatDetail, Chat, ChatType, DirectChatDetail, GroupChatDetail, LastMessage } from '../../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb';
-import { IChatItem } from '@app/models/chat';
-import { BehaviorSubject } from 'rxjs';
+import {
+    Component,
+    ElementRef,
+    inject,
+    input,
+    Input,
+    model,
+    ViewChild,
+    viewChild,
+} from "@angular/core";
+import { ActiveChatComponent } from "@components/active-chat/active-chat.component";
+import { ChatItemComponent } from "@components/chat-item/chat-item.component";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgScrollbarModule } from "ngx-scrollbar";
+import { Store } from "@ngrx/store";
+import * as ChatSelector from "@store/chat/chat.selectors";
+import { ChatActions } from "@app/store/chat/chat.actions";
+import { ChatService } from "@services/chat.service";
+import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
+import { BehaviorSubject, take } from "rxjs";
+import { SearchService } from "@app/services/search.service";
+
+import {
+    ChannelChatDetail,
+    Chat,
+    ChatType,
+    DirectChatDetail,
+    GroupChatDetail,
+    LastMessage,
+} from "kavka-core/model/chat/v1/chat_pb";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 @Component({
-  selector: 'app-chats',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    FormsModule,
-    ChatDetailDrawerComponent,
-    ActiveChatComponent,
-    ChatItemComponent,
-    NgScrollbarModule,
-  ],
-  templateUrl: './chats.component.html',
-  styleUrl: './chats.component.scss',
+    selector: "app-chats",
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        FormsModule,
+        ActiveChatComponent,
+        ChatItemComponent,
+        NgScrollbarModule,
+    ],
+    templateUrl: "./chats.component.html",
+    styleUrl: "./chats.component.scss",
 })
 export class ChatsComponent {
-  private chatService = inject(ChatService);
-  private store = inject(Store);
-  activeChat: Chat | null;
-  searchText = '';
+    private chatService = inject(ChatService);
+    private searchService = inject(SearchService);
+    private store = inject(Store);
+    activeChat: Chat | null;
 
-  chatItems: IChatItem[] = []
-  filteredChatItems: IChatItem[] = []
+    chatItems: IChatItem[] = [];
+    filteredChatItems: IChatItem[] = [];
 
-  @ViewChild('createChatModal') createChatModalRef;
-  createChatMenuActiveTab: string | undefined;
-  channelTitleInput: string = "";
-  channelUsernameInput: string = "";
-  groupTitleInput: string = "";
-  groupUsernameInput: string = "";
+    search: {
+        input: "";
+        loading: boolean;
+        chats: IChatItem[];
+        users: User[];
+        finalResult: IChatItem[];
+    };
 
-  constructor() {
-    this.store.select(ChatSelector.selectActiveChat).subscribe((chat) => {
-      if (chat !== null || chat !== undefined) {
-        this.activeChat = chat;
-        return
-      }
+    @ViewChild("createChatModal") createChatModalRef;
+    createChatMenuActiveTab: string | undefined;
+    channelTitleInput: string = "";
+    channelUsernameInput: string = "";
+    groupTitleInput: string = "";
+    groupUsernameInput: string = "";
 
-      this.activeChat = null;
-    })
+    constructor() {
+        this.clearSearchResult();
 
-    this.chatService.GetUserChats().then((chats) => {
-      this.store.dispatch(ChatActions.set({ chats }))
+        this.store.select(ChatSelector.selectActiveChat).subscribe(chat => {
+            if (chat !== null || chat !== undefined) {
+                this.activeChat = chat;
+                return;
+            }
 
-      this.filteredChatItems = this.chatItems
-    });
+            this.activeChat = null;
+        });
 
-    this.store.select(ChatSelector.selectChats).subscribe((chats) => {
-      this.chatItems = chats;
-      this.filteredChatItems = this.filterChatsList(this.searchText, chats);
-    })
-  }
+        this.chatService.GetUserChats().then(chats => {
+            this.store.dispatch(ChatActions.set({ chats }));
 
-  activateChat(chatId: string) {
-    this.store.dispatch(ChatActions.setActiveChat({ chatId }))
-  }
+            this.filteredChatItems = this.chatItems;
+        });
 
-  filterChatsList(input: string, sourceList: IChatItem[]): IChatItem[] {
-    if (input.trim().length == 0) {
-      return sourceList;
+        this.store.select(ChatSelector.selectChatItems).subscribe(chats => {
+            this.chatItems = chats;
+            this.filteredChatItems = this.filterChatsList(this.search.input, chats);
+        });
     }
 
-    let temp: IChatItem[] = [];
+    // ANCHOR
+    // Check it the chat does not exists in the local chats
+    // we prepare to fetch the chat from the back-end and add to store
+    activateUncreatedChat(chatId: string) {
+        this.store
+            .select(ChatSelector.selectChats)
+            .pipe(take(1))
+            .subscribe(localChats => {
+                const chatIdx = localChats.findIndex(_chat => _chat.chatId === chatId);
+                if (chatIdx !== -1) {
+                    // exist
+                    this.activateChat(chatId);
+                }
 
-    sourceList.forEach((item) => {
-      if (item.title.toLowerCase().indexOf(input.toLowerCase()) > -1) {
-        temp.push(item);
-      }
-    });
+                // fetch chat
+                this.chatService.GetChat(chatId).then(fetchedChat => {
+                    this.store.dispatch(ChatActions.add({ chat: fetchedChat }));
+                    this.activateChat(chatId);
+                });
+            });
+    }
 
-    return temp;
-  }
+    activateChat(chatId: string) {
+        this.store.dispatch(ChatActions.setActiveChat({ chatId }));
+    }
 
-  submitCreateChannel() {
-    this.chatService.CreateChannel(this.channelTitleInput, this.channelUsernameInput).then((chat) => {
-      this.store.dispatch(ChatActions.add({ chat }))
-    })
-    this.closeCreateChatModal()
-  }
+    submitCreateChannel() {
+        this.chatService
+            .CreateChannel(this.channelTitleInput, this.channelUsernameInput)
+            .then(chat => {
+                this.store.dispatch(ChatActions.add({ chat }));
+            });
+        this.closeCreateChatModal();
+    }
 
-  submitCreateGroup() {
-    this.createChatMenuActiveTab = undefined;
-    this.closeCreateChatModal()
-  }
+    submitCreateGroup() {
+        this.createChatMenuActiveTab = undefined;
+        this.closeCreateChatModal();
+    }
 
-  closeCreateChatModal() {
-    this.createChatModalRef.nativeElement.querySelector('.modal-overlay').click()
-    this.createChatMenuActiveTab = undefined;
-    this.channelTitleInput = ""
-    this.channelUsernameInput = ""
-    this.groupTitleInput = ""
-    this.groupUsernameInput = ""
-  }
+    closeCreateChatModal() {
+        this.createChatModalRef.nativeElement.querySelector(".modal-overlay").click();
+        this.createChatMenuActiveTab = undefined;
+        this.channelTitleInput = "";
+        this.channelUsernameInput = "";
+        this.groupTitleInput = "";
+        this.groupUsernameInput = "";
+    }
 
-  onSearchInputChange() {
-    this.filteredChatItems = this.filterChatsList(
-      this.searchText,
-      this.chatItems
-    );
-  }
+    filterChatsList(input: string, sourceList: IChatItem[]): IChatItem[] {
+        if (input.trim().length == 0) {
+            return sourceList;
+        }
+
+        let temp: IChatItem[] = [];
+
+        sourceList.forEach(item => {
+            if (item.title.toLowerCase().indexOf(input.toLowerCase()) > -1) {
+                temp.push(item);
+            }
+        });
+
+        return temp;
+    }
+
+    clearSearchResult() {
+        this.search = {
+            users: [],
+            chats: [],
+            input: "",
+            loading: false,
+            finalResult: [],
+        };
+    }
+
+    localAndFetchedUserChatCombiner(
+        localChatItems: IChatItem[],
+        fetchResult: { users: User[]; chats: Chat[] }
+    ) {
+        return new Promise<IChatItem[]>(async (resolve, reject) => {
+            let finalChatItems: IChatItem[] = [...localChatItems];
+
+            await this.store
+                .select(ChatSelector.selectChats)
+                .pipe(take(1))
+                .subscribe(async localChats => {
+                    await fetchResult.chats.forEach(chat => {
+                        const alreadyExistIdx = localChatItems.findIndex(
+                            _chat => _chat.chatId === chat.chatId
+                        );
+                        if (alreadyExistIdx === -1) {
+                            finalChatItems.push(convertChatsToChatItems([chat])[0]);
+                        }
+                    });
+
+                    // fetchResult.users.forEach(user => {
+                    //   const alreadyExistIdx = localChats.findIndex((_chat) => {
+                    //     return (_chat.chatDetail.chatDetailType.value as DirectChatDetail).userInfo.userId === user.userId;
+                    //   });
+                    //   if (alreadyExistIdx === -1) {
+                    //     finalChatItems.push({
+                    //       chatId: user.userId,
+                    //       title: user.name + " " + user.lastName,
+                    //       lastMessage: undefined
+                    //     });
+                    //   }
+                    // });
+                });
+
+            resolve(finalChatItems);
+        });
+    }
+
+    determineSearchResult(result: { users: User[]; chats: Chat[] }) {
+        this.localAndFetchedUserChatCombiner(this.filteredChatItems, result).then(
+            combinedResult => {
+                this.search.finalResult = combinedResult;
+            }
+        );
+    }
+
+    onSearchInputChange() {
+        this.filteredChatItems = this.filterChatsList(this.search.input, this.chatItems);
+
+        if (this.search.input.trim().length > 0) {
+            this.search.loading = true;
+
+            this.searchService
+                .Search(this.search.input.trim())
+                .then(result => {
+                    this.search.loading = false;
+
+                    this.search.chats = result.chats as any as IChatItem[];
+                    this.search.users = result.users;
+
+                    this.determineSearchResult(result);
+                })
+                .catch(() => {
+                    this.determineSearchResult(undefined);
+                });
+        } else {
+            this.clearSearchResult();
+        }
+
+        this.search.loading = false;
+    }
 }

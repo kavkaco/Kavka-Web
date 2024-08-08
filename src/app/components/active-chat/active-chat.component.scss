@@ -1,92 +1,92 @@
 $mobile-break-point: 900px;
 
 .back-chat-button {
-  display: none;
+    display: none;
 }
 
 @media screen and (max-width: $mobile-break-point) {
-  .back-chat-button {
-    display: flex;
-  }
+    .back-chat-button {
+        display: flex;
+    }
 }
 
 .active-chat {
-  --head-size: 65px;
-  --input-section-size: 40px;
+    --head-size: 65px;
+    --input-section-size: 40px;
 
-  height: 100%;
-  display: grid;
-  grid-template-rows: var(--head-size) calc(100vh - var(--head-size));
-
-  .active-chat--body {
-    position: relative;
+    height: 100%;
     display: grid;
-    grid-template-rows: auto max-content;
-    align-items: end;
+    grid-template-rows: var(--head-size) calc(100vh - var(--head-size));
 
-    .active-chat--loading {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: rgb(var(--backgroundPrimary));
-      z-index: 10;
+    .active-chat--body {
+        position: relative;
+        display: grid;
+        grid-template-rows: auto max-content;
+        align-items: end;
+
+        .active-chat--loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(var(--backgroundPrimary));
+            z-index: 10;
+        }
+
+        .active-chat--body--messages-list {
+            overflow-y: auto;
+            padding: 10px;
+            height: 100%;
+        }
+
+        .active-chat--body--input-section {
+            display: grid;
+            align-items: end;
+            grid-template-columns: max-content auto max-content;
+            border-top: 1px solid rgb(var(--border));
+            padding: 5px 10px;
+            padding-top: 7px;
+
+            min-height: var(--input-section-size);
+
+            textarea {
+                background-color: transparent;
+                outline: none;
+                height: 40px;
+                line-height: 18px;
+                padding: 10px;
+                border: none;
+            }
+        }
     }
 
-    .active-chat--body--messages-list {
-      overflow-y: auto;
-      padding: 10px;
-      height: 100%;
+    .active-chat--head {
+        display: grid;
+        grid-template-columns: auto max-content;
+        align-items: center;
+        column-gap: 10px;
+        padding: 0 10px;
+        border-bottom: 1px solid rgb(var(--border));
     }
-
-    .active-chat--body--input-section {
-      display: grid;
-      align-items: end;
-      grid-template-columns: max-content auto max-content;
-      border-top: 1px solid rgb(var(--border));
-      padding: 5px 10px;
-      padding-top: 7px;
-
-      min-height: var(--input-section-size);
-
-      textarea {
-        background-color: transparent;
-        outline: none;
-        height: 40px;
-        line-height: 18px;
-        padding: 10px;
-        border: none;
-      }
-    }
-  }
-
-  .active-chat--head {
-    display: grid;
-    grid-template-columns: auto max-content;
-    align-items: center;
-    column-gap: 10px;
-    padding: 0 10px;
-    border-bottom: 1px solid rgb(var(--border));
-  }
 }
 
 .active-chat--chat-info {
-  width: 400px !important;
-  max-width: none;
-  background-color: rgb(var(--backgroundPrimary));
-  border-left: 1px solid rgb(var(--border));
+    width: 400px !important;
+    max-width: none;
+    background-color: rgb(var(--backgroundPrimary));
+    border-left: 1px solid rgb(var(--border));
 
-  @media screen and (max-width: 850px) {
-    & {
-      width: 330px !important;
+    @media screen and (max-width: 850px) {
+        & {
+            width: 330px !important;
+        }
     }
-  }
 
-  @media screen and (max-width: 700px) {
-    & {
-      width: 100% !important;
+    @media screen and (max-width: 700px) {
+        & {
+            width: 100% !important;
+        }
     }
-  }
 }

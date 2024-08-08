@@ -1,24 +1,26 @@
 import { createReducer, on } from "@ngrx/store";
-import { Message } from "../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/message/v1/message_pb";
 import { MessageActions } from "@app/store/messages/messages.actions";
+import { Message } from "kavka-core/model/message/v1/message_pb";
 
 export interface IMessageStore {
-    chatId: string
-    messages: Message[]
+    chatId: string;
+    messages: Message[];
 }
 
 export interface MessagesState {
-    messageStores: IMessageStore[]
+    messageStores: IMessageStore[];
 }
 
 const initialState: MessagesState = {
-    messageStores: []
+    messageStores: [],
 };
 
 export const messageReducer = createReducer(
     initialState,
     on(MessageActions.set, (state, { messagesList, chatId }) => {
-        const messageStoreIndex = state.messageStores.findIndex((_messageStore) => _messageStore.chatId === chatId)
+        const messageStoreIndex = state.messageStores.findIndex(
+            _messageStore => _messageStore.chatId === chatId
+        );
         if (messageStoreIndex == -1) {
             return {
                 ...state,
@@ -26,29 +28,28 @@ export const messageReducer = createReducer(
                     ...state.messageStores,
                     {
                         chatId: chatId,
-                        messages: messagesList
-                    }
-                ]
-            }
+                        messages: messagesList,
+                    },
+                ],
+            };
         }
 
         const messageStore: IMessageStore = {
             chatId: state.messageStores[messageStoreIndex].chatId,
             messages: messagesList,
-        }
-
+        };
 
         return {
             ...state,
             messageStores: [
                 ...state.messageStores.slice(0, messageStoreIndex),
                 messageStore,
-                ...state.messageStores.slice(messageStoreIndex + 1)
+                ...state.messageStores.slice(messageStoreIndex + 1),
             ],
-        }
+        };
     }),
     on(MessageActions.add, (state, { chatId, message }) => {
-        const idx = state.messageStores.findIndex((_item) => _item.chatId === chatId)
+        const idx = state.messageStores.findIndex(_item => _item.chatId === chatId);
         if (idx !== -1) {
             const messageStore: IMessageStore = state.messageStores[idx];
 
@@ -58,16 +59,13 @@ export const messageReducer = createReducer(
                     ...state.messageStores.slice(0, idx),
                     {
                         chatId,
-                        messages: [
-                            ...messageStore.messages,
-                            message
-                        ]
+                        messages: [...messageStore.messages, message],
                     },
                     ...state.messageStores.slice(idx + 1),
-                ]
-            }
+                ],
+            };
         }
 
-        return state
+        return state;
     })
 );

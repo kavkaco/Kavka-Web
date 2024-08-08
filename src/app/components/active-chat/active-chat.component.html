@@ -3,66 +3,74 @@
 <label class="overlay" for="chat-detail-drawer"></label>
 <div class="active-chat--chat-info drawer drawer-right">
     <div class="drawer-content px-0 pt-10 h-full">
-
-        <label for="chat-detail-drawer" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+        <label
+            for="chat-detail-drawer"
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</label
+        >
         <div class="flex flex-row gap-3 mb-3 px-3 pb-3">
             <div>
                 @if (avatar) {
-                <div class="avatar">
-                    <img [src]="avatar" alt="avatar" />
-                </div>
+                    <div class="avatar">
+                        <img [src]="avatar" alt="avatar" />
+                    </div>
                 } @else {
-                <div class="avatar size-20 text-xl bg-primary flex items-center justify-center">
-                    {{title[0].toUpperCase()}}
-                </div>
+                    <div class="avatar size-20 text-xl bg-primary flex items-center justify-center">
+                        {{ title[0].toUpperCase() }}
+                    </div>
                 }
             </div>
 
             <div class="flex flex-col gap-1s">
-                <h2 class="text-xl font-medium">{{title}}</h2>
+                <h2 class="text-xl font-medium">{{ title }}</h2>
                 @if (membersCount) {
-                <span class="text-xs text-content2">{{membersCount}} members</span>
-                }
-                @else if (online != undefined) {
-                @if (online == true) {
-                <span class="text-xs text-green-600">Online</span>
-                } @else {
-                <span class="text-xs text-content2">Offline</span>
-                }
+                    <span class="text-xs text-content2">{{ membersCount }} members</span>
+                } @else if (online != undefined) {
+                    @if (online == true) {
+                        <span class="text-xs text-green-600">Online</span>
+                    } @else {
+                        <span class="text-xs text-content2">Offline</span>
+                    }
                 }
             </div>
         </div>
 
         <div class="border-b border-border pb-5 px-4">
             <div class="flex flex-row gap-5 items-start">
-                <svg class="w-5 mt-1 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
+                <svg
+                    class="w-5 mt-1 fill-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
+                    <path
+                        d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
                     <path
                         d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
                 </svg>
 
                 <div>
-                    <h3 class="text-md">{{username}}</h3>
+                    <h3 class="text-md">{{ username }}</h3>
                     <span class="text-sm text-content2">Username</span>
                 </div>
             </div>
         </div>
 
-        @if (description.trim().length> 0) {
-        <div class="border-b border-border py-5 px-4">
-            <div class="flex flex-row gap-5 items-start">
-                <svg class="w-5 mt-1 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path
-                        d="M13.5,6.5a1.5,1.5,0,0,1-3,0A1.5,1.5,0,0,1,13.5,6.5ZM24,19V12.34A12.209,12.209,0,0,0,12.836.028,12,12,0,0,0,.029,12.854C.471,19.208,6.082,24,13.083,24H19A5.006,5.006,0,0,0,24,19ZM12.7,2.024A10.2,10.2,0,0,1,22,12.34V19a3,3,0,0,1-3,3H13.083C7.049,22,2.4,18.1,2.025,12.716A10,10,0,0,1,12.016,2C12.243,2,12.472,2.009,12.7,2.024ZM14,18V12a2,2,0,0,0-2-2H11a1,1,0,0,0,0,2h1v6a1,1,0,0,0,2,0Z" />
-                </svg>
+        @if (description.trim().length > 0) {
+            <div class="border-b border-border py-5 px-4">
+                <div class="flex flex-row gap-5 items-start">
+                    <svg
+                        class="w-5 mt-1 fill-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M13.5,6.5a1.5,1.5,0,0,1-3,0A1.5,1.5,0,0,1,13.5,6.5ZM24,19V12.34A12.209,12.209,0,0,0,12.836.028,12,12,0,0,0,.029,12.854C.471,19.208,6.082,24,13.083,24H19A5.006,5.006,0,0,0,24,19ZM12.7,2.024A10.2,10.2,0,0,1,22,12.34V19a3,3,0,0,1-3,3H13.083C7.049,22,2.4,18.1,2.025,12.716A10,10,0,0,1,12.016,2C12.243,2,12.472,2.009,12.7,2.024ZM14,18V12a2,2,0,0,0-2-2H11a1,1,0,0,0,0,2h1v6a1,1,0,0,0,2,0Z" />
+                    </svg>
 
-                <div>
-                    <h3 class="text-md">{{description}}</h3>
-                    <span class="text-sm text-content2">Description</span>
+                    <div>
+                        <h3 class="text-md">{{ description }}</h3>
+                        <span class="text-sm text-content2">Description</span>
+                    </div>
                 </div>
-
             </div>
-        </div>
         }
 
         <div class="border-b border-border py-5 px-4">
@@ -72,7 +80,7 @@
                         d="M12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16Zm0-6a2,2,0,1,0,2,2A2,2,0,0,0,12,10Zm6,13A6,6,0,0,0,6,23a1,1,0,0,0,2,0,4,4,0,0,1,8,0,1,1,0,0,0,2,0ZM18,8a4,4,0,1,1,4-4A4,4,0,0,1,18,8Zm0-6a2,2,0,1,0,2,2A2,2,0,0,0,18,2Zm6,13a6.006,6.006,0,0,0-6-6,1,1,0,0,0,0,2,4,4,0,0,1,4,4,1,1,0,0,0,2,0ZM6,8a4,4,0,1,1,4-4A4,4,0,0,1,6,8ZM6,2A2,2,0,1,0,8,4,2,2,0,0,0,6,2ZM2,15a4,4,0,0,1,4-4A1,1,0,0,0,6,9a6.006,6.006,0,0,0-6,6,1,1,0,0,0,2,0Z" />
                 </svg>
 
-                <h3 class="text-md">{{membersCount}} Members</h3>
+                <h3 class="text-md">{{ membersCount }} Members</h3>
             </div>
         </div>
 
@@ -92,9 +100,10 @@
 </div>
 
 <div class="active-chat">
-    <div class="active-chat--head ">
+    <div class="active-chat--head">
         <label for="chat-detail-drawer" class="h-full flex flex-row items-center gap-2">
-            <button (click)="submitCloseChat()"
+            <button
+                (click)="submitCloseChat()"
                 class="back-chat-button ml-1 flex text-center justify-center btn btn-circle btn-ghost fill-content2">
                 <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
@@ -103,23 +112,24 @@
             </button>
             <div class="flex items-center gap-2">
                 @if (avatar) {
-                <div class="avatar">
-                    <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
-                </div>
+                    <div class="avatar">
+                        <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
+                    </div>
                 } @else {
-                <div class="avatar items-center justify-center bg-primary">{{ title[0].toUpperCase() }}</div>
+                    <div class="avatar items-center justify-center bg-primary">
+                        {{ title[0].toUpperCase() }}
+                    </div>
                 }
                 <div class="flex flex-col">
-                    <h1 class="text-md">{{title}}</h1>
+                    <h1 class="text-md">{{ title }}</h1>
                     @if (membersCount) {
-                    <span class="text-xs text-content2">{{membersCount}} members</span>
-                    }
-                    @else if (online != undefined) {
-                    @if (online == true) {
-                    <span class="text-xs text-green-600">Online</span>
-                    } @else {
-                    <span class="text-xs text-content2">Offline</span>
-                    }
+                        <span class="text-xs text-content2">{{ membersCount }} members</span>
+                    } @else if (online != undefined) {
+                        @if (online == true) {
+                            <span class="text-xs text-green-600">Online</span>
+                        } @else {
+                            <span class="text-xs text-content2">Offline</span>
+                        }
                     }
                 </div>
             </div>
@@ -139,8 +149,15 @@
             </button>
             <div class="dropdown">
                 <label class="btn btn-circle btn-ghost fill-content2" tabindex="0">
-                    <svg class="w-5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        version="1.1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;"
+                    <svg
+                        class="w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                        version="1.1"
+                        x="0px"
+                        y="0px"
+                        viewBox="0 0 512 512"
+                        style="enable-background: new 0 0 512 512"
                         xml:space="preserve">
                         <g>
                             <circle cx="256" cy="42.667" r="42.667" />
@@ -151,92 +168,111 @@
                 </label>
                 <div class="dropdown-menu dropdown-menu-bottom-left">
                     <a tabindex="-1" class="dropdown-item hover:bg-primary text-sm">Profile</a>
-                    <a tabindex="-1" class="dropdown-item hover:bg-primary text-sm">Account settings</a>
-                    <a tabindex="-1" class="dropdown-item hover:bg-primary text-sm">Subscriptions</a>
+                    <a tabindex="-1" class="dropdown-item hover:bg-primary text-sm"
+                        >Account settings</a
+                    >
+                    <a tabindex="-1" class="dropdown-item hover:bg-primary text-sm"
+                        >Subscriptions</a
+                    >
                 </div>
             </div>
         </div>
     </div>
     <div class="active-chat--body">
         @if (isLoading) {
-        <div class="active-chat--loading">
-            <svg class="spinner-ring" viewBox="25 25 50 50" stroke-width="4">
-                <circle cx="50" cy="50" r="20" />
-            </svg>
-        </div>
+            <div class="active-chat--loading">
+                <svg class="spinner-ring" viewBox="25 25 50 50" stroke-width="4">
+                    <circle cx="50" cy="50" r="20" />
+                </svg>
+            </div>
         }
 
         <div class="active-chat--body--messages-list">
-            <ng-scrollbar #messagesScrollbar [appearance]="'compact'" class="ngx-custom-scrollbar overflow-x-hidden">
+            <ng-scrollbar
+                #messagesScrollbar
+                [appearance]="'compact'"
+                class="ngx-custom-scrollbar overflow-x-hidden">
                 <div class="pr-4">
                     @for (item of messages; track $index) {
-                    @switch (item.payload.case) {
-                    @case ("textMessage") {
-                    <app-message-bubble track [messageCaption]="item.payload.value.text" messageType="label"
-                        [senderTitle]="item.sender.name + ' ' + item.sender.lastName"
-                        [isSelfMessage]="item.sender.userId === activeUser.userId" [chatType]="activeChat.chatType"
-                        [createdAt]="item.createdAt"></app-message-bubble>
-                    }
-                    @case ("labelMessage") {
-                    <div class="flex items-center justify-center text-center">
-                        <div
-                            class="text-sm my-3 text-gray-200 border border-border bg-backgroundPrimary py-1 px-3 w-max rounded-full">
-                            {{ item.payload.value.text }}
-                        </div>
-                    </div>
-                    }
-                    }
+                        @switch (item.payload.case) {
+                            @case ("textMessage") {
+                                <app-message-bubble
+                                    track
+                                    [messageCaption]="item.payload.value.text"
+                                    messageType="label"
+                                    [senderTitle]="item.sender.name + ' ' + item.sender.lastName"
+                                    [isSelfMessage]="item.sender.userId === activeUser.userId"
+                                    [chatType]="activeChat.chatType"
+                                    [createdAt]="item.createdAt"></app-message-bubble>
+                            }
+                            @case ("labelMessage") {
+                                <div class="flex items-center justify-center text-center">
+                                    <div
+                                        class="text-sm my-3 text-gray-200 border border-border bg-backgroundPrimary py-1 px-3 w-max rounded-full">
+                                        {{ item.payload.value.text }}
+                                    </div>
+                                </div>
+                            }
+                        }
                     }
                 </div>
             </ng-scrollbar>
         </div>
 
         @if (userHasAccessToSendMessage) {
-        <div class="active-chat--body--input-section relative">
-            <button class="btn btn-circle btn-ghost fill-content2">
-                <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path
-                        d="M22.95,9.6a1,1,0,0,0-1.414,0L10.644,20.539a5,5,0,1,1-7.072-7.071L14.121,2.876a3,3,0,0,1,4.243,4.242L7.815,17.71a1.022,1.022,0,0,1-1.414,0,1,1,0,0,1,0-1.414l9.392-9.435a1,1,0,0,0-1.414-1.414L4.987,14.882a3,3,0,0,0,0,4.243,3.073,3.073,0,0,0,4.243,0L19.778,8.532a5,5,0,0,0-7.071-7.07L2.158,12.054a7,7,0,0,0,9.9,9.9L22.95,11.018A1,1,0,0,0,22.95,9.6Z" />
-                </svg>
-            </button>
-
-            <textarea [(ngModel)]="textInput" appAutoGrowingInput [borderWidth]="1" [initialHeight]="40"
-                [lineHeight]="18" class="resize-none transparent-scrollbar" placeholder="Write a message..."></textarea>
-
-            <div>
-                <button class="btn btn-circle btn-ghost fill-content2 mr-2">
+            <div class="active-chat--body--input-section relative">
+                <button class="btn btn-circle btn-ghost fill-content2">
                     <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
-                            d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm0,22A10,10,0,1,1,22,12,10.011,10.011,0,0,1,12,22ZM7,9.5A1.5,1.5,0,1,1,8.5,11,1.5,1.5,0,0,1,7,9.5Zm7,0A1.5,1.5,0,1,1,15.5,11,1.5,1.5,0,0,1,14,9.5ZM11.993,15A21.923,21.923,0,0,0,18,14c-.615,2.28-2.664,5-6,5s-5.392-2.72-6.007-5A21.841,21.841,0,0,0,11.993,15Z" />
+                            d="M22.95,9.6a1,1,0,0,0-1.414,0L10.644,20.539a5,5,0,1,1-7.072-7.071L14.121,2.876a3,3,0,0,1,4.243,4.242L7.815,17.71a1.022,1.022,0,0,1-1.414,0,1,1,0,0,1,0-1.414l9.392-9.435a1,1,0,0,0-1.414-1.414L4.987,14.882a3,3,0,0,0,0,4.243,3.073,3.073,0,0,0,4.243,0L19.778,8.532a5,5,0,0,0-7.071-7.07L2.158,12.054a7,7,0,0,0,9.9,9.9L22.95,11.018A1,1,0,0,0,22.95,9.6Z" />
                     </svg>
                 </button>
 
-                @if (textInput.length > 0) {
-                <button (click)="submitSendTextMessage()" class="btn btn-circle btn-primary fill-content2">
-                    <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <g id="_01_align_center" data-name="01 align center">
+                <textarea
+                    [(ngModel)]="textInput"
+                    appAutoGrowingInput
+                    [borderWidth]="1"
+                    [initialHeight]="40"
+                    [lineHeight]="18"
+                    class="resize-none transparent-scrollbar"
+                    placeholder="Write a message..."></textarea>
+
+                <div>
+                    <button class="btn btn-circle btn-ghost fill-content2 mr-2">
+                        <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path
-                                d="M1.444,6.669a2,2,0,0,0-.865,3.337l3.412,3.408V20h6.593l3.435,3.43a1.987,1.987,0,0,0,1.408.588,2.034,2.034,0,0,0,.51-.066,1.978,1.978,0,0,0,1.42-1.379L23.991.021ZM2,8.592l17.028-5.02L5.993,16.586v-4Zm13.44,13.424L11.413,18h-4L20.446,4.978Z" />
-                        </g>
-                    </svg>
-                </button>
-                }
-                @else {
-                <button class="btn btn-circle btn-primary fill-content2">
-                    <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path
-                            d="M12,20a8.009,8.009,0,0,0,8-8V8A8,8,0,0,0,4,8v4A8.009,8.009,0,0,0,12,20ZM12,2a6.006,6.006,0,0,1,5.91,5H15a1,1,0,0,0,0,2h3v2H15a1,1,0,0,0,0,2h2.91A5.993,5.993,0,0,1,6.09,13H9a1,1,0,0,0,0-2H6V9H9A1,1,0,0,0,9,7H6.09A6.006,6.006,0,0,1,12,2Z" />
-                        <path
-                            d="M23,12a1,1,0,0,0-1,1,9.01,9.01,0,0,1-9,9H11a9.011,9.011,0,0,1-9-9,1,1,0,0,0-2,0A11.013,11.013,0,0,0,11,24h2A11.013,11.013,0,0,0,24,13,1,1,0,0,0,23,12Z" />
-                    </svg>
-                </button>
-                }
+                                d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm0,22A10,10,0,1,1,22,12,10.011,10.011,0,0,1,12,22ZM7,9.5A1.5,1.5,0,1,1,8.5,11,1.5,1.5,0,0,1,7,9.5Zm7,0A1.5,1.5,0,1,1,15.5,11,1.5,1.5,0,0,1,14,9.5ZM11.993,15A21.923,21.923,0,0,0,18,14c-.615,2.28-2.664,5-6,5s-5.392-2.72-6.007-5A21.841,21.841,0,0,0,11.993,15Z" />
+                        </svg>
+                    </button>
+
+                    @if (textInput.length > 0) {
+                        <button
+                            (click)="submitSendTextMessage()"
+                            class="btn btn-circle btn-primary fill-content2">
+                            <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <g id="_01_align_center" data-name="01 align center">
+                                    <path
+                                        d="M1.444,6.669a2,2,0,0,0-.865,3.337l3.412,3.408V20h6.593l3.435,3.43a1.987,1.987,0,0,0,1.408.588,2.034,2.034,0,0,0,.51-.066,1.978,1.978,0,0,0,1.42-1.379L23.991.021ZM2,8.592l17.028-5.02L5.993,16.586v-4Zm13.44,13.424L11.413,18h-4L20.446,4.978Z" />
+                                </g>
+                            </svg>
+                        </button>
+                    } @else {
+                        <button class="btn btn-circle btn-primary fill-content2">
+                            <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="M12,20a8.009,8.009,0,0,0,8-8V8A8,8,0,0,0,4,8v4A8.009,8.009,0,0,0,12,20ZM12,2a6.006,6.006,0,0,1,5.91,5H15a1,1,0,0,0,0,2h3v2H15a1,1,0,0,0,0,2h2.91A5.993,5.993,0,0,1,6.09,13H9a1,1,0,0,0,0-2H6V9H9A1,1,0,0,0,9,7H6.09A6.006,6.006,0,0,1,12,2Z" />
+                                <path
+                                    d="M23,12a1,1,0,0,0-1,1,9.01,9.01,0,0,1-9,9H11a9.011,9.011,0,0,1-9-9,1,1,0,0,0-2,0A11.013,11.013,0,0,0,11,24h2A11.013,11.013,0,0,0,24,13,1,1,0,0,0,23,12Z" />
+                            </svg>
+                        </button>
+                    }
+                </div>
             </div>
-        </div>
-        }@else {
-        <button class="absolute bg-transparent outline-none w-full py-4 border-t border-border uppercase">
-            Mute
-        </button>
+        } @else {
+            <button
+                class="absolute bg-transparent outline-none w-full py-4 border-t border-border uppercase">
+                Mute
+            </button>
         }
     </div>
 </div>

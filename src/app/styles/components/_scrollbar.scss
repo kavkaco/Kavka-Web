@@ -1,32 +1,32 @@
 .ngx-custom-scrollbar .ng-scroll-content {
-  --scrollbar-offset: 7px;
+    --scrollbar-offset: 7px;
 
-  .ng-scrollbar-track {
-    border-radius: 50px;
-    background-color: transparent;
-  }
-  .ng-scrollbar-thumb {
-    border-radius: 50px;
-    background-color: #141414ea;
-    opacity: 0.7;
-  }
+    .ng-scrollbar-track {
+        border-radius: 50px;
+        background-color: transparent;
+    }
+    .ng-scrollbar-thumb {
+        border-radius: 50px;
+        background-color: #141414ea;
+        opacity: 0.7;
+    }
 
-  scrollbar-x {
-    display: none;
-  }
+    scrollbar-x {
+        display: none;
+    }
 }
 
 .transparent-scrollbar {
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
+    &::-webkit-scrollbar {
+        width: 0px;
+    }
 
-  &::-webkit-scrollbar-track {
-    background: transparent !important;
-  }
+    &::-webkit-scrollbar-track {
+        background: transparent !important;
+    }
 
-  &::-webkit-scrollbar-thumb,
-  &::-webkit-scrollbar-thumb:hover {
-    background: transparent !important;
-  }
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-thumb:hover {
+        background: transparent !important;
+    }
 }

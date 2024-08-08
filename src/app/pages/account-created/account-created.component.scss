@@ -1,10 +1,10 @@
 .account-created-card {
-  width: 600px !important;
-  max-width: unset !important;
+    width: 600px !important;
+    max-width: unset !important;
 
-  @media screen and (max-width: 800px) {
-    & {
-      width: 90% !important;
+    @media screen and (max-width: 800px) {
+        & {
+            width: 90% !important;
+        }
     }
-  }
 }

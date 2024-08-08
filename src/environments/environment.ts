@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  grpcTransportBaseUrl: 'http://api.kavka.org',
+    production: true,
+    grpcTransportBaseUrl: "http://api.kavka.org",
 };

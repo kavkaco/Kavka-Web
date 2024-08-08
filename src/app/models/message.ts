@@ -3,10 +3,10 @@ export enum MessageType {
     Image,
     Voice,
     File,
-    Sticker
+    Sticker,
 }
 
-export interface IMessage { };
+export interface IMessage {}
 
 export function getMessageCreatedAtTimestamp(createdAtBigInt: bigint): string {
     const tsNumber = Number(createdAtBigInt);
@@ -15,9 +15,9 @@ export function getMessageCreatedAtTimestamp(createdAtBigInt: bigint): string {
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().locale;
 
     const timeString = date.toLocaleTimeString(userTimezone, {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
     });
 
     return timeString;

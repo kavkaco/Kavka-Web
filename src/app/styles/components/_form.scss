@@ -1,17 +1,17 @@
 .form {
-  width: 500px;
+    width: 500px;
 
-  @media screen and (max-width: 670px) {
-    & {
-      width: 95%;
+    @media screen and (max-width: 670px) {
+        & {
+            width: 95%;
+        }
     }
-  }
 }
 
 .form-center {
-  position: relative;
+    position: relative;
 
-  margin-top: 30px;
-  left: 50%;
-  transform: translate(-50%);
+    margin-top: 30px;
+    left: 50%;
+    transform: translate(-50%);
 }

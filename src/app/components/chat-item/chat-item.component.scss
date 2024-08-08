@@ -1,41 +1,41 @@
 $mobile-break-point: 900px;
 
 .platform-chats--item {
-  position: relative;
-  justify-content: left;
-  height: 70px;
-  background-color: transparent;
-  transition: 0.2s ease-out;
-  margin-bottom: 8px;
+    position: relative;
+    justify-content: left;
+    height: 70px;
+    background-color: transparent;
+    transition: 0.2s ease-out;
+    margin-bottom: 8px;
 
-  &.platform-chats--active-item {
-    .platform-chats--item--caption,
-    .platform-chats--item--caption svg {
-      color: #fff !important;
-      fill: #fff !important;
+    &.platform-chats--active-item {
+        .platform-chats--item--caption,
+        .platform-chats--item--caption svg {
+            color: #fff !important;
+            fill: #fff !important;
+        }
     }
-  }
 
-  .platform-chats--item--caption {
-    max-width: calc(var(--sidebar-size) - 95px);
-    @media screen and (max-width: $mobile-break-point) {
-      & {
-        max-width: calc(100vw - 130px);
-      }
+    .platform-chats--item--caption {
+        max-width: calc(var(--sidebar-size) - 95px);
+        @media screen and (max-width: $mobile-break-point) {
+            & {
+                max-width: calc(100vw - 130px);
+            }
+        }
     }
-  }
 }
 
 @media screen and (min-width: $mobile-break-point) {
-  .platform-chats--active-item,
-  .platform-chats--item {
-    &:hover,
-    &:focus {
-      background-color: rgb(var(--primary));
+    .platform-chats--active-item,
+    .platform-chats--item {
+        &:hover,
+        &:focus {
+            background-color: rgb(var(--primary));
+        }
     }
-  }
 
-  .platform-chats--item:hover {
-    background-color: rgb(var(--backgroundSecondary));
-  }
+    .platform-chats--item:hover {
+        background-color: rgb(var(--backgroundSecondary));
+    }
 }

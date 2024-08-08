@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { ChatActions } from "@app/store/chat/chat.actions";
-import { Chat } from "../../../../../Kavka-Core/protobuf/gen/es/protobuf/model/chat/v1/chat_pb";
+import { Chat } from "kavka-core/model/chat/v1/chat_pb";
 export interface ChatState {
     activeChat: string | null;
     chats: Chat[];
@@ -14,7 +14,7 @@ const initialState: ChatState = {
 export const chatReducer = createReducer(
     initialState,
     on(ChatActions.setActiveChat, (state, { chatId }) => {
-        const chatIndex = state.chats.findIndex((_chat) => _chat.chatId === chatId);
+        const chatIndex = state.chats.findIndex(_chat => _chat.chatId === chatId);
 
         if (chatIndex == -1) {
             return state;
@@ -22,23 +22,23 @@ export const chatReducer = createReducer(
 
         return {
             ...state,
-            activeChat: chatId
-        }
+            activeChat: chatId,
+        };
     }),
-    on(ChatActions.removeActiveChat, (state, { }) => {
+    on(ChatActions.removeActiveChat, (state, {}) => {
         return {
             ...state,
-            activeChat: null
-        }
+            activeChat: null,
+        };
     }),
     on(ChatActions.set, (state, { chats }) => {
         return {
             ...state,
-            chats
-        }
+            chats,
+        };
     }),
     on(ChatActions.update, (state, { chatId, changes }) => {
-        const idx = state.chats.findIndex((_chat) => _chat.chatId === chatId);
+        const idx = state.chats.findIndex(_chat => _chat.chatId === chatId);
         if (idx === -1) {
             return state;
         }
@@ -47,20 +47,13 @@ export const chatReducer = createReducer(
 
         return {
             ...state,
-            chats: [
-                ...state.chats.slice(0, idx),
-                updatedChat,
-                ...state.chats.slice(idx + 1)
-            ]
-        }
+            chats: [...state.chats.slice(0, idx), updatedChat, ...state.chats.slice(idx + 1)],
+        };
     }),
     on(ChatActions.add, (state, { chat }) => {
         return {
             ...state,
-            chats: [
-                chat,
-                ...state.chats,
-            ]
-        }
+            chats: [chat, ...state.chats],
+        };
     })
 );
