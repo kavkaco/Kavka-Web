@@ -8,7 +8,6 @@ import { ChatActions } from "@app/store/chat/chat.actions";
 import { MessageActions } from "@app/store/messages/messages.actions";
 import { EventsService as KavkaEventsService } from "kavka-core/events/v1/events_connect";
 import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "kavka-core/events/v1/events_pb";
-import { LastMessage } from "kavka-core/model/chat/v1/chat_pb";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {

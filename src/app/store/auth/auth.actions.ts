@@ -1,5 +1,5 @@
-import { createAction, createActionGroup, emptyProps, props } from "@ngrx/store";
 import { IUserUpdatableFields, IUser } from "@models/auth";
+import { createActionGroup, props } from "@ngrx/store";
 
 export const AuthActions = createActionGroup({
     source: "auth",

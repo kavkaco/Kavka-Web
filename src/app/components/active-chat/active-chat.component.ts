@@ -1,4 +1,15 @@
-import { Component, ElementRef, HostListener, inject, Input, ViewChild } from "@angular/core";
+import {
+    Component,
+    ElementRef,
+    HostListener,
+    inject,
+    Input,
+    ViewChild,
+    OnInit,
+    OnChanges,
+    AfterViewInit,
+    AfterContentInit,
+} from "@angular/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { AutoGrowingInputDirective } from "@directives/auto-growing-input.directive";
 import { FormsModule } from "@angular/forms";
@@ -27,11 +38,11 @@ import { Message } from "kavka-core/model/message/v1/message_pb";
     templateUrl: "./active-chat.component.html",
     styleUrl: "./active-chat.component.scss",
 })
-export class ActiveChatComponent {
+export class ActiveChatComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
     private store = inject(Store);
     private messageService = inject(MessageService);
 
-    textInput: string = "";
+    textInput = "";
     activeUser: IUser;
     @Input() activeChat: Chat;
     @ViewChild("messagesScrollbar") messagesScrollbarRef: ElementRef;
@@ -144,7 +155,7 @@ export class ActiveChatComponent {
     submitSendTextMessage() {
         this.messageService
             .SendTextMessage(this.activeChat.chatId, this.textInput.trim())
-            .then(message => {
+            .then(() => {
                 this.textInput = "";
                 this.scrollToBottom(this.messagesScrollbarRef);
             });

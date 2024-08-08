@@ -15,9 +15,7 @@ const initialState: AuthState = {
 export function isUserAlreadyExist(users: IUser[], user: IUser): boolean {
     let exists = false;
 
-    for (let i = 0; i < users.length; i++) {
-        const _user = users[i];
-
+    for (const _user of users) {
         if (_user?.username == user.username || _user?.email == user.email) {
             exists = true;
             break;

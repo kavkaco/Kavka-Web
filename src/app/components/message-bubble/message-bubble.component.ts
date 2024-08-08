@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnChanges, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { getChatTypeString } from "@app/models/chat";
 import { getMessageCreatedAtTimestamp } from "@app/models/message";
@@ -12,7 +12,7 @@ import { ChatType } from "kavka-core/model/chat/v1/chat_pb";
     templateUrl: "./message-bubble.component.html",
     styleUrl: "./message-bubble.component.scss",
 })
-export class MessageBubbleComponent {
+export class MessageBubbleComponent implements OnChanges, OnInit {
     showAvatar = true;
 
     @Input() isSelfMessage: boolean;

@@ -5,8 +5,7 @@ import * as AuthSelector from "@store/auth/auth.selectors";
 import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GrpcTransportService } from "@app/services/grpc-transport.service";
 
-import { CreateChannelResponse } from "kavka-core/chat/v1/chat_pb";
-import { Chat, ChatType } from "kavka-core/model/chat/v1/chat_pb";
+import { Chat } from "kavka-core/model/chat/v1/chat_pb";
 import { ChatService as KavkaChatService } from "kavka-core/chat/v1/chat_connect";
 
 @Injectable({ providedIn: "root" })

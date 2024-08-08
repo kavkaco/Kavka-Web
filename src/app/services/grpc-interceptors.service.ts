@@ -1,4 +1,3 @@
-import { Router } from "@angular/router";
 import { AccountManagerService } from "@app/services/account-manager.service";
 import { AuthService } from "@app/services/auth.service";
 import { Interceptor } from "@connectrpc/connect";

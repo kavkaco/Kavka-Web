@@ -6,7 +6,7 @@ import { Store } from "@ngrx/store";
 import * as ChatSelector from "@app/store/chat/chat.selectors";
 import { take } from "rxjs";
 import { EventsService } from "@app/services/events.service";
-import { ChatService } from "@app/services/chat.service";
+
 @Component({
     selector: "app-platform",
     standalone: true,

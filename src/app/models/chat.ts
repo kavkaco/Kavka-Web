@@ -1,5 +1,3 @@
-import { IUser } from "./auth";
-
 import {
     ChannelChatDetail,
     Chat,

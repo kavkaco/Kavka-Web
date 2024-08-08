@@ -1,18 +1,14 @@
 import { isPlatformBrowser } from "@angular/common";
 import { inject, PLATFORM_ID } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
-import { IUser } from "@app/models/auth";
 import { AccountManagerService } from "@app/services/account-manager.service";
 import { AuthService } from "@app/services/auth.service";
-import { GrpcTransportService } from "@app/services/grpc-transport.service";
-import { AuthActions } from "@app/store/auth/auth.actions";
 import { Store } from "@ngrx/store";
 import * as AuthSelector from "@store/auth/auth.selectors";
 import { take } from "rxjs";
 
-export const authGuard: CanActivateFn = async (route, state) => {
+export const authGuard: CanActivateFn = async () => {
     const platformId = inject(PLATFORM_ID);
-    const transport = inject(GrpcTransportService).transport;
     const authService = new AuthService();
     const accountManagerService = inject(AccountManagerService);
     const router = inject(Router);

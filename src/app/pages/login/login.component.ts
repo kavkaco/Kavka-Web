@@ -1,13 +1,7 @@
-import { Component, inject, PLATFORM_ID } from "@angular/core";
+import { Component, inject, PLATFORM_ID, OnInit } from "@angular/core";
 import { Router, RouterLink, RouterModule } from "@angular/router";
-import { select, Store } from "@ngrx/store";
-import {
-    FormControl,
-    FormGroup,
-    FormsModule,
-    ReactiveFormsModule,
-    Validators,
-} from "@angular/forms";
+import { Store } from "@ngrx/store";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from "@app/services/auth.service";
 import { AuthActions } from "@store/auth/auth.actions";
 import * as AuthSelectors from "@app/store/auth/auth.selectors";
@@ -25,10 +19,10 @@ import { ILocalStorageAccount } from "@app/models/auth";
     templateUrl: "./login.component.html",
     styleUrl: "./login.component.scss",
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     platformId = inject(PLATFORM_ID);
     accountsList: ILocalStorageAccount[] | null = null;
-    activeAccountId: string = "";
+    activeAccountId = "";
 
     loginForm = new FormGroup({
         email: new FormControl("", [Validators.required]),
@@ -37,7 +31,7 @@ export class LoginComponent {
     });
     formErrors: string[] = [];
 
-    showSelectAccount: boolean = false;
+    showSelectAccount = false;
 
     addNewFormError(msg: string) {
         const i = this.formErrors.findIndex(_msg => _msg.trim() === msg.trim());

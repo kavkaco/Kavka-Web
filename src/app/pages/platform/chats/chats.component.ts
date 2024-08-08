@@ -1,13 +1,4 @@
-import {
-    Component,
-    ElementRef,
-    inject,
-    input,
-    Input,
-    model,
-    ViewChild,
-    viewChild,
-} from "@angular/core";
+import { Component, inject, ViewChild } from "@angular/core";
 import { ActiveChatComponent } from "@components/active-chat/active-chat.component";
 import { ChatItemComponent } from "@components/chat-item/chat-item.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -17,17 +8,10 @@ import * as ChatSelector from "@store/chat/chat.selectors";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { ChatService } from "@services/chat.service";
 import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
-import { BehaviorSubject, take } from "rxjs";
+import { take } from "rxjs";
 import { SearchService } from "@app/services/search.service";
 
-import {
-    ChannelChatDetail,
-    Chat,
-    ChatType,
-    DirectChatDetail,
-    GroupChatDetail,
-    LastMessage,
-} from "kavka-core/model/chat/v1/chat_pb";
+import { Chat, DirectChatDetail } from "kavka-core/model/chat/v1/chat_pb";
 import { User } from "kavka-core/model/user/v1/user_pb";
 
 @Component({
@@ -62,10 +46,10 @@ export class ChatsComponent {
 
     @ViewChild("createChatModal") createChatModalRef;
     createChatMenuActiveTab: string | undefined;
-    channelTitleInput: string = "";
-    channelUsernameInput: string = "";
-    groupTitleInput: string = "";
-    groupUsernameInput: string = "";
+    channelTitleInput = "";
+    channelUsernameInput = "";
+    groupTitleInput = "";
+    groupUsernameInput = "";
 
     constructor() {
         this.clearSearchResult();
@@ -145,7 +129,7 @@ export class ChatsComponent {
             return sourceList;
         }
 
-        let temp: IChatItem[] = [];
+        const temp: IChatItem[] = [];
 
         sourceList.forEach(item => {
             if (item.title.toLowerCase().indexOf(input.toLowerCase()) > -1) {
@@ -170,10 +154,10 @@ export class ChatsComponent {
         localChatItems: IChatItem[],
         fetchResult: { users: User[]; chats: Chat[] }
     ) {
-        return new Promise<IChatItem[]>(async (resolve, reject) => {
-            let finalChatItems: IChatItem[] = [...localChatItems];
+        return new Promise<IChatItem[]>(resolve => {
+            const finalChatItems: IChatItem[] = [...localChatItems];
 
-            await this.store
+            this.store
                 .select(ChatSelector.selectChats)
                 .pipe(take(1))
                 .subscribe(async localChats => {
@@ -186,18 +170,21 @@ export class ChatsComponent {
                         }
                     });
 
-                    // fetchResult.users.forEach(user => {
-                    //   const alreadyExistIdx = localChats.findIndex((_chat) => {
-                    //     return (_chat.chatDetail.chatDetailType.value as DirectChatDetail).userInfo.userId === user.userId;
-                    //   });
-                    //   if (alreadyExistIdx === -1) {
-                    //     finalChatItems.push({
-                    //       chatId: user.userId,
-                    //       title: user.name + " " + user.lastName,
-                    //       lastMessage: undefined
-                    //     });
-                    //   }
-                    // });
+                    fetchResult.users.forEach(user => {
+                        const alreadyExistIdx = localChats.findIndex(_chat => {
+                            return (
+                                (_chat.chatDetail.chatDetailType.value as DirectChatDetail).userInfo
+                                    .userId === user.userId
+                            );
+                        });
+                        if (alreadyExistIdx === -1) {
+                            finalChatItems.push({
+                                chatId: user.userId,
+                                title: user.name + " " + user.lastName,
+                                lastMessage: undefined,
+                            });
+                        }
+                    });
                 });
 
             resolve(finalChatItems);

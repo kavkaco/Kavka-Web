@@ -25,7 +25,7 @@ export const chatReducer = createReducer(
             activeChat: chatId,
         };
     }),
-    on(ChatActions.removeActiveChat, (state, {}) => {
+    on(ChatActions.removeActiveChat, state => {
         return {
             ...state,
             activeChat: null,

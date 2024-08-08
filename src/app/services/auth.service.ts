@@ -60,7 +60,7 @@ export class AuthService {
         authService: AuthService,
         accountManagerService: AccountManagerService
     ) {
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const activeAccount = accountManagerService.GetActiveAccount();
             if (activeAccount && activeAccount.accessToken && activeAccount.refreshToken) {
                 const isAccessTokenExpired = AuthService.isAccessTokenExpired(
@@ -69,7 +69,7 @@ export class AuthService {
 
                 if (isAccessTokenExpired) {
                     // Refresh access token and update on storage
-                    await authService
+                    authService
                         .RefreshToken(activeAccount.refreshToken, activeAccount.accountId)
                         .then(newAccessToken => {
                             console.log("[AccessTokenProtector] Refreshed");
@@ -114,7 +114,7 @@ export class AuthService {
             const decodedToken = JSON.parse(atob(accessToken.split(".")[1]));
             const expiry = decodedToken.exp - 80;
             return Date.now() / 1000 >= expiry;
-        } catch (err) {
+        } catch {
             return true;
         }
     }

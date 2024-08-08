@@ -1,4 +1,4 @@
-import { Component, inject, Input, output, Output } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { Store } from "@ngrx/store";
 import * as ChatSelector from "@app/store/chat/chat.selectors";
 
@@ -18,7 +18,7 @@ export class ChatItemComponent {
     @Input({ required: true }) title!: string;
     @Input() avatar: string | undefined;
     @Input({ required: true }) lastMessage!: LastMessage;
-    isActive: boolean = false;
+    isActive = false;
 
     constructor() {
         this.store.select(ChatSelector.selectActiveChat).subscribe(chat => {

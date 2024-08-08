@@ -1,7 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { ChatState } from "@app/store/chat/chat.reducers";
-import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
-import { Chat } from "kavka-core/model/chat/v1/chat_pb";
+import { convertChatsToChatItems } from "@app/models/chat";
 
 export const selectChatState = createFeatureSelector<ChatState>("chat");
 

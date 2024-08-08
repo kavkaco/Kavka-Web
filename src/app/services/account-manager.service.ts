@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ILocalStorageAccount } from "@app/models/auth";
-import { isUserAlreadyExist } from "@app/store/auth/auth.reducer";
 
 const localStorageKeys = {
     ActiveAccountKey: "active_account",
@@ -13,9 +12,7 @@ export function isAccountAlreadyExist(
 ): boolean {
     let exists = false;
 
-    for (let i = 0; i < accounts.length; i++) {
-        const _account = accounts[i];
-
+    for (const _account of accounts) {
         if (_account?.accountId == account.accountId) {
             exists = true;
             break;
@@ -29,8 +26,6 @@ export function isAccountAlreadyExist(
     providedIn: "root",
 })
 export class AccountManagerService {
-    constructor() {}
-
     GetActiveAccountId() {
         return localStorage.getItem(localStorageKeys.ActiveAccountKey);
     }
@@ -99,7 +94,7 @@ export class AccountManagerService {
             const accounts = JSON.parse(accountsString);
 
             return accounts as ILocalStorageAccount[];
-        } catch (_) {
+        } catch {
             return null;
         }
     }
@@ -125,7 +120,7 @@ export class AccountManagerService {
     }
 
     ActivateAccount(accountId: string): boolean {
-        let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
+        const accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
 
         const accounts = JSON.parse(accountsString || "[]");
 

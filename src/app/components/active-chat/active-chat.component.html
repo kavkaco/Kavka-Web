@@ -25,8 +25,8 @@
                 <h2 class="text-xl font-medium">{{ title }}</h2>
                 @if (membersCount) {
                     <span class="text-xs text-content2">{{ membersCount }} members</span>
-                } @else if (online != undefined) {
-                    @if (online == true) {
+                } @else if (online !== undefined) {
+                    @if (online === true) {
                         <span class="text-xs text-green-600">Online</span>
                     } @else {
                         <span class="text-xs text-content2">Offline</span>
@@ -124,8 +124,8 @@
                     <h1 class="text-md">{{ title }}</h1>
                     @if (membersCount) {
                         <span class="text-xs text-content2">{{ membersCount }} members</span>
-                    } @else if (online != undefined) {
-                        @if (online == true) {
+                    } @else if (online !== undefined) {
+                        @if (online === true) {
                             <span class="text-xs text-green-600">Online</span>
                         } @else {
                             <span class="text-xs text-content2">Offline</span>
@@ -148,7 +148,7 @@
                 </svg>
             </button>
             <div class="dropdown">
-                <label class="btn btn-circle btn-ghost fill-content2" tabindex="0">
+                <div class="btn btn-circle btn-ghost fill-content2" tabindex="0">
                     <svg
                         class="w-5"
                         xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +165,7 @@
                             <circle cx="256" cy="469.333" r="42.667" />
                         </g>
                     </svg>
-                </label>
+                </div>
                 <div class="dropdown-menu dropdown-menu-bottom-left">
                     <a tabindex="-1" class="dropdown-item hover:bg-primary text-sm">Profile</a>
                     <a tabindex="-1" class="dropdown-item hover:bg-primary text-sm"

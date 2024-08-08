@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from "@angular/common";
-import { Component, inject, PLATFORM_ID } from "@angular/core";
+import { Component, inject, PLATFORM_ID, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import * as AuthSelectors from "@app/store/auth/auth.selectors";
 import { NgScrollbar } from "ngx-scrollbar";
@@ -12,7 +12,7 @@ import { IUser } from "@app/models/auth";
     templateUrl: "./settings.component.html",
     styleUrl: "./settings.component.scss",
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
     platformId = inject(PLATFORM_ID);
     user: IUser | undefined;
     users: IUser[] | undefined;

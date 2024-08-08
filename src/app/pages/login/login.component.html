@@ -7,7 +7,7 @@
                 <section class="menu-section">
                     <ul class="menu-items">
                         @for (item of accountsList; track $index) {
-                            <a
+                            <button
                                 (click)="activateAccount(item.accountId)"
                                 track
                                 class="menu-item menu-item-no-animation hover:bg-transparent">
@@ -16,7 +16,7 @@
                                     class="radio-primary radio"
                                     [checked]="item.accountId === activeAccountId" />
                                 {{ item.email }}
-                            </a>
+                            </button>
                         }
 
                         <button (click)="showSelectAccount = false" class="btn btn-primary mt-2">
@@ -25,7 +25,6 @@
                     </ul>
                 </section>
             </nav>
-
         } @else {
             @for (item of formErrors; track $index) {
                 <div track class="alert alert-error mb-3">
@@ -50,11 +49,11 @@
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl">Login</h2>
                 @if (showSelectAccount) {
-                    <a
+                    <button
                         (click)="showSelectAccount = true"
-                        class="link link-underline-hover link-primary text-sm"
-                        >Select account</a
-                    >
+                        class="link link-underline-hover link-primary text-sm">
+                        Select account
+                    </button>
                 }
             </div>
             <form [formGroup]="loginForm" class="form-group">

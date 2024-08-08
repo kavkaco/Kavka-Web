@@ -1,9 +1,4 @@
-import {
-    ApplicationConfig,
-    provideZoneChangeDetection,
-    isDevMode,
-    importProvidersFrom,
-} from "@angular/core";
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from "@angular/core";
 import { provideRouter } from "@angular/router";
 
 import { routes } from "./app.routes";

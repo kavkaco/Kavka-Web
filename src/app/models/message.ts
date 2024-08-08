@@ -6,8 +6,6 @@ export enum MessageType {
     Sticker,
 }
 
-export interface IMessage {}
-
 export function getMessageCreatedAtTimestamp(createdAtBigInt: bigint): string {
     const tsNumber = Number(createdAtBigInt);
     const date = new Date(tsNumber);
