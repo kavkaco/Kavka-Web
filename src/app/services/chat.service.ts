@@ -31,7 +31,7 @@ export class ChatService {
                     resolve(response.chat);
                 })
                 .catch((e: Error) => {
-                    console.log("[ChatService] GetChat", e.message);
+                    console.error("[ChatService] GetChat", e.message);
                     reject(e);
                 });
         });
@@ -44,10 +44,12 @@ export class ChatService {
                 .getUserChats({ userId })
                 .then(response => {
                     console.log("[ChatService] User chats loaded");
-
                     resolve(response.chats);
                 })
-                .catch(() => reject);
+                .catch((e: Error) => {
+                    console.error("[ChatService] GetUserChats", e.message);
+                    reject(e);
+                });
         });
     }
 
@@ -58,7 +60,24 @@ export class ChatService {
                 .then(response => {
                     resolve(response.chat);
                 })
-                .catch(() => reject);
+                .catch((e: Error) => {
+                    console.error("[ChatService] CreateChannel", e.message);
+                    reject(e);
+                });
+        });
+    }
+
+    CreateGroup(title: string, username: string) {
+        return new Promise<Chat>((resolve, reject) => {
+            this.client
+                .createGroup({ title, username })
+                .then(response => {
+                    resolve(response.chat);
+                })
+                .catch((e: Error) => {
+                    console.error("[ChatService] CreateGroup", e.message);
+                    reject(e);
+                });
         });
     }
 }

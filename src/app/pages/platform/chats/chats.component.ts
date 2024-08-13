@@ -75,7 +75,6 @@ export class ChatsComponent {
         });
     }
 
-    // ANCHOR
     // Check it the chat does not exists in the local chats
     // we prepare to fetch the chat from the back-end and add to store
     activateUncreatedChat(chatId: string) {
@@ -91,14 +90,18 @@ export class ChatsComponent {
 
                 // fetch chat
                 this.chatService.GetChat(chatId).then(fetchedChat => {
-                    this.store.dispatch(ChatActions.add({ chat: fetchedChat }));
-                    this.activateChat(chatId);
+                    this.store.dispatch(ChatActions.setActiveChat({ chat: fetchedChat }));
                 });
             });
     }
 
     activateChat(chatId: string) {
-        this.store.dispatch(ChatActions.setActiveChat({ chatId }));
+        this.store
+            .select(ChatSelector.selectChat(chatId))
+            .pipe(take(1))
+            .subscribe(chat => {
+                this.store.dispatch(ChatActions.setActiveChat({ chat }));
+            });
     }
 
     submitCreateChannel() {
@@ -107,11 +110,15 @@ export class ChatsComponent {
             .then(chat => {
                 this.store.dispatch(ChatActions.add({ chat }));
             });
+
         this.closeCreateChatModal();
     }
 
     submitCreateGroup() {
-        this.createChatMenuActiveTab = undefined;
+        this.chatService.CreateGroup(this.groupTitleInput, this.groupUsernameInput).then(chat => {
+            this.store.dispatch(ChatActions.add({ chat }));
+        });
+
         this.closeCreateChatModal();
     }
 
@@ -192,11 +199,9 @@ export class ChatsComponent {
     }
 
     determineSearchResult(result: { users: User[]; chats: Chat[] }) {
-        this.mergeLocalAndFetchedChats(this.filteredChatItems, result).then(
-            merged => {
-                this.search.finalResult = merged;
-            }
-        );
+        this.mergeLocalAndFetchedChats(this.filteredChatItems, result).then(merged => {
+            this.search.finalResult = merged;
+        });
     }
 
     onSearchInputChange() {
