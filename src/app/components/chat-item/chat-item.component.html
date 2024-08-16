@@ -41,9 +41,9 @@
             }
 
             @if (lastMessage.messageCaption) {
-                <p class="overflow-hidden text-ellipsis whitespace-nowrap">
-                    {{ lastMessage.messageCaption }}
-                </p>
+                <p
+                    [innerHTML]="sanitizeLastMessageCaption(lastMessage.messageCaption)"
+                    class="overflow-hidden text-ellipsis whitespace-nowrap"></p>
             }
         </div>
     </div>

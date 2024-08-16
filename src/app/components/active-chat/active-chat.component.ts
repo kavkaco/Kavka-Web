@@ -6,8 +6,8 @@ import {
     Input,
     ViewChild,
     OnInit,
-    OnChanges,
     AfterViewInit,
+    OnChanges,
     AfterContentInit,
 } from "@angular/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
@@ -17,12 +17,8 @@ import { MessageBubbleComponent } from "@components/message-bubble/message-bubbl
 import * as MessageSelector from "@store/messages/messages.selectors";
 import { MessageService } from "@app/services/message.service";
 import { MessageActions } from "@app/store/messages/messages.actions";
-import { IUser } from "@app/models/auth";
 import { Store } from "@ngrx/store";
-import * as AuthSelector from "@store/auth/auth.selectors";
-import { take } from "rxjs";
 import { ChatActions } from "@app/store/chat/chat.actions";
-
 import {
     ChannelChatDetail,
     Chat,
@@ -30,6 +26,8 @@ import {
     GroupChatDetail,
 } from "kavka-core/model/chat/v1/chat_pb";
 import { Message } from "kavka-core/model/message/v1/message_pb";
+import { ChatService } from "@app/services/chat.service";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 @Component({
     selector: "app-active-chat",
@@ -38,16 +36,17 @@ import { Message } from "kavka-core/model/message/v1/message_pb";
     templateUrl: "./active-chat.component.html",
     styleUrl: "./active-chat.component.scss",
 })
-export class ActiveChatComponent implements OnInit, OnChanges, AfterViewInit, AfterContentInit {
+export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
     private store = inject(Store);
     private messageService = inject(MessageService);
+    private chatService = inject(ChatService);
 
-    textInput = "";
-    activeUser: IUser;
+    @Input() activeUser: User;
     @Input() activeChat: Chat;
     @ViewChild("messagesScrollbar") messagesScrollbarRef: ElementRef;
-    isLoading = true;
 
+    // Active chat extra detail
+    textInput = "";
     title = "";
     username = "";
     description = "";
@@ -55,38 +54,31 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterViewInit, Af
     online?: boolean | undefined;
     avatar: string | undefined;
     messages: Message[];
-    userHasAccessToSendMessage = false;
+    inputSectionStatus: {
+        show: boolean;
+        joined: boolean;
+    };
 
     ngOnInit() {
-        this.store
-            .select(AuthSelector.selectActiveUser)
-            .pipe(take(1))
-            .subscribe(activeUser => {
-                this.activeUser = activeUser;
-            });
+        this.inputSectionStatus = {
+            show: false,
+            joined: false,
+        };
     }
 
     ngOnChanges() {
-        let detail;
-        switch (this.activeChat.chatType) {
-            case ChatType.CHANNEL:
-                detail = this.activeChat.chatDetail.chatDetailType.value as ChannelChatDetail;
-                this.title = detail.title;
-                this.username = detail.username;
-                this.membersCount = detail.members.length;
-                this.description = detail.description;
-                break;
-            case ChatType.GROUP:
-                detail = this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail;
-                this.title = detail.title;
-                this.username = detail.username;
-                this.membersCount = detail.members.length;
-                this.description = detail.description;
-                break;
-            default:
-                break;
-        }
+        this.prepareActiveChat();
+    }
 
+    ngAfterContentInit() {
+        this.prepareActiveChat();
+    }
+
+    ngAfterViewInit() {
+        this.scrollToBottom(this.messagesScrollbarRef);
+    }
+
+    prepareActiveChat() {
         // Fetch messages from store or if it not exists in the local store
         // we need to call a rpc unary from the server to get them!
         this.store
@@ -95,6 +87,7 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterViewInit, Af
                 // Load messages from local store
                 if (_messages) {
                     this.messages = _messages;
+                    this.scrollToBottomAfterGettingNewMessage();
                     return;
                 }
 
@@ -110,45 +103,104 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterViewInit, Af
                                 messagesList: fetchedMessages,
                             })
                         );
+
+                        this.scrollToBottomAfterGettingNewMessage();
                     });
             });
+
+        this.setLocalChatDetail();
+        this.setInputSectionStatus();
+        console.log("[ActiveChat] Chat Loaded");
     }
 
-    ngAfterViewInit() {
-        this.scrollToBottom(this.messagesScrollbarRef);
+    submitJoinChat() {
+        this.chatService.JoinChat(this.activeChat.chatId).then(chat => {
+            this.activeChat = chat;
+            this.store.dispatch(ChatActions.add({ chat }));
+            this.setInputSectionStatus();
+
+            console.log(this.inputSectionStatus);
+        });
     }
 
-    ngAfterContentInit() {
-        let detail;
-        switch (this.activeChat.chatType) {
-            case ChatType.CHANNEL:
-                detail = this.activeChat.chatDetail.chatDetailType.value as ChannelChatDetail;
-                this.userHasAccessToSendMessage = (detail.admins as string[]).includes(
-                    this.activeUser.userId
-                );
-                break;
-            case ChatType.GROUP:
-                detail = this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail;
-                this.userHasAccessToSendMessage = true;
-                break;
+    isScrollAtBottom(elRef: ElementRef) {
+        if (elRef) {
+            const el = elRef.nativeElement as HTMLElement;
+            return el.scrollTop + el.clientHeight >= el.scrollHeight;
         }
 
-        setTimeout(() => {
-            this.isLoading = false;
-        }, 250);
+        return false;
     }
 
     scrollToBottom(elRef: ElementRef) {
         setTimeout(() => {
-            const el = elRef.nativeElement as HTMLElement;
-            el.scrollTop = el.scrollHeight;
+            if (elRef && elRef.nativeElement) {
+                const el = elRef.nativeElement as HTMLElement;
+                el.scrollTop = el.scrollHeight;
+            }
         }, 100);
     }
 
-    @HostListener("window:keydown", ["$event"])
-    onKeyDown(event: KeyboardEvent) {
-        if (event.ctrlKey && event.key == "Enter") {
-            this.submitSendTextMessage();
+    scrollToBottomAfterGettingNewMessage() {
+        if (this.isScrollAtBottom(this.messagesScrollbarRef)) {
+            this.scrollToBottom(this.messagesScrollbarRef);
+        }
+    }
+
+    setInputSectionStatus() {
+        if (this.activeChat.chatType === ChatType.CHANNEL) {
+            const channelDetail = this.activeChat.chatDetail.chatDetailType
+                .value as unknown as ChannelChatDetail;
+
+            if (channelDetail.admins.includes(this.activeUser.userId)) {
+                this.inputSectionStatus = {
+                    joined: true,
+                    show: true,
+                };
+            } else {
+                if (channelDetail.members.includes(this.activeUser.userId)) {
+                    this.inputSectionStatus = {
+                        joined: true,
+                        show: false,
+                    };
+                } else {
+                    this.inputSectionStatus = {
+                        joined: false,
+                        show: false,
+                    };
+                }
+            }
+        }
+        if (this.activeChat.chatType === ChatType.GROUP) {
+            const groupDetail = this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail;
+            if (groupDetail.members.includes(this.activeUser.userId)) {
+                this.inputSectionStatus = {
+                    show: true,
+                    joined: true,
+                };
+            } else {
+                this.inputSectionStatus = {
+                    show: false,
+                    joined: false,
+                };
+            }
+        }
+    }
+
+    setLocalChatDetail() {
+        if (this.activeChat.chatType == ChatType.CHANNEL) {
+            const channelDetail = this.activeChat.chatDetail.chatDetailType
+                .value as ChannelChatDetail;
+            this.title = channelDetail.title;
+            this.username = channelDetail.username;
+            this.membersCount = channelDetail.members.length;
+            this.description = channelDetail.description;
+        } else if (this.activeChat.chatType == ChatType.GROUP) {
+            const groupDetail = this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail;
+            this.title = groupDetail.title;
+            this.username = groupDetail.username;
+            this.membersCount = groupDetail.members.length;
+            this.description = groupDetail.description;
         }
     }
 
@@ -163,5 +215,12 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterViewInit, Af
 
     submitCloseChat() {
         this.store.dispatch(ChatActions.removeActiveChat());
+    }
+
+    @HostListener("window:keydown", ["$event"])
+    onKeyDown(event: KeyboardEvent) {
+        if (event.ctrlKey && event.key == "Enter") {
+            this.submitSendTextMessage();
+        }
     }
 }

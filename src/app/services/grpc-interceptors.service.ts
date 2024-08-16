@@ -7,7 +7,6 @@ export function useAuthInterceptorFactory(accountManagerService: AccountManagerS
     const authInterceptor: Interceptor = next => async req => {
         const activeAccount = accountManagerService.GetActiveAccount();
         if (activeAccount) {
-            console.info("[AuthInterceptor]", "Set access token");
             req.header.set("X-Access-Token", activeAccount.accessToken);
         }
 
@@ -23,8 +22,6 @@ export function useRefreshTokenInterceptorFactory(
     authService: AuthService
 ) {
     const refreshTokenInterceptor: Interceptor = next => async req => {
-        console.log("[RefreshTokenInterceptor] Refresh token interceptor called");
-
         AuthService.refreshTokenIfExpired(authService, accountManagerService);
 
         return await next(req);

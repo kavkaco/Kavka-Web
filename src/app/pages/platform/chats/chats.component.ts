@@ -5,12 +5,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { Store } from "@ngrx/store";
 import * as ChatSelector from "@store/chat/chat.selectors";
+import * as AuthSelector from "@store/auth/auth.selectors";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { ChatService } from "@services/chat.service";
 import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
 import { take } from "rxjs";
 import { SearchService } from "@app/services/search.service";
-
 import { Chat, DirectChatDetail } from "kavka-core/model/chat/v1/chat_pb";
 import { User } from "kavka-core/model/user/v1/user_pb";
 
@@ -32,6 +32,7 @@ export class ChatsComponent {
     private searchService = inject(SearchService);
     private store = inject(Store);
     activeChat: Chat | null;
+    activeUser: User | null;
 
     chatItems: IChatItem[] = [];
     filteredChatItems: IChatItem[] = [];
@@ -73,9 +74,12 @@ export class ChatsComponent {
             this.chatItems = chats;
             this.filteredChatItems = this.filterChatsList(this.search.input, chats);
         });
+
+        this.store.select(AuthSelector.selectActiveUser).subscribe(activeUser => {
+            this.activeUser = activeUser;
+        });
     }
 
-    // ANCHOR
     // Check it the chat does not exists in the local chats
     // we prepare to fetch the chat from the back-end and add to store
     activateUncreatedChat(chatId: string) {
@@ -91,14 +95,18 @@ export class ChatsComponent {
 
                 // fetch chat
                 this.chatService.GetChat(chatId).then(fetchedChat => {
-                    this.store.dispatch(ChatActions.add({ chat: fetchedChat }));
-                    this.activateChat(chatId);
+                    this.store.dispatch(ChatActions.setActiveChat({ chat: fetchedChat }));
                 });
             });
     }
 
     activateChat(chatId: string) {
-        this.store.dispatch(ChatActions.setActiveChat({ chatId }));
+        this.store
+            .select(ChatSelector.selectChat(chatId))
+            .pipe(take(1))
+            .subscribe(chat => {
+                this.store.dispatch(ChatActions.setActiveChat({ chat }));
+            });
     }
 
     submitCreateChannel() {
@@ -107,11 +115,15 @@ export class ChatsComponent {
             .then(chat => {
                 this.store.dispatch(ChatActions.add({ chat }));
             });
+
         this.closeCreateChatModal();
     }
 
     submitCreateGroup() {
-        this.createChatMenuActiveTab = undefined;
+        this.chatService.CreateGroup(this.groupTitleInput, this.groupUsernameInput).then(chat => {
+            this.store.dispatch(ChatActions.add({ chat }));
+        });
+
         this.closeCreateChatModal();
     }
 
@@ -192,11 +204,9 @@ export class ChatsComponent {
     }
 
     determineSearchResult(result: { users: User[]; chats: Chat[] }) {
-        this.mergeLocalAndFetchedChats(this.filteredChatItems, result).then(
-            merged => {
-                this.search.finalResult = merged;
-            }
-        );
+        this.mergeLocalAndFetchedChats(this.filteredChatItems, result).then(merged => {
+            this.search.finalResult = merged;
+        });
     }
 
     onSearchInputChange() {

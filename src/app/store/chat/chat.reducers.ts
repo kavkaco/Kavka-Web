@@ -2,7 +2,7 @@ import { createReducer, on } from "@ngrx/store";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { Chat } from "kavka-core/model/chat/v1/chat_pb";
 export interface ChatState {
-    activeChat: string | null;
+    activeChat: Chat | null;
     chats: Chat[];
 }
 
@@ -13,16 +13,10 @@ const initialState: ChatState = {
 
 export const chatReducer = createReducer(
     initialState,
-    on(ChatActions.setActiveChat, (state, { chatId }) => {
-        const chatIndex = state.chats.findIndex(_chat => _chat.chatId === chatId);
-
-        if (chatIndex == -1) {
-            return state;
-        }
-
+    on(ChatActions.setActiveChat, (state, { chat }) => {
         return {
             ...state,
-            activeChat: chatId,
+            activeChat: chat,
         };
     }),
     on(ChatActions.removeActiveChat, state => {
@@ -51,9 +45,22 @@ export const chatReducer = createReducer(
         };
     }),
     on(ChatActions.add, (state, { chat }) => {
+        const idx = state.chats.findIndex(_chat => _chat.chatId == chat.chatId);
+        if (idx === -1) {
+            // chat does not exist
+            return {
+                ...state,
+                chats: [chat, ...state.chats],
+            };
+        }
+
+        // chat exists and only left to update it!
         return {
             ...state,
-            chats: [chat, ...state.chats],
+            ...ChatActions.update({
+                chatId: chat.chatId,
+                changes: { chatDetail: chat.chatDetail, lastMessage: chat.lastMessage },
+            }),
         };
     })
 );

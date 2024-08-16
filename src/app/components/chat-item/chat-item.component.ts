@@ -3,6 +3,7 @@ import { Store } from "@ngrx/store";
 import * as ChatSelector from "@app/store/chat/chat.selectors";
 
 import { LastMessage } from "kavka-core/model/chat/v1/chat_pb";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
     selector: "app-chat-item",
@@ -20,7 +21,7 @@ export class ChatItemComponent {
     @Input({ required: true }) lastMessage!: LastMessage;
     isActive = false;
 
-    constructor() {
+    constructor(private sanitizer: DomSanitizer) {
         this.store.select(ChatSelector.selectActiveChat).subscribe(chat => {
             if (chat && chat.chatId == this.chatId) {
                 this.isActive = true;
@@ -29,5 +30,10 @@ export class ChatItemComponent {
 
             this.isActive = false;
         });
+    }
+
+    sanitizeLastMessageCaption(messageCaption: string) {
+        messageCaption = messageCaption.replace(/\n\r?/g, "<br>");
+        return this.sanitizer.bypassSecurityTrustHtml(messageCaption);
     }
 }

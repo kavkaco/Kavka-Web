@@ -11,11 +11,3 @@ export interface IUserUpdatableFields {
     accessToken?: string;
     refreshToken?: string;
 }
-
-export interface IUser {
-    userId: string;
-    name: string;
-    lastName: string;
-    username: string;
-    email: string;
-}

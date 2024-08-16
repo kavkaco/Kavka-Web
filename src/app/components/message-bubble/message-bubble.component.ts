@@ -27,8 +27,14 @@ export class MessageBubbleComponent implements OnChanges, OnInit {
     constructor(private sanitizer: DomSanitizer) {}
 
     ngOnChanges() {
-        this.messageCaption = this.messageCaption.replace(/\n\r?/g, "<br>");
-        this.messageCaption = this.sanitizer.bypassSecurityTrustHtml(this.messageCaption);
+        if (this.messageCaption !== undefined && this.messageCaption !== null) {
+            try {
+                this.messageCaption = this.messageCaption.replace(/\n\r?/g, "<br>");
+                this.messageCaption = this.sanitizer.bypassSecurityTrustHtml(this.messageCaption);
+            } catch {
+                this.messageCaption = "";
+            }
+        }
     }
 
     ngOnInit() {
