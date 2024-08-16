@@ -5,12 +5,12 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { Store } from "@ngrx/store";
 import * as ChatSelector from "@store/chat/chat.selectors";
+import * as AuthSelector from "@store/auth/auth.selectors";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { ChatService } from "@services/chat.service";
 import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
 import { take } from "rxjs";
 import { SearchService } from "@app/services/search.service";
-
 import { Chat, DirectChatDetail } from "kavka-core/model/chat/v1/chat_pb";
 import { User } from "kavka-core/model/user/v1/user_pb";
 
@@ -32,6 +32,7 @@ export class ChatsComponent {
     private searchService = inject(SearchService);
     private store = inject(Store);
     activeChat: Chat | null;
+    activeUser: User | null;
 
     chatItems: IChatItem[] = [];
     filteredChatItems: IChatItem[] = [];
@@ -72,6 +73,10 @@ export class ChatsComponent {
         this.store.select(ChatSelector.selectChatItems).subscribe(chats => {
             this.chatItems = chats;
             this.filteredChatItems = this.filterChatsList(this.search.input, chats);
+        });
+
+        this.store.select(AuthSelector.selectActiveUser).subscribe(activeUser => {
+            this.activeUser = activeUser;
         });
     }
 

@@ -1,5 +1,4 @@
 import { inject, Injectable } from "@angular/core";
-import { IUser } from "@app/models/auth";
 import { Store } from "@ngrx/store";
 import * as AuthSelector from "@store/auth/auth.selectors";
 import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
@@ -8,11 +7,12 @@ import { ChatActions } from "@app/store/chat/chat.actions";
 import { MessageActions } from "@app/store/messages/messages.actions";
 import { EventsService as KavkaEventsService } from "kavka-core/events/v1/events_connect";
 import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "kavka-core/events/v1/events_pb";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
     private store = inject(Store);
-    private activeUser: IUser | undefined;
+    private activeUser: User | undefined;
     private client: PromiseClient<typeof KavkaEventsService>;
 
     constructor() {

@@ -1,10 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
 import { AuthActions } from "./auth.actions";
-import { IUser } from "@app/models/auth";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 export interface AuthState {
     activeUserId: string | undefined;
-    users: IUser[];
+    users: User[];
 }
 
 const initialState: AuthState = {
@@ -12,7 +12,7 @@ const initialState: AuthState = {
     users: [],
 };
 
-export function isUserAlreadyExist(users: IUser[], user: IUser): boolean {
+export function isUserAlreadyExist(users: User[], user: User): boolean {
     let exists = false;
 
     for (const _user of users) {
@@ -35,7 +35,7 @@ export const authReducer = createReducer(
             const updatedUser = {
                 ...state.users[existingUserIndex],
                 ...user,
-            };
+            } as User;
 
             return {
                 ...state,

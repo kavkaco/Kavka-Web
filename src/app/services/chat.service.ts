@@ -1,5 +1,4 @@
 import { inject, Injectable } from "@angular/core";
-import { IUser } from "@app/models/auth";
 import { Store } from "@ngrx/store";
 import * as AuthSelector from "@store/auth/auth.selectors";
 import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
@@ -7,11 +6,12 @@ import { GrpcTransportService } from "@app/services/grpc-transport.service";
 
 import { Chat } from "kavka-core/model/chat/v1/chat_pb";
 import { ChatService as KavkaChatService } from "kavka-core/chat/v1/chat_connect";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 @Injectable({ providedIn: "root" })
 export class ChatService {
     private store = inject(Store);
-    private activeUser: IUser | undefined;
+    private activeUser: User | undefined;
     private client: PromiseClient<typeof KavkaChatService>;
 
     constructor() {
@@ -76,6 +76,20 @@ export class ChatService {
                 })
                 .catch((e: Error) => {
                     console.error("[ChatService] CreateGroup", e.message);
+                    reject(e);
+                });
+        });
+    }
+
+    JoinChat(chatId: string) {
+        return new Promise<Chat>((resolve, reject) => {
+            this.client
+                .joinChat({ chatId })
+                .then(response => {
+                    resolve(response.chat);
+                })
+                .catch((e: Error) => {
+                    console.error("[ChatService] JoinChat", e.message);
                     reject(e);
                 });
         });

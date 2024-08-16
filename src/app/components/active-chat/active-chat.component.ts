@@ -8,7 +8,6 @@ import {
     OnInit,
     AfterViewInit,
     OnChanges,
-    AfterContentChecked,
     AfterContentInit,
 } from "@angular/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
@@ -18,9 +17,8 @@ import { MessageBubbleComponent } from "@components/message-bubble/message-bubbl
 import * as MessageSelector from "@store/messages/messages.selectors";
 import { MessageService } from "@app/services/message.service";
 import { MessageActions } from "@app/store/messages/messages.actions";
-import { IUser } from "@app/models/auth";
 import { Store } from "@ngrx/store";
-import * as AuthSelector from "@store/auth/auth.selectors";
+import * as ChatSelector from "@store/chat/chat.selectors";
 import { take } from "rxjs";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import {
@@ -30,6 +28,8 @@ import {
     GroupChatDetail,
 } from "kavka-core/model/chat/v1/chat_pb";
 import { Message } from "kavka-core/model/message/v1/message_pb";
+import { ChatService } from "@app/services/chat.service";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 @Component({
     selector: "app-active-chat",
@@ -41,13 +41,14 @@ import { Message } from "kavka-core/model/message/v1/message_pb";
 export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
     private store = inject(Store);
     private messageService = inject(MessageService);
+    private chatService = inject(ChatService);
 
-    textInput = "";
-    activeUser: IUser;
+    @Input() activeUser: User;
     @Input() activeChat: Chat;
     @ViewChild("messagesScrollbar") messagesScrollbarRef: ElementRef;
-    isLoading = true;
 
+    // Active chat extra detail
+    textInput = "";
     title = "";
     username = "";
     description = "";
@@ -55,7 +56,6 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     online?: boolean | undefined;
     avatar: string | undefined;
     messages: Message[];
-
     inputSectionStatus: {
         show: boolean;
         joined: boolean;
@@ -66,18 +66,21 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
             show: false,
             joined: false,
         };
-
-        this.store
-            .select(AuthSelector.selectActiveUser)
-            .pipe(take(1))
-            .subscribe(activeUser => {
-                this.activeUser = activeUser;
-            });
     }
 
     ngOnChanges() {
-        this.isLoading = true;
+        this.prepareActiveChat();
+    }
 
+    ngAfterContentInit() {
+        this.prepareActiveChat();
+    }
+
+    ngAfterViewInit() {
+        this.scrollToBottom(this.messagesScrollbarRef);
+    }
+
+    prepareActiveChat() {
         // Fetch messages from store or if it not exists in the local store
         // we need to call a rpc unary from the server to get them!
         this.store
@@ -108,18 +111,18 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
             });
 
         this.setLocalChatDetail();
-
-        setTimeout(() => {
-            this.isLoading = false;
-        }, 100);
-    }
-
-    ngAfterContentInit() {
         this.setInputSectionStatus();
+        console.log("[ActiveChat] Chat Loaded");
     }
 
-    ngAfterViewInit() {
-        this.scrollToBottom(this.messagesScrollbarRef);
+    submitJoinChat() {
+        this.chatService.JoinChat(this.activeChat.chatId).then(chat => {
+            this.activeChat = chat;
+            this.store.dispatch(ChatActions.add({ chat }));
+            this.setInputSectionStatus();
+
+            console.log(this.inputSectionStatus);
+        });
     }
 
     isScrollAtBottom(elRef: ElementRef) {

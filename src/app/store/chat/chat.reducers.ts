@@ -45,9 +45,22 @@ export const chatReducer = createReducer(
         };
     }),
     on(ChatActions.add, (state, { chat }) => {
+        const idx = state.chats.findIndex(_chat => _chat.chatId == chat.chatId);
+        if (idx === -1) {
+            // chat does not exist
+            return {
+                ...state,
+                chats: [chat, ...state.chats],
+            };
+        }
+
+        // chat exists and only left to update it!
         return {
             ...state,
-            chats: [chat, ...state.chats],
+            ...ChatActions.update({
+                chatId: chat.chatId,
+                changes: { chatDetail: chat.chatDetail, lastMessage: chat.lastMessage },
+            }),
         };
     })
 );

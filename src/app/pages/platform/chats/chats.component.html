@@ -141,7 +141,7 @@
 
     <div [className]="'platform-chats--viewbox ' + (activeChat ? 'chat-activated' : '')">
         @if (activeChat) {
-        <app-active-chat [activeChat]="activeChat"></app-active-chat>
+        <app-active-chat [activeChat]="activeChat" [activeUser]="this.activeUser"></app-active-chat>
         } @else {
         <div class="no-chat-selected w-full h-full flex justify-center items-center">
             <span class="border border-border px-3 py-1 rounded-full">No chat selected</span>

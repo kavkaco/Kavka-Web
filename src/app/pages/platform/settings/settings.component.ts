@@ -3,7 +3,7 @@ import { Component, inject, PLATFORM_ID, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import * as AuthSelectors from "@app/store/auth/auth.selectors";
 import { NgScrollbar } from "ngx-scrollbar";
-import { IUser } from "@app/models/auth";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 @Component({
     selector: "app-settings",
@@ -14,8 +14,8 @@ import { IUser } from "@app/models/auth";
 })
 export class SettingsComponent implements OnInit {
     platformId = inject(PLATFORM_ID);
-    user: IUser | undefined;
-    users: IUser[] | undefined;
+    user: User | undefined;
+    users: User[] | undefined;
 
     constructor(private store: Store) {}
 

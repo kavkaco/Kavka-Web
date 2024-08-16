@@ -5227,10 +5227,10 @@ karma-source-map-support@1.4.0:
   dependencies:
     source-map-support "^0.5.5"
 
-kavka-core@^1.1.81:
-  version "1.1.81"
-  resolved "https://registry.yarnpkg.com/kavka-core/-/kavka-core-1.1.81.tgz#ed88abc004db5e329f6ae5631cb793c7866a6a8d"
-  integrity sha512-yDa9glGGyV7fKJMr/An078HgcKkBGZKIfvyC30D+9xV3oi8Ds6zr4esqStz7vFoyT2y5VTb1G8tcRlwbWryv/g==
+kavka-core@^1.1.83:
+  version "1.1.83"
+  resolved "https://registry.yarnpkg.com/kavka-core/-/kavka-core-1.1.83.tgz#5473e5447e5b443b3ff68e23fded7ff3525f2280"
+  integrity sha512-jioWToapClaK1mkq5OahZIxi/4Sa6DnCuhy6iYgjy6GzwZD9Rq+RtVVvRqxlJzVJOwak6SgGoHxyth7/aNhn7w==
   dependencies:
     "@bufbuild/protobuf" "^1.10.0"
 

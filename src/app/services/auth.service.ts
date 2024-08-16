@@ -3,11 +3,11 @@ import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GetErrorMessage } from "@helpers/grpc_response";
 import { AuthService as KavkaAuthService } from "kavka-core/auth/v1/auth_connect";
 import { AccountManagerService } from "@app/services/account-manager.service";
-import { IUser } from "@app/models/auth";
 import { Store } from "@ngrx/store";
 import { AuthActions } from "@app/store/auth/auth.actions";
 import { ConnectTransportOptions, createGrpcWebTransport } from "@connectrpc/connect-web";
 import { environment } from "@environments/environment.development";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 export class UnauthorizedError extends Error {
     constructor() {
@@ -122,7 +122,7 @@ export class AuthService {
     loadUser() {
         return new Promise(
             (
-                resolve: ({ user, accessToken }: { user: IUser; accessToken: string }) => void,
+                resolve: ({ user, accessToken }: { user: User; accessToken: string }) => void,
                 reject
             ) => {
                 // Get the tokens of active account from local storage
@@ -130,7 +130,7 @@ export class AuthService {
 
                 if (activeAccount) {
                     this.Authenticate(activeAccount.accessToken)
-                        .then((user: IUser) => {
+                        .then((user: User) => {
                             // Update state for user
                             this.store.dispatch(
                                 AuthActions.add({
@@ -158,7 +158,7 @@ export class AuthService {
     Login(email: string, password: string) {
         return new Promise(
             (
-                resolve: (resp: { user: IUser; accessToken: string; refreshToken: string }) => void,
+                resolve: (resp: { user: User; accessToken: string; refreshToken: string }) => void,
                 reject
             ) => {
                 this.client
