@@ -18,6 +18,6 @@ export const selectChats = createSelector(selectChatState, (state: ChatState) =>
 
 export function selectChat(chatId: string) {
     return createSelector(selectChatState, (state: ChatState) => {
-        return state.chats.find((_chat) => _chat.chatId === chatId);
+        return state.chats.find(_chat => _chat.chatId === chatId);
     });
 }

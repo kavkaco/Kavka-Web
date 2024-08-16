@@ -18,8 +18,6 @@ import * as MessageSelector from "@store/messages/messages.selectors";
 import { MessageService } from "@app/services/message.service";
 import { MessageActions } from "@app/store/messages/messages.actions";
 import { Store } from "@ngrx/store";
-import * as ChatSelector from "@store/chat/chat.selectors";
-import { take } from "rxjs";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import {
     ChannelChatDetail,
@@ -150,66 +148,59 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     }
 
     setInputSectionStatus() {
-        switch (this.activeChat.chatType) {
-            case ChatType.CHANNEL:
-                const channelDetail = this.activeChat.chatDetail.chatDetailType
-                    .value as ChannelChatDetail;
+        if (this.activeChat.chatType === ChatType.CHANNEL) {
+            const channelDetail = this.activeChat.chatDetail.chatDetailType
+                .value as unknown as ChannelChatDetail;
 
-                if (channelDetail.admins.includes(this.activeUser.userId)) {
+            if (channelDetail.admins.includes(this.activeUser.userId)) {
+                this.inputSectionStatus = {
+                    joined: true,
+                    show: true,
+                };
+            } else {
+                if (channelDetail.members.includes(this.activeUser.userId)) {
                     this.inputSectionStatus = {
                         joined: true,
-                        show: true,
-                    };
-                } else {
-                    if (channelDetail.members.includes(this.activeUser.userId)) {
-                        this.inputSectionStatus = {
-                            joined: true,
-                            show: false,
-                        };
-                    } else {
-                        this.inputSectionStatus = {
-                            joined: false,
-                            show: false,
-                        };
-                    }
-                }
-                break;
-            case ChatType.GROUP:
-                const groupDetail = this.activeChat.chatDetail.chatDetailType
-                    .value as GroupChatDetail;
-                if (groupDetail.members.includes(this.activeUser.userId)) {
-                    this.inputSectionStatus = {
-                        show: true,
-                        joined: true,
-                    };
-                } else {
-                    this.inputSectionStatus = {
                         show: false,
+                    };
+                } else {
+                    this.inputSectionStatus = {
                         joined: false,
+                        show: false,
                     };
                 }
-                break;
+            }
+        }
+        if (this.activeChat.chatType === ChatType.GROUP) {
+            const groupDetail = this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail;
+            if (groupDetail.members.includes(this.activeUser.userId)) {
+                this.inputSectionStatus = {
+                    show: true,
+                    joined: true,
+                };
+            } else {
+                this.inputSectionStatus = {
+                    show: false,
+                    joined: false,
+                };
+            }
         }
     }
 
     setLocalChatDetail() {
-        switch (this.activeChat.chatType) {
-            case ChatType.CHANNEL:
-                const channelDetail = this.activeChat.chatDetail.chatDetailType
-                    .value as ChannelChatDetail;
-                this.title = channelDetail.title;
-                this.username = channelDetail.username;
-                this.membersCount = channelDetail.members.length;
-                this.description = channelDetail.description;
-                break;
-            case ChatType.GROUP:
-                const groupDetail = this.activeChat.chatDetail.chatDetailType
-                    .value as GroupChatDetail;
-                this.title = groupDetail.title;
-                this.username = groupDetail.username;
-                this.membersCount = groupDetail.members.length;
-                this.description = groupDetail.description;
-                break;
+        if (this.activeChat.chatType == ChatType.CHANNEL) {
+            const channelDetail = this.activeChat.chatDetail.chatDetailType
+                .value as ChannelChatDetail;
+            this.title = channelDetail.title;
+            this.username = channelDetail.username;
+            this.membersCount = channelDetail.members.length;
+            this.description = channelDetail.description;
+        } else if (this.activeChat.chatType == ChatType.GROUP) {
+            const groupDetail = this.activeChat.chatDetail.chatDetailType.value as GroupChatDetail;
+            this.title = groupDetail.title;
+            this.username = groupDetail.username;
+            this.membersCount = groupDetail.members.length;
+            this.description = groupDetail.description;
         }
     }
 
