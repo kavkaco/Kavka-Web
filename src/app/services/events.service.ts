@@ -1,25 +1,19 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { Store } from "@ngrx/store";
-import * as AuthSelector from "@store/auth/auth.selectors";
-import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
+import { CallOptions, createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GrpcTransportService } from "@app/services/grpc-transport.service";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { MessageActions } from "@app/store/messages/messages.actions";
 import { EventsService as KavkaEventsService } from "kavka-core/events/v1/events_connect";
 import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "kavka-core/events/v1/events_pb";
-import { User } from "kavka-core/model/user/v1/user_pb";
+import { ConnectivityActions } from "@app/store/connectivity/connectivity.actions";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
     private store = inject(Store);
-    private activeUser: User | undefined;
     private client: PromiseClient<typeof KavkaEventsService>;
 
     constructor() {
-        this.store.select(AuthSelector.selectActiveUser).subscribe(user => {
-            this.activeUser = user;
-        });
-
         const transport = inject(GrpcTransportService).transport;
         this.client = createPromiseClient(KavkaEventsService, transport);
     }
@@ -27,19 +21,31 @@ export class EventsService {
     async SubscribeEventsStream() {
         const events = this.client.subscribeEventsStream({});
 
-        for await (const event of events) {
-            console.log(event.name, event.payload);
+        try {
+            this.store.dispatch(ConnectivityActions.set({ online: true }));
+            for await (const event of events) {
+                console.log(event.name, event.payload);
 
-            switch (event.name) {
-                case "add-chat":
-                    this.addChat(event);
-                    break;
-                case "add-message":
-                    this.addMessage(event);
-                    break;
-                default:
-                    break;
+                switch (event.name) {
+                    case "add-chat":
+                        this.addChat(event);
+                        break;
+                    case "add-message":
+                        this.addMessage(event);
+                        break;
+                    default:
+                        break;
+                }
             }
+        } catch (error) {
+            this.store.dispatch(ConnectivityActions.set({ online: false }));
+            console.error("[EventsService] Stream terminated");
+            console.error("[EventsService] Stream Getting ready to establish stream again");
+
+            setTimeout(() => {
+                console.error("[EventsService] Establishing stream connection...");
+                this.SubscribeEventsStream();
+            }, 2500);
         }
     }
 

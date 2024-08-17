@@ -1,12 +1,7 @@
 import { Component, HostListener, inject } from "@angular/core";
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
-import { ChatActions } from "@app/store/chat/chat.actions";
 import { UserAvatarDropdownComponent } from "@components/user-avatar-dropdown/user-avatar-dropdown.component";
-import { Store } from "@ngrx/store";
-import * as ChatSelector from "@app/store/chat/chat.selectors";
-import { take } from "rxjs";
 import { EventsService } from "@app/services/events.service";
-
 @Component({
     selector: "app-platform",
     standalone: true,
@@ -15,7 +10,6 @@ import { EventsService } from "@app/services/events.service";
     styleUrl: "./platform.component.scss",
 })
 export class PlatformComponent {
-    private store = inject(Store);
     private router = inject(Router);
     private eventsService = inject(EventsService);
 
@@ -26,17 +20,13 @@ export class PlatformComponent {
     @HostListener("window:keydown", ["$event"])
     onKeyDown(event: KeyboardEvent) {
         if (event.key === "Escape") {
-            this.store
-                .select(ChatSelector.selectActiveChat)
-                .pipe(take(1))
-                .subscribe(activeChat => {
-                    if (activeChat) {
-                        this.store.dispatch(ChatActions.removeActiveChat());
-                        return;
-                    }
+            event.preventDefault();
 
-                    this.router.navigate(["/"]);
-                });
+            const routerUrl = this.router.url;
+            if (routerUrl !== "/p/u" && routerUrl !== "/") {
+                this.router.navigate(["/"]);
+                return;
+            }
         }
     }
 }
