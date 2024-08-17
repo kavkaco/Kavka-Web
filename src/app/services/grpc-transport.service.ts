@@ -17,9 +17,10 @@ export class GrpcTransportService {
 
     private authService: AuthService;
     private accountManagerService = inject(AccountManagerService);
+    private options: ConnectTransportOptions;
 
     constructor() {
-        const options: ConnectTransportOptions = {
+        this.options = {
             baseUrl: environment.grpcTransportBaseUrl,
             interceptors: [
                 useRefreshTokenInterceptorFactory(this.accountManagerService, this.authService),
@@ -27,8 +28,12 @@ export class GrpcTransportService {
             ],
         };
 
-        this._transport = createConnectTransport(options);
+        this.establishConnection();
         this.authService = new AuthService();
+    }
+
+    establishConnection() {
+        this._transport = createConnectTransport(this.options);
     }
 
     get transport() {

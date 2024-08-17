@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from "@angular/core";
+import { Component, HostListener, inject, ViewChild } from "@angular/core";
 import { ActiveChatComponent } from "@components/active-chat/active-chat.component";
 import { ChatItemComponent } from "@components/chat-item/chat-item.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -6,6 +6,7 @@ import { NgScrollbarModule } from "ngx-scrollbar";
 import { Store } from "@ngrx/store";
 import * as ChatSelector from "@store/chat/chat.selectors";
 import * as AuthSelector from "@store/auth/auth.selectors";
+import * as ConnectivitySelector from "@store/connectivity/connectivity.selectors";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { ChatService } from "@services/chat.service";
 import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
@@ -31,6 +32,9 @@ export class ChatsComponent {
     private chatService = inject(ChatService);
     private searchService = inject(SearchService);
     private store = inject(Store);
+
+    isOnline = true;
+
     activeChat: Chat | null;
     activeUser: User | null;
 
@@ -77,6 +81,10 @@ export class ChatsComponent {
 
         this.store.select(AuthSelector.selectActiveUser).subscribe(activeUser => {
             this.activeUser = activeUser;
+        });
+
+        this.store.select(ConnectivitySelector.selectIsOnline).subscribe(isOnline => {
+            this.isOnline = isOnline;
         });
     }
 
@@ -173,30 +181,32 @@ export class ChatsComponent {
                 .select(ChatSelector.selectChats)
                 .pipe(take(1))
                 .subscribe(async localChats => {
-                    await fetchResult.chats.forEach(chat => {
-                        const alreadyExistIdx = localChatItems.findIndex(
-                            _chat => _chat.chatId === chat.chatId
-                        );
-                        if (alreadyExistIdx === -1) {
-                            finalChatItems.push(convertChatsToChatItems([chat])[0]);
-                        }
-                    });
-
-                    fetchResult.users.forEach(user => {
-                        const alreadyExistIdx = localChats.findIndex(_chat => {
-                            return (
-                                (_chat.chatDetail.chatDetailType.value as DirectChatDetail).userInfo
-                                    .userId === user.userId
+                    if (fetchResult && fetchResult.chats !== undefined) {
+                        await fetchResult.chats.forEach(chat => {
+                            const alreadyExistIdx = localChatItems.findIndex(
+                                _chat => _chat.chatId === chat.chatId
                             );
+                            if (alreadyExistIdx === -1) {
+                                finalChatItems.push(convertChatsToChatItems([chat])[0]);
+                            }
                         });
-                        if (alreadyExistIdx === -1) {
-                            finalChatItems.push({
-                                chatId: user.userId,
-                                title: user.name + " " + user.lastName,
-                                lastMessage: undefined,
+
+                        fetchResult.users.forEach(user => {
+                            const alreadyExistIdx = localChats.findIndex(_chat => {
+                                return (
+                                    (_chat.chatDetail.chatDetailType.value as DirectChatDetail)
+                                        .userInfo.userId === user.userId
+                                );
                             });
-                        }
-                    });
+                            if (alreadyExistIdx === -1) {
+                                finalChatItems.push({
+                                    chatId: user.userId,
+                                    title: user.name + " " + user.lastName,
+                                    lastMessage: undefined,
+                                });
+                            }
+                        });
+                    }
                 });
 
             resolve(finalChatItems);
@@ -215,17 +225,19 @@ export class ChatsComponent {
         if (this.search.input.trim().length > 0) {
             this.search.loading = true;
 
-            this.searchService
-                .Search(this.search.input.trim())
-                .then(result => {
-                    this.search.chats = result.chats as any as IChatItem[];
-                    this.search.users = result.users;
+            if (this.search.input.trim().length >= 3) {
+                this.searchService
+                    .Search(this.search.input.trim())
+                    .then(result => {
+                        this.search.chats = result.chats as any as IChatItem[];
+                        this.search.users = result.users;
 
-                    this.determineSearchResult(result);
-                })
-                .catch(() => {
-                    this.determineSearchResult(undefined);
-                });
+                        this.determineSearchResult(result);
+                    })
+                    .catch(() => {
+                        this.determineSearchResult(undefined);
+                    });
+            }
         } else {
             this.clearSearchResult();
         }
@@ -233,5 +245,27 @@ export class ChatsComponent {
         setTimeout(() => {
             this.search.loading = false;
         }, 600);
+    }
+
+    @HostListener("window:keydown", ["$event"])
+    onKeyDown(event: KeyboardEvent) {
+        if (event.key === "Escape") {
+            event.preventDefault();
+
+            this.store
+                .select(ChatSelector.selectActiveChat)
+                .pipe(take(1))
+                .subscribe(activeChat => {
+                    if (activeChat) {
+                        this.store.dispatch(ChatActions.removeActiveChat());
+                        return;
+                    }
+
+                    if (this.search.input.trim() != "") {
+                        this.filteredChatItems = this.filterChatsList("", this.chatItems);
+                        this.clearSearchResult();
+                    }
+                });
+        }
     }
 }

@@ -39,7 +39,6 @@ export class LoginComponent implements OnInit {
         if (i === -1) this.formErrors.push(msg);
     }
 
-    private transport = inject(GrpcTransportService).transport;
     private authService = new AuthService();
     private accountManagerService = inject(AccountManagerService);
 
