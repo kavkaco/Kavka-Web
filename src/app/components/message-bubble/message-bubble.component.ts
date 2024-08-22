@@ -12,7 +12,7 @@ import { ChatType } from "kavka-core/model/chat/v1/chat_pb";
     templateUrl: "./message-bubble.component.html",
     styleUrl: "./message-bubble.component.scss",
 })
-export class MessageBubbleComponent implements OnChanges, OnInit {
+export class MessageBubbleComponent implements OnInit {
     showAvatar = true;
 
     @Input() isSelfMessage: boolean;
@@ -21,23 +21,25 @@ export class MessageBubbleComponent implements OnChanges, OnInit {
     @Input() messageCaption: any;
     @Input() chatType: ChatType;
     @Input() createdAt: bigint;
+    @Input() messageSelected: boolean;
+
     chatTypeString: string;
     messageTimestamp: string;
 
     constructor(private sanitizer: DomSanitizer) {}
 
-    ngOnChanges() {
+    ngOnInit() {
         if (this.messageCaption !== undefined && this.messageCaption !== null) {
+            console.log(this.messageCaption);
+
             try {
                 this.messageCaption = this.messageCaption.replace(/\n\r?/g, "<br>");
                 this.messageCaption = this.sanitizer.bypassSecurityTrustHtml(this.messageCaption);
             } catch {
-                this.messageCaption = "";
+                this.messageCaption = "Sanitization failed!";
             }
         }
-    }
 
-    ngOnInit() {
         if (this.chatType == ChatType.CHANNEL || this.isSelfMessage) {
             this.showAvatar = false;
         }

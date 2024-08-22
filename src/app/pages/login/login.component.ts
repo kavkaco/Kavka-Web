@@ -98,4 +98,13 @@ export class LoginComponent implements OnInit {
             this.router.navigate(["/"]);
         }
     }
+
+    removeAccount(accountId: string) {
+        this.accountManagerService.RemoveAccount(accountId);
+        this.accountsList = this.accountManagerService.GetAccountsList();
+
+        if (this.accountsList.length == 0) {
+            this.showSelectAccount = false;
+        }
+    }
 }

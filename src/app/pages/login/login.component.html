@@ -1,132 +1,121 @@
 <div class="form form-center">
     <div class="flex flex-col p-4">
         @if (showSelectAccount) {
-            <h2 class="mb-4 text-2xl">Activate an account</h2>
+        <h2 class="mb-4 text-2xl">
+            Activate an account
+        </h2>
 
-            <nav class="menu border border-border p-2 mb-4 rounded-xl">
-                <section class="menu-section">
-                    <ul class="menu-items">
-                        @for (item of accountsList; track $index) {
-                            <button
-                                (click)="activateAccount(item.accountId)"
-                                track
-                                class="menu-item menu-item-no-animation hover:bg-transparent">
-                                <input
-                                    type="radio"
-                                    class="radio-primary radio"
-                                    [checked]="item.accountId === activeAccountId" />
-                                {{ item.email }}
-                            </button>
-                        }
-
-                        <button (click)="showSelectAccount = false" class="btn btn-primary mt-2">
-                            Add new account
+        <nav class="menu border border-border p-2 mb-4 rounded-xl">
+            <section class="menu-section">
+                <ul class="menu-items">
+                    @for (item of accountsList; track $index) {
+                    <div class="relative flex flex-row justify-between w-full">
+                        <button (click)="activateAccount(item.accountId)" track
+                            class="menu-item menu-item-no-animation hover:bg-transparent">
+                            <input type="radio" class="radio-primary radio"
+                                [checked]="item.accountId === activeAccountId" />
+                            {{ item.email }}
                         </button>
-                    </ul>
-                </section>
-            </nav>
-        } @else {
-            @for (item of formErrors; track $index) {
-                <div track class="alert alert-error mb-3">
-                    <svg
-                        width="30"
-                        height="30"
-                        viewBox="0 0 48 48"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 26C22.9 26 22 25.1 22 24V16C22 14.9 22.9 14 24 14C25.1 14 26 14.9 26 16V24C26 25.1 25.1 26 24 26ZM26 34H22V30H26V34Z"
-                            fill="#E92C2C" />
-                    </svg>
-                    <div class="flex flex-col">
-                        <span>{{ item }}</span>
-                    </div>
-                </div>
-            }
 
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl">Login</h2>
-                @if (showSelectAccount) {
-                    <button
-                        (click)="showSelectAccount = true"
-                        class="link link-underline-hover link-primary text-sm">
-                        Select account
+                        <button (click)="removeAccount(item.accountId)" class="btn btn-circle bg-transparent mr-1">
+                            <svg class="fill-white w-5" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                    }
+
+                    <button (click)="showSelectAccount = false" class="btn btn-primary mt-2">
+                        Add new account
                     </button>
-                }
+                </ul>
+            </section>
+        </nav>
+        } @else {
+        @for (item of formErrors; track $index) {
+        <div track class="alert alert-error mb-3">
+            <svg class="w-6" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 26C22.9 26 22 25.1 22 24V16C22 14.9 22.9 14 24 14C25.1 14 26 14.9 26 16V24C26 25.1 25.1 26 24 26ZM26 34H22V30H26V34Z"
+                    fill="#E92C2C" />
+            </svg>
+            <div class="flex flex-col">
+                <span>{{ item }}</span>
             </div>
-            <form [formGroup]="loginForm" class="form-group">
-                <div class="form-field">
-                    <label class="form-label">Email</label>
+        </div>
+        }
 
-                    <input
-                        formControlName="email"
-                        placeholder="mail@kavka.org"
-                        type="email"
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl flex flex-row items-center">
+                @if (accountsList && accountsList.length > 0) {
+                <button (click)="showSelectAccount = true;" class="btn btn-circle bg-transparent mr-2">
+                    <svg class="fill-white w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z" />
+                    </svg>
+                </button>
+                }
+                Login
+            </h2>
+
+            @if (showSelectAccount) {
+            <button (click)="showSelectAccount = true" class="link link-underline-hover link-primary text-sm">
+                Select account
+            </button>
+            }
+        </div>
+        <form [formGroup]="loginForm" class="form-group">
+            <div class="form-field">
+                <label class="form-label">Email</label>
+
+                <input formControlName="email" placeholder="mail@kavka.org" type="email" class="input max-w-full" />
+                <label class="form-label">
+                    <span class="form-label-alt">Please enter a valid email.</span>
+                </label>
+            </div>
+            <div class="form-field">
+                <label class="form-label">
+                    <span>Password</span>
+                </label>
+                <div class="form-control">
+                    <input formControlName="password" placeholder="Secure password" type="password"
                         class="input max-w-full" />
+                </div>
+                <div class="form-label">
+                    <span class="form-label-alt">At least 8 characters and strong structure.</span>
+                </div>
+            </div>
+            <div class="form-field mt-4">
+                <div class="form-control justify-between">
+                    <div class="flex gap-2">
+                        <input formControlName="rememberMe" id="remember-me" type="checkbox" class="checkbox" />
+                        <label class="cursor-pointer" for="remember-me">Remember me</label>
+                    </div>
                     <label class="form-label">
-                        <span class="form-label-alt">Please enter a valid email.</span>
+                        <a routerLink="/auth/forgot_password"
+                            class="link link-underline-hover link-primary text-sm">Forgot your password?</a>
                     </label>
                 </div>
-                <div class="form-field">
-                    <label class="form-label">
-                        <span>Password</span>
-                    </label>
-                    <div class="form-control">
-                        <input
-                            formControlName="password"
-                            placeholder="Secure password"
-                            type="password"
-                            class="input max-w-full" />
-                    </div>
-                    <div class="form-label">
-                        <span class="form-label-alt"
-                            >At least 8 characters and strong structure.</span
-                        >
-                    </div>
+            </div>
+            <div class="form-field pt-5">
+                <div class="form-control justify-between">
+                    <button (click)="submitLogin()" [disabled]="!loginForm.valid" type="button"
+                        class="btn btn-primary w-full">
+                        Submit
+                    </button>
                 </div>
-                <div class="form-field mt-4">
-                    <div class="form-control justify-between">
-                        <div class="flex gap-2">
-                            <input
-                                formControlName="rememberMe"
-                                id="remember-me"
-                                type="checkbox"
-                                class="checkbox" />
-                            <label class="cursor-pointer" for="remember-me">Remember me</label>
-                        </div>
-                        <label class="form-label">
-                            <a
-                                routerLink="/auth/forgot_password"
-                                class="link link-underline-hover link-primary text-sm"
-                                >Forgot your password?</a
-                            >
-                        </label>
-                    </div>
-                </div>
-                <div class="form-field pt-5">
-                    <div class="form-control justify-between">
-                        <button
-                            (click)="submitLogin()"
-                            [disabled]="!loginForm.valid"
-                            type="button"
-                            class="btn btn-primary w-full">
-                            Submit
-                        </button>
-                    </div>
-                </div>
+            </div>
 
-                <div class="form-field">
-                    <div class="form-control">
-                        <a
-                            routerLink="/auth/signup"
-                            class="link link-underline-hover link-primary text-sm"
-                            >Don't have an account? Signup!</a
-                        >
-                    </div>
+            <div class="form-field">
+                <div class="form-control">
+                    <a routerLink="/auth/signup" class="link link-underline-hover link-primary text-sm">Don't have an
+                        account? Signup!</a>
                 </div>
-            </form>
+            </div>
+        </form>
         }
     </div>
 </div>

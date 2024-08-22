@@ -3,11 +3,7 @@
 <div class="modal w-screen">
     <label class="modal-overlay" for="terms-and-cond-modal"></label>
     <div class="modal-content max-w-3xl flex flex-col gap-5">
-        <label
-            for="terms-and-cond-modal"
-            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >✕</label
-        >
+        <label for="terms-and-cond-modal" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
         <h2 class="text-xl">Terms & Conditions</h2>
         <p>
             So how did the classical Latin become so incoherent? According to McClintock, a 15th
@@ -47,23 +43,16 @@
         <h2 class="mb-4 text-2xl">Signup</h2>
 
         @for (item of formErrors; track $index) {
-            <div track class="alert alert-error mb-3">
-                <svg
-                    width="30"
-                    height="30"
-                    viewBox="0 0 48 48"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 26C22.9 26 22 25.1 22 24V16C22 14.9 22.9 14 24 14C25.1 14 26 14.9 26 16V24C26 25.1 25.1 26 24 26ZM26 34H22V30H26V34Z"
-                        fill="#E92C2C" />
-                </svg>
-                <div class="flex flex-col">
-                    <span>{{ item }}</span>
-                </div>
+        <div track class="alert alert-error mb-3">
+            <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 26C22.9 26 22 25.1 22 24V16C22 14.9 22.9 14 24 14C25.1 14 26 14.9 26 16V24C26 25.1 25.1 26 24 26ZM26 34H22V30H26V34Z"
+                    fill="#E92C2C" />
+            </svg>
+            <div class="flex flex-col">
+                <span>{{ item }}</span>
             </div>
+        </div>
         }
 
         <div class="form-group">
@@ -71,50 +60,34 @@
                 <div class="form-field">
                     <label class="form-label">First Name</label>
 
-                    <input
-                        formControlName="firstName"
-                        name="firstName"
-                        placeholder="John"
-                        type="text"
+                    <input formControlName="firstName" name="firstName" placeholder="John" type="text"
                         class="input max-w-full" />
                 </div>
                 <div class="form-field">
                     <label class="form-label">Last Name</label>
 
-                    <input
-                        formControlName="lastName"
-                        name="firstName"
-                        placeholder="Doe"
-                        type="text"
+                    <input formControlName="lastName" name="firstName" placeholder="Doe" type="text"
                         class="input max-w-full" />
                 </div>
             </div>
 
             <div class="form-field">
-                <label class="form-label">Email</label>
+                <label class="form-label">Username</label>
 
-                <input
-                    formControlName="email"
-                    name="email"
-                    placeholder="mail@kavka.org"
-                    type="email"
+                <input formControlName="username" name="username" placeholder="john_doe" type="text"
                     class="input max-w-full" />
                 <label class="form-label">
-                    <span class="form-label-alt">Please enter a valid email.</span>
+                    <span class="form-label-alt">Use only underline to separate words.</span>
                 </label>
             </div>
 
             <div class="form-field">
-                <label class="form-label">Username</label>
+                <label class="form-label">Email</label>
 
-                <input
-                    formControlName="username"
-                    name="username"
-                    placeholder="john_doe"
-                    type="text"
+                <input formControlName="email" name="email" placeholder="mail@kavka.org" type="email"
                     class="input max-w-full" />
                 <label class="form-label">
-                    <span class="form-label-alt">Use only underline to separate words.</span>
+                    <span class="form-label-alt">Please enter a valid email.</span>
                 </label>
             </div>
 
@@ -123,11 +96,7 @@
                     <span>Password</span>
                 </label>
                 <div class="form-control">
-                    <input
-                        formControlName="password"
-                        name="password"
-                        placeholder="Secure password"
-                        type="password"
+                    <input formControlName="password" name="password" placeholder="Secure password" type="password"
                         class="input max-w-full" />
                 </div>
                 <div class="form-label">
@@ -138,24 +107,17 @@
             <div class="form-field mt-4">
                 <div class="form-control justify-between">
                     <div class="flex gap-2">
-                        <input
-                            formControlName="acceptTheTermsAndConditions"
-                            name="acceptTheTermsAndConditions"
-                            type="checkbox"
-                            class="checkbox" />
-                        <label class="cursor-pointer" for="terms-and-cond-modal"
-                            >Accept the terms and conditions of the Kavka.</label
-                        >
+                        <input formControlName="acceptTheTermsAndConditions" name="acceptTheTermsAndConditions"
+                            type="checkbox" class="checkbox" />
+                        <label class="cursor-pointer" for="terms-and-cond-modal">Accept the terms and conditions of the
+                            Kavka.</label>
                     </div>
                 </div>
             </div>
 
             <div class="form-field pt-5">
                 <div class="form-control justify-between">
-                    <button
-                        (click)="submitSignup()"
-                        [disabled]="!signupForm.valid"
-                        type="button"
+                    <button (click)="submitSignup()" [disabled]="!signupForm.valid" type="button"
                         class="btn btn-primary w-full">
                         Submit
                     </button>
@@ -164,11 +126,8 @@
 
             <div class="form-field">
                 <div class="form-control">
-                    <a
-                        routerLink="/auth/login"
-                        class="link link-underline-hover link-primary text-sm"
-                        >Already have an account? Login.</a
-                    >
+                    <a routerLink="/auth/login" class="link link-underline-hover link-primary text-sm">Already have an
+                        account? Login.</a>
                 </div>
             </div>
         </div>

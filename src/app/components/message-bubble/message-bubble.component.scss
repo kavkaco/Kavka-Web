@@ -1,5 +1,12 @@
 .message-bubble {
     .message-bubble--content {
+        &.message-bubble--selected {
+            background-color: rgb(var(--primary));
+            .fill-primary {
+                fill: #fff !important;
+            }
+        }
+
         width: max-content;
         max-width: 450px;
 

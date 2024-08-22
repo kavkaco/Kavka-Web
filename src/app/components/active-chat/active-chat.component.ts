@@ -28,6 +28,7 @@ import {
 import { Message } from "kavka-core/model/message/v1/message_pb";
 import { ChatService } from "@app/services/chat.service";
 import { User } from "kavka-core/model/user/v1/user_pb";
+import { getChatTypeString } from "@app/models/chat";
 
 @Component({
     selector: "app-active-chat",
@@ -44,8 +45,10 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     @Input() activeUser: User;
     @Input() activeChat: Chat;
     @ViewChild("messagesScrollbar") messagesScrollbarRef: ElementRef;
+    @ViewChild("messageContextMenu") messageContextMenuRef: ElementRef;
 
     // Active chat extra detail
+    chatTypeString: string;
     textInput = "";
     title = "";
     username = "";
@@ -54,10 +57,59 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     online?: boolean | undefined;
     avatar: string | undefined;
     messages: Message[];
+    selectedMessages = [] as string[];
     inputSectionStatus: {
         show: boolean;
         joined: boolean;
     };
+
+    showMessageContextMenu = false;
+    selectedMessageCaption: string | null;
+
+    isMessageSelected(messageId: string) {
+        return this.selectedMessages.includes(messageId);
+    }
+
+    copySelectedMessageCaption() {
+        navigator.clipboard.writeText(this.selectedMessageCaption || "").then(() => {
+            console.log("[ActiveChat] Message Caption Copied");
+        });
+    }
+
+    toggleSelectMessage(event: MouseEvent, messageId: string) {
+        event.preventDefault();
+        if (!this.selectedMessages.includes(messageId)) {
+            this.selectedMessages.push(messageId);
+            return;
+        }
+
+        this.selectedMessages = this.selectedMessages.filter(
+            _messageId => _messageId !== messageId
+        );
+    }
+
+    openMessageContextMenu(event: MouseEvent, messageId: string) {
+        event.preventDefault();
+        const el = this.messageContextMenuRef.nativeElement as HTMLElement;
+        const menuRect = el.getBoundingClientRect();
+
+        el.style.top = event.clientY - menuRect.height + "px";
+        el.style.left = event.clientX + "px";
+
+        const message = this.messages.find(_message => _message.messageId === messageId);
+        if (message !== undefined) {
+            this.selectedMessageCaption = message.payload.value.text.trim();
+            this.showMessageContextMenu = true;
+
+            return;
+        }
+
+        this.showMessageContextMenu = false;
+    }
+
+    closeMessageContextMenu() {
+        this.showMessageContextMenu = false;
+    }
 
     ngOnInit() {
         this.inputSectionStatus = {
@@ -107,6 +159,8 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
                         this.scrollToBottomAfterGettingNewMessage();
                     });
             });
+
+        this.chatTypeString = getChatTypeString(this.activeChat.chatType);
 
         this.setLocalChatDetail();
         this.setInputSectionStatus();
@@ -205,12 +259,9 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     }
 
     submitSendTextMessage() {
-        this.messageService
-            .SendTextMessage(this.activeChat.chatId, this.textInput.trim())
-            .then(() => {
-                this.textInput = "";
-                this.scrollToBottom(this.messagesScrollbarRef);
-            });
+        this.messageService.SendTextMessage(this.activeChat.chatId, this.textInput.trim());
+        this.textInput = "";
+        this.scrollToBottom(this.messagesScrollbarRef);
     }
 
     submitCloseChat() {
