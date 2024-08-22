@@ -49,7 +49,7 @@ export class AuthService {
     constructor() {
         const options: ConnectTransportOptions = {
             baseUrl: environment.grpcTransportBaseUrl,
-            defaultTimeoutMs: 7000,
+            defaultTimeoutMs: 20000,
         };
 
         const transport = createGrpcWebTransport(options);

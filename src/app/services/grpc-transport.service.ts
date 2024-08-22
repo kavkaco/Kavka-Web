@@ -26,6 +26,7 @@ export class GrpcTransportService {
                 useRefreshTokenInterceptorFactory(this.accountManagerService, this.authService),
                 useAuthInterceptorFactory(this.accountManagerService),
             ],
+            defaultTimeoutMs: 20000,
         };
 
         this.establishConnection();
