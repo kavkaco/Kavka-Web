@@ -1,5 +1,9 @@
 $mobile-break-point: 900px;
 
+.create-chat-modal {
+    min-width: 470px !important;
+}
+
 .platform-chats {
     --sidebar-size: 370px;
 

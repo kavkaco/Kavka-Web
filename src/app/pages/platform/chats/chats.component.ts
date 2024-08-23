@@ -14,6 +14,7 @@ import { take } from "rxjs";
 import { SearchService } from "@app/services/search.service";
 import { Chat, DirectChatDetail } from "kavka-core/model/chat/v1/chat_pb";
 import { User } from "kavka-core/model/user/v1/user_pb";
+import { ChatItemSkeletonComponent } from "@app/components/chat-item/chat-item-skeleton/chat-item-skeleton.component";
 
 @Component({
     selector: "app-chats",
@@ -23,6 +24,7 @@ import { User } from "kavka-core/model/user/v1/user_pb";
         FormsModule,
         ActiveChatComponent,
         ChatItemComponent,
+        ChatItemSkeletonComponent,
         NgScrollbarModule,
     ],
     templateUrl: "./chats.component.html",
@@ -38,6 +40,7 @@ export class ChatsComponent {
     activeChat: Chat | null;
     activeUser: User | null;
 
+    chatItemsLoaded = false;
     chatItems: IChatItem[] = [];
     filteredChatItems: IChatItem[] = [];
 
@@ -72,6 +75,7 @@ export class ChatsComponent {
             this.store.dispatch(ChatActions.set({ chats }));
 
             this.filteredChatItems = this.chatItems;
+            this.chatItemsLoaded = true;
         });
 
         this.store.select(ChatSelector.selectChatItems).subscribe(chats => {
