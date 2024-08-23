@@ -24,10 +24,11 @@ export class LoginComponent implements OnInit {
     accountsList: ILocalStorageAccount[] | null = null;
     activeAccountId = "";
 
+    isLoading = false;
     loginForm = new FormGroup({
-        email: new FormControl("", [Validators.required]),
-        password: new FormControl("", [Validators.required]),
-        rememberMe: new FormControl(true),
+        email: new FormControl({ value: "", disabled: false }, [Validators.required]),
+        password: new FormControl({ value: "", disabled: false }, [Validators.required]),
+        rememberMe: new FormControl({ value: true, disabled: false }),
     });
     formErrors: string[] = [];
 
@@ -59,6 +60,9 @@ export class LoginComponent implements OnInit {
     }
 
     submitLogin() {
+        this.isLoading = true;
+        this.loginForm.disable();
+
         this.formErrors = [];
 
         this.authService
@@ -89,6 +93,10 @@ export class LoginComponent implements OnInit {
             })
             .catch((err: Error) => {
                 this.addNewFormError(err.message);
+            })
+            .finally(() => {
+                this.isLoading = false;
+                this.loginForm.enable();
             });
     }
 

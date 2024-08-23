@@ -11,7 +11,7 @@
                     @for (item of accountsList; track $index) {
                     <div class="relative flex flex-row justify-between w-full">
                         <button (click)="activateAccount(item.accountId)" track
-                            class="menu-item menu-item-no-animation hover:bg-transparent">
+                            class="menu-item menu-item-no-animation focus:bg-transparent hover:bg-transparent">
                             <input type="radio" class="radio-primary radio"
                                 [checked]="item.accountId === activeAccountId" />
                             {{ item.email }}
@@ -36,13 +36,13 @@
         </nav>
         } @else {
         @for (item of formErrors; track $index) {
-        <div track class="alert alert-error mb-3">
+        <div track class="alert border border-border bg-transparent mb-3">
             <svg class="w-6" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
                     d="M24 4C12.96 4 4 12.96 4 24C4 35.04 12.96 44 24 44C35.04 44 44 35.04 44 24C44 12.96 35.04 4 24 4ZM24 26C22.9 26 22 25.1 22 24V16C22 14.9 22.9 14 24 14C25.1 14 26 14.9 26 16V24C26 25.1 25.1 26 24 26ZM26 34H22V30H26V34Z"
                     fill="#E92C2C" />
             </svg>
-            <div class="flex flex-col">
+            <div class="flex flex-col text-error">
                 <span>{{ item }}</span>
             </div>
         </div>
@@ -51,7 +51,8 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl flex flex-row items-center">
                 @if (accountsList && accountsList.length > 0) {
-                <button (click)="showSelectAccount = true;" class="btn btn-circle bg-transparent mr-2">
+                <button [disabled]="isLoading" (click)="showSelectAccount = true;"
+                    class="btn btn-circle bg-transparent mr-2">
                     <svg class="fill-white w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path
                             d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z" />
@@ -67,7 +68,7 @@
             </button>
             }
         </div>
-        <form [formGroup]="loginForm" class="form-group">
+        <form (submit)="submitLogin()" [formGroup]="loginForm" class="form-group">
             <div class="form-field">
                 <label class="form-label">Email</label>
 
@@ -102,9 +103,16 @@
             </div>
             <div class="form-field pt-5">
                 <div class="form-control justify-between">
-                    <button (click)="submitLogin()" [disabled]="!loginForm.valid" type="button"
-                        class="btn btn-primary w-full">
+                    <button [disabled]="!loginForm.valid" type="submit"
+                        class="btn btn-primary disabled:bg-primary w-full">
+                        @if (isLoading) {
+                        <svg class="spinner-ring p-2 [--spinner-color:var(--slate-12)]" viewBox="25 25 50 50"
+                            stroke-width="4">
+                            <circle cx="50" cy="50" r="20" />
+                        </svg>
+                        } @else {
                         Submit
+                        }
                     </button>
                 </div>
             </div>
