@@ -66,7 +66,6 @@ $layout-grid-gap: 10px;
     .platform {
         --sidebar-size: 60px;
         grid-template-columns: unset;
-        // grid-template-rows: calc(100% - var(--sidebar-size)) var(--sidebar-size);
     }
 
     .platform-sidebar {

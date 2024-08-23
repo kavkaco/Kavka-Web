@@ -31,8 +31,34 @@
             </a>
         </div>
 
-        <div class="platform-sidebar--footer">
-            <app-user-avatar-dropdown dropDownPosition="top-right"></app-user-avatar-dropdown>
+        <div class="platform-sidebar--footer flex justify-center">
+            <div class="dropdown-container">
+                <div class="dropdown">
+                    <label class="cursor-pointer" tabindex="0">
+                        <div class="flex items-center justify-center avatar bg-primary size-10">
+                            {{ activeUser.name[0].toUpperCase() }}
+                        </div>
+                    </label>
+                    <div class="mb-4 dropdown-menu-blur dropdown-menu dropdown-menu-top-right">
+                        <a routerLink="/auth/login" tabindex="-1"
+                            class="dropdown-item text-sm text-white flex flex-row items-center gap-2">
+                            <svg class="w-4 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="m7.5 13a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5zm7.5 14a5.006 5.006 0 0 0 -5-5h-5a5.006 5.006 0 0 0 -5 5v4h2v-4a3 3 0 0 1 3-3h5a3 3 0 0 1 3 3v4h2zm2.5-11a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5zm6.5 14a5.006 5.006 0 0 0 -5-5h-4v2h4a3 3 0 0 1 3 3v4h2z" />
+                            </svg>
+                            Switch Account
+                        </a>
+                        <a routerLink="/auth/logout" tabindex="-1"
+                            class="dropdown-item text-sm text-error flex flex-row items-center gap-2">
+                            <svg class="w-4 fill-error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path
+                                    d="m24,12c0,6.617-5.383,12-12,12-.552,0-1-.447-1-1s.448-1,1-1c5.514,0,10-4.486,10-10S17.514,2,12,2c-.552,0-1-.447-1-1s.448-1,1-1c6.617,0,12,5.383,12,12Zm-21.538,1.116c-.036-.036-.064-.078-.096-.116h13.633c.552,0,1-.447,1-1s-.448-1-1-1H2.367c.033-.04.061-.082.098-.119l5.134-5.177c.389-.392.386-1.025-.006-1.414-.392-.39-1.026-.387-1.414.006L1.047,9.47c-.675.677-1.047,1.575-1.047,2.53s.372,1.854,1.045,2.527l5.134,5.177c.195.197.453.296.71.296.254,0,.509-.097.704-.29.392-.389.395-1.022.006-1.414l-5.137-5.18Z" />
+                            </svg>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

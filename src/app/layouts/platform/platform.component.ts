@@ -1,20 +1,33 @@
 import { Component, HostListener, inject } from "@angular/core";
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
-import { UserAvatarDropdownComponent } from "@components/user-avatar-dropdown/user-avatar-dropdown.component";
 import { EventsService } from "@app/services/events.service";
+import { User } from "kavka-core/model/user/v1/user_pb";
+import { Store } from "@ngrx/store";
+import * as AuthSelector from "@store/auth/auth.selectors";
+import { take } from "rxjs";
+
 @Component({
     selector: "app-platform",
     standalone: true,
-    imports: [RouterOutlet, RouterLink, RouterLinkActive, UserAvatarDropdownComponent],
+    imports: [RouterOutlet, RouterLink, RouterLinkActive],
     templateUrl: "./platform.component.html",
     styleUrl: "./platform.component.scss",
 })
 export class PlatformComponent {
+    private store = inject(Store);
     private router = inject(Router);
     private eventsService = inject(EventsService);
+    activeUser: User;
 
     constructor() {
         this.eventsService.SubscribeEventsStream();
+
+        this.store
+            .select(AuthSelector.selectActiveUser)
+            .pipe(take(1))
+            .subscribe(_activeUser => {
+                this.activeUser = _activeUser;
+            });
     }
 
     @HostListener("window:keydown", ["$event"])

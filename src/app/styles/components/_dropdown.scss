@@ -3,3 +3,14 @@
     backdrop-filter: blur(5px);
     border: 1px solid rgb(var(--border));
 }
+
+.dropdown-menu {
+    .dropdown-item {
+        padding: 8px !important;
+        &,
+        &:hover,
+        &:focus {
+            background-color: transparent !important;
+        }
+    }
+}
