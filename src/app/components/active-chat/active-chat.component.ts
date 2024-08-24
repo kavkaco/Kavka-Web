@@ -29,6 +29,7 @@ import { Message } from "kavka-core/model/message/v1/message_pb";
 import { ChatService } from "@app/services/chat.service";
 import { User } from "kavka-core/model/user/v1/user_pb";
 import { getChatTypeString } from "@app/models/chat";
+import { IMessage } from "@app/models/message";
 
 @Component({
     selector: "app-active-chat",
@@ -56,12 +57,13 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     membersCount?: number | undefined;
     online?: boolean | undefined;
     avatar: string | undefined;
-    messages: Message[];
+    messages: IMessage[];
     selectedMessages = [] as string[];
     inputSectionStatus: {
         show: boolean;
         joined: boolean;
     };
+    isLoading = true;
 
     showMessageContextMenu = false;
     selectedMessageCaption: string | null;
@@ -140,14 +142,20 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
                 if (_messages) {
                     this.messages = _messages;
                     this.scrollToBottomAfterGettingNewMessage();
+                    this.isLoading = false;
                     return;
                 }
 
+                this.isLoading = true;
                 // The message are not accessible form the local and here we do unary call
                 await this.messageService
                     .FetchMessages(this.activeChat.chatId)
                     .then(fetchedMessages => {
                         this.messages = fetchedMessages;
+
+                        this.messages.forEach(message => {
+                            message.sent = true;
+                        });
 
                         this.store.dispatch(
                             MessageActions.set({
@@ -157,6 +165,7 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
                         );
 
                         this.scrollToBottomAfterGettingNewMessage();
+                        this.isLoading = false;
                     });
             });
 
@@ -259,9 +268,22 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     }
 
     submitSendTextMessage() {
-        this.messageService.SendTextMessage(this.activeChat.chatId, this.textInput.trim());
-        this.textInput = "";
-        this.scrollToBottom(this.messagesScrollbarRef);
+        this.messageService
+            .SendTextMessage(this.activeChat.chatId, this.textInput.trim())
+            .then((message: IMessage) => {
+                message.sent = false;
+
+                this.store.dispatch(
+                    MessageActions.add({
+                        chatId: this.activeChat.chatId,
+                        message,
+                    })
+                );
+                this.textInput = "";
+                this.scrollToBottom(this.messagesScrollbarRef);
+
+                console.log("sent");
+            });
     }
 
     submitCloseChat() {

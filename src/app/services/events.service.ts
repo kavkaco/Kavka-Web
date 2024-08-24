@@ -7,6 +7,7 @@ import { MessageActions } from "@app/store/messages/messages.actions";
 import { EventsService as KavkaEventsService } from "kavka-core/events/v1/events_connect";
 import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "kavka-core/events/v1/events_pb";
 import { ConnectivityActions } from "@app/store/connectivity/connectivity.actions";
+import { IMessage } from "@app/models/message";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
@@ -51,10 +52,18 @@ export class EventsService {
 
     addMessage(ie: SubscribeEventsStreamResponse) {
         const event = ie.payload.value as AddMessage;
-        const message = event.message;
         const chatId = event.chatId;
+        let message = event.message as IMessage;
 
-        this.store.dispatch(MessageActions.add({ chatId, message }));
+        message.sent = true;
+
+        this.store.dispatch(
+            MessageActions.update({
+                chatId,
+                messageId: message.messageId,
+                replaceWith: message,
+            })
+        );
 
         // Update last message of the chat
         this.store.dispatch(

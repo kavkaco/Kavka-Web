@@ -1,10 +1,10 @@
 import { createReducer, on } from "@ngrx/store";
 import { MessageActions } from "@app/store/messages/messages.actions";
-import { Message } from "kavka-core/model/message/v1/message_pb";
+import { IMessage } from "@app/models/message";
 
 export interface IMessageStore {
     chatId: string;
-    messages: Message[];
+    messages: IMessage[];
 }
 
 export interface MessagesState {
@@ -60,6 +60,40 @@ export const messageReducer = createReducer(
                     {
                         chatId,
                         messages: [...messageStore.messages, message],
+                    },
+                    ...state.messageStores.slice(idx + 1),
+                ],
+            };
+        }
+
+        return state;
+    }),
+    on(MessageActions.update, (state, { chatId, messageId, replaceWith }) => {
+        const idx = state.messageStores.findIndex(_item => _item.chatId === chatId);
+        if (idx !== -1) {
+            const messageStore: IMessageStore = state.messageStores[idx];
+            const messageIdx = messageStore.messages.findIndex(
+                _message => _message.messageId === messageId
+            );
+
+            console.log("updating");
+
+            if (messageIdx === -1) {
+                console.log("[MessagesReducer] Message not found to update it");
+                return state;
+            }
+
+            return {
+                ...state,
+                messageStores: [
+                    ...state.messageStores.slice(0, idx),
+                    {
+                        chatId,
+                        messages: [
+                            ...messageStore.messages.slice(0, messageIdx),
+                            replaceWith,
+                            ...messageStore.messages.slice(messageIdx + 1),
+                        ],
                     },
                     ...state.messageStores.slice(idx + 1),
                 ],

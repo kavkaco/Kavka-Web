@@ -22,6 +22,7 @@ export class MessageBubbleComponent implements OnInit {
     @Input() chatType: ChatType;
     @Input() createdAt: bigint;
     @Input() messageSelected: boolean;
+    @Input() sent: boolean;
 
     chatTypeString: string;
     messageTimestamp: string;
@@ -30,8 +31,6 @@ export class MessageBubbleComponent implements OnInit {
 
     ngOnInit() {
         if (this.messageCaption !== undefined && this.messageCaption !== null) {
-            console.log(this.messageCaption);
-
             try {
                 this.messageCaption = this.messageCaption.replace(/\n\r?/g, "<br>");
                 this.messageCaption = this.sanitizer.bypassSecurityTrustHtml(this.messageCaption);

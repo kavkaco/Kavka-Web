@@ -155,8 +155,8 @@
     <div class="active-chat--head relative">
         @if (selectedMessages.length > 0) {
         <div style="z-index: 93;"
-            class="absolute left-0 right-0 top-0 bottom-0 w-full h-full bg-backgroundPrimary flex flex-row justify-between items-center px-3">
-            <h1 class="text-md">{{selectedMessages.length + 1}} Messages Selected</h1>
+            class="absolute left-0 right-0 top-0 bottom-0 w-full h-full bg-backgroundPrimary flex flex-row justify-between items-center px-5">
+            <h1 class="text-md">{{ selectedMessages.length }} Messages Selected</h1>
             <div>
                 <button (click)="selectedMessages = []" class="btn btn-circle btn-ghost fill-content2">
                     <svg class="w-6 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -233,7 +233,15 @@
             </div>
         </div>
     </div>
-    <div class="active-chat--body">
+    <div class="active-chat--body relative">
+        @if (isLoading) {
+        <div class="active-chat--loading">
+            <svg class="spinner-ring" viewBox="25 25 50 50" stroke-width="5">
+                <circle cx="50" cy="50" r="20" />
+            </svg>
+        </div>
+        }
+
         <div class="active-chat--body--messages-list">
             <ng-scrollbar #messagesScrollbar [appearance]="'compact'" class="ngx-custom-scrollbar overflow-x-hidden">
                 <div class="pr-4">
@@ -246,7 +254,7 @@
                         <app-message-bubble track [messageCaption]="item.payload.value.text" messageType="label"
                             [senderTitle]="item.sender.name + ' ' + item.sender.lastName"
                             [isSelfMessage]="item.sender.userId === activeUser.userId" [chatType]="activeChat.chatType"
-                            [createdAt]="item.createdAt"
+                            [createdAt]="item.createdAt" [sent]="item.sent"
                             [messageSelected]="isMessageSelected(item.messageId)"></app-message-bubble>
                         }
                         @case ("labelMessage") {

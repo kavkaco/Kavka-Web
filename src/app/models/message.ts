@@ -1,9 +1,15 @@
+import { Message } from "kavka-core/model/message/v1/message_pb";
+
 export enum MessageType {
     Text,
     Image,
     Voice,
     File,
     Sticker,
+}
+
+export interface IMessage extends Message {
+    sent?: boolean;
 }
 
 export function getMessageCreatedAtTimestamp(createdAtBigInt: bigint): string {

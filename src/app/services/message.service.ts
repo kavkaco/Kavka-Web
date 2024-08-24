@@ -1,8 +1,9 @@
 import { inject, Injectable } from "@angular/core";
 import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GrpcTransportService } from "@app/services/grpc-transport.service";
-import { MessageService as KavkaMessageService } from "kavka-core/message/message_connect";
+import { MessageService as KavkaMessageService } from "kavka-core/message/v1/message_connect";
 import { Message } from "kavka-core/model/message/v1/message_pb";
+import { IMessage } from "@app/models/message";
 
 @Injectable({ providedIn: "root" })
 export class MessageService {
@@ -35,7 +36,8 @@ export class MessageService {
             this.client
                 .sendTextMessage({ chatId, text })
                 .then(response => {
-                    resolve(response.message);
+                    const message = response.message as IMessage;
+                    resolve(message);
                     return;
                 })
                 .catch((e: Error) => {

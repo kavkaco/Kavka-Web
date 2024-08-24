@@ -6,7 +6,7 @@
         "start": "ng serve",
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
-        "serve:ssr:Kavka-Web": "node dist/kavka-web/server/server.mjs",
+        "serve:ssr": "node dist/kavka-web/server/server.mjs",
         "lint": "ng lint",
         "format": "npx prettier --write ."
     },
@@ -32,7 +32,7 @@
         "body-parser": "^1.20.2",
         "express": "^4.19.2",
         "jsonwebtoken": "^9.0.2",
-        "kavka-core": "^1.1.83",
+        "kavka-core": "^1.1.86",
         "ngx-scrollbar": "^15.0.1",
         "rippleui": "^1.12.1",
         "rxjs": "^7.8.1",
