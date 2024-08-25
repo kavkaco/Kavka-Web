@@ -1,0 +1,31 @@
+.settings-container {
+    padding-top: 50px;
+    width: 1200px;
+    display: grid;
+    grid-template-columns: auto 300px;
+    gap: 25px;
+
+    @media screen and (max-width: 1300px) {
+        & {
+            width: 950px;
+        }
+    }
+
+    @media screen and (max-width: 1100px) {
+        .settings-navigation {
+            display: none;
+        }
+
+        & {
+            width: 80%;
+            padding-top: 20px;
+            grid-template-columns: auto;
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        & {
+            width: 96%;
+        }
+    }
+}

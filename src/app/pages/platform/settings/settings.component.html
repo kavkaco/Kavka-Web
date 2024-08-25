@@ -1,24 +1,167 @@
-<ng-scrollbar
-    class="ngx-custom-scrollbar overflow-x-hidden"
-    [visibility]="'hover'"
-    [appearance]="'compact'">
+<ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden" [visibility]="'hover'" [appearance]="'compact'">
+    <div class="settings-container relative p-3 md:p-7 mb-10 mx-auto">
+
+        <div>
+            <div id="account" class="w-full">
+                <a href="/p/settings#account">
+                    <h1 class="w-full text-3xl pb-2 mb-5 border-b border-border">Account</h1>
+                </a>
+
+                @if (avatar) {
+                <!-- TODO -->
+                }
+                @else {
+                <div class="flex flex-row gap-4 items-center mb-6">
+                    <div
+                        class="flex items-center justify-center text-2xl avatar size-20 md:size-28 border border-border bg-transparent">
+                        {{
+                        user.name[0].toUpperCase() }}
+                    </div>
+                    <div class="flex flex-col ">
+                        <h2 class="text-3xl">{{ user.name + " " + user.lastName }}</h2>
+                        @if (isOnline) {
+                        <h3 class="text-md text-success">
+                            Online
+                        </h3>
+                        } @else {
+                        <h3 class="text-md text-content2">
+                            Offline
+                        </h3>
+                        }
+                    </div>
+                </div>
+                }
+
+                <div class="flex flex-row gap-2 mb-7">
+                    <button class="btn btn-primary">Change picture</button>
+                    <button class="btn text-error bg-transparent border border-border">Delete picture</button>
+                </div>
+
+                <div class="flex md:flex-row flex-col gap-2">
+                    <div class="w-full">
+                        <label for="profile-name">Name</label>
+                        <input [ngModel]="user.name" id="profile-name" placeholder="Name"
+                            class="input-custom input input-block" type="text">
+                    </div>
+
+                    <div class="w-full">
+                        <label for="profile-name">Last Name</label>
+                        <input [ngModel]="user.lastName" id="profile-last-name" placeholder="Last Name"
+                            class="input-custom input input-block" type="text">
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label for="profile-name">Email</label>
+                    <input [ngModel]="user.email" id="profile-email" placeholder="Email"
+                        class="input-custom input input-block cursor-default" type="email" readonly>
+                </div>
+
+                <div class="mt-4">
+                    <label for="profile-bio">Biography</label>
+                    <textarea maxlength="120" [ngModel]="user.biography"
+                        class="input-custom textarea-block textarea h-52"
+                        placeholder="Everything you want to people know about you..."></textarea>
+                </div>
+
+                <div class="w-full flex justify-end">
+                    <button class="btn btn-primary mt-2">Save Changes</button>
+                </div>
+            </div>
+
+            <div id="notifications" class="w-full mt-10">
+                <a href="/p/settings#notifications">
+                    <h1 class="w-full text-3xl pb-2 mb-5 border-b border-border">Notifications</h1>
+                </a>
+
+                <div>
+                    <div class="flex flex-row justify-between">
+                        <label for="private-chat-notif" class="w-full cursor-pointer">
+                            Private chats
+                        </label>
+                        <input id="private-chat-notif" type="checkbox" class="switch switch-primary" checked />
+                    </div>
+
+                    <span class="text-content2">On.</span>
+                </div>
+
+                <div class="mt-4">
+                    <div class="flex flex-row justify-between">
+                        <label for="channels-notif" class="w-full cursor-pointer">
+                            Channels
+                        </label>
+                        <input id="channels-notif" type="checkbox" class="switch switch-primary" />
+                    </div>
+
+                    <span class="text-content2">Off.</span>
+                </div>
+
+                <div class="mt-4">
+                    <div class="flex flex-row justify-between">
+                        <label for="groups-notif" class="w-full cursor-pointer">
+                            Groups
+                        </label>
+                        <input id="groups-notif" type="checkbox" class="switch switch-primary" checked />
+                    </div>
+
+                    <span class="text-content2">On.</span>
+                </div>
+
+                <div class="flex items-center justify-center py-10 rounded-lg border border-border my-6">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-row gap-3 items-center border border-border py-3 px-5 rounded-lg mt-4">
+                            <div class="avatar border border-border size-10">
+                                <img src="/assets/logo/icon-128x128.png" alt="Kavka Logo">
+                            </div>
+                            <div>
+                                <h2>Kavka Platform</h2>
+                                <span class="text-content2">You have a new message.</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-row gap-3 justify-center">
+                            <div>
+                                <label class="flex items-center cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Name</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="flex items-center cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Text</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky top-5 settings-navigation border border-border rounded-lg p-3 h-max">
+            <h2 class="text-xl text-primary">Settings</h2>
+            <div class="flex flex-col gap-2 pl-3 mt-2">
+                <a href="/p/settings#account">Account</a>
+                <a href="/p/settings#notifications">Notifications</a>
+            </div>
+        </div>
+
+    </div>
+</ng-scrollbar>
+
+<!-- <ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden" [visibility]="'hover'" [appearance]="'compact'">
     <div class="settings-container pl-3 pr-5 pt-5 mb-10">
         <div class="container mx-auto mt-0 md:mt-3">
             <div class="relative mb-14 rounded-xl">
-                <img
-                    class="object-cover border border-border w-full md:h-64 lg:h-72 rounded-xl"
-                    src="/assets/img/settings_intro_banner.png"
-                    alt="settings-banner" />
+                <img class="object-cover border border-border w-full md:h-64 lg:h-72 rounded-xl"
+                    src="/assets/img/settings_intro_banner.png" alt="settings-banner" />
 
-                <div
-                    class="avatar size-24 bottom-5 sm:-bottom-11 xl:-bottom-16 right-5 absolute lg:size-32 xl:size-48">
+                <div class="avatar size-24 bottom-5 sm:-bottom-11 xl:-bottom-16 right-5 absolute lg:size-32 xl:size-48">
                     <img src="https://avatars.githubusercontent.com/u/72092675?v=4" alt="avatar" />
                 </div>
 
                 <div class="sm:absolute sm:mt-0 mt-3 left-4 bottom-4 flex flex-col gap-1">
                     <div class="flex flex-row gap-1">
-                        <h2
-                            class="text-2xl w-max border border-border bg-backgroundPrimary rounded-md px-1">
+                        <h2 class="text-2xl w-max border border-border bg-backgroundPrimary rounded-md px-1">
                             {{ user?.name + " " + user?.lastName }}
                         </h2>
                         <span
@@ -45,42 +188,29 @@
                     <section class="menu-section">
                         <ul class="menu-items">
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="m7.5 13a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5zm7.5 17v-.5a7.5 7.5 0 0 0 -15 0v.5a1 1 0 0 0 2 0v-.5a5.5 5.5 0 0 1 11 0v.5a1 1 0 0 0 2 0zm9-5a7 7 0 0 0 -11.667-5.217 1 1 0 1 0 1.334 1.49 5 5 0 0 1 8.333 3.727 1 1 0 0 0 2 0zm-6.5-9a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5z" />
                                 </svg>
                                 Edit profile
                             </a>
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M22.555,13.662l-1.9-6.836A9.321,9.321,0,0,0,2.576,7.3L1.105,13.915A5,5,0,0,0,5.986,20H7.1a5,5,0,0,0,9.8,0h.838a5,5,0,0,0,4.818-6.338ZM12,22a3,3,0,0,1-2.816-2h5.632A3,3,0,0,1,12,22Zm8.126-5.185A2.977,2.977,0,0,1,17.737,18H5.986a3,3,0,0,1-2.928-3.651l1.47-6.616a7.321,7.321,0,0,1,14.2-.372l1.9,6.836A2.977,2.977,0,0,1,20.126,16.815Z" />
                                 </svg>
                                 Notifications
                             </a>
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M19,8.424V7A7,7,0,0,0,5,7V8.424A5,5,0,0,0,2,13v6a5.006,5.006,0,0,0,5,5H17a5.006,5.006,0,0,0,5-5V13A5,5,0,0,0,19,8.424ZM7,7A5,5,0,0,1,17,7V8H7ZM20,19a3,3,0,0,1-3,3H7a3,3,0,0,1-3-3V13a3,3,0,0,1,3-3H17a3,3,0,0,1,3,3Z" />
-                                    <path
-                                        d="M12,14a1,1,0,0,0-1,1v2a1,1,0,0,0,2,0V15A1,1,0,0,0,12,14Z" />
+                                    <path d="M12,14a1,1,0,0,0-1,1v2a1,1,0,0,0,2,0V15A1,1,0,0,0,12,14Z" />
                                 </svg>
                                 Privacy & Security
                             </a>
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M24,11.247A12.012,12.012,0,1,0,12.017,24H19a5.005,5.005,0,0,0,5-5V11.247ZM22,19a3,3,0,0,1-3,3H12.017a10.041,10.041,0,0,1-7.476-3.343,9.917,9.917,0,0,1-2.476-7.814,10.043,10.043,0,0,1,8.656-8.761A10.564,10.564,0,0,1,12.021,2,9.921,9.921,0,0,1,18.4,4.3,10.041,10.041,0,0,1,22,11.342Z" />
                                     <path d="M8,9h4a1,1,0,0,0,0-2H8A1,1,0,0,0,8,9Z" />
@@ -90,10 +220,7 @@
                                 Chat Settings
                             </a>
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="m19,4H5c-2.761,0-5,2.238-5,5v6c0,2.761,2.239,5,5,5h14c2.757,0,5-2.243,5-5v-6c0-2.757-2.243-5-5-5Zm-10.878,12h-.002c-.326,0-.609-.225-.682-.543l-.265-1.157h-2.409l-.274,1.161c-.075.316-.356.539-.681.539-.451,0-.784-.421-.681-.86l1.413-5.993c.201-.866,1.137-1.406,2.056-1.021.439.184.734.606.842,1.07l1.363,5.948c.1.438-.232.856-.682.856Zm13.878-1c0,1.654-1.346,3-3,3h-7V6h7c1.654,0,3,1.346,3,3v6Zm-1.5-5.384v.021c0,.34-.276.616-.616.616h-.316c-.121,1.275-.617,2.731-1.607,3.866.542.329,1.192.564,1.984.639.315.03.555.296.555.613v.021c0,.366-.316.648-.68.613-1.137-.109-2.059-.489-2.808-1.022-.753.538-1.686.915-2.832,1.022-.364.034-.679-.248-.679-.614v-.021c0-.321.248-.584.568-.614.788-.075,1.438-.307,1.977-.635-.331-.379-.607-.794-.833-1.227-.213-.408.089-.896.549-.896h.01c.226,0,.437.122.541.322.185.352.416.691.693,1.002.818-.92,1.192-2.108,1.303-3.071h-4.191c-.34,0-.616-.276-.616-.616v-.021c0-.34.276-.616.616-.616h2.257v-.384c0-.34.276-.616.616-.616h.021c.34,0,.616.276.616.616v.384h2.257c.34,0,.616.276.616.616Zm-14.435-.153l.787,3.437h-1.757l.811-3.437c.009-.037.041-.063.079-.063s.071.026.079.063Z" />
                                 </svg>
@@ -105,15 +232,12 @@
             </div>
 
             <div class="mt-10">
-                <h2 class="pl-3 text-sm mb-2">Kavka Itself</h2>
+                <h2 class="pl-3 text-sm mb-2">Support</h2>
                 <nav class="menu border border-border p-2 mb-4 rounded-xl">
                     <section class="menu-section">
                         <ul class="menu-items">
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm0,22A10,10,0,1,1,22,12,10.011,10.011,0,0,1,12,22Z" />
                                     <path
@@ -123,20 +247,14 @@
                                 Kavka FAQ
                             </a>
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="m17.994 2.286a9 9 0 0 0 -14.919 5.536 8.938 8.938 0 0 0 2.793 7.761 6.263 6.263 0 0 1 2.132 4.566v.161a3.694 3.694 0 0 0 3.69 3.69h.62a3.694 3.694 0 0 0 3.69-3.69v-.549a5.323 5.323 0 0 1 1.932-4 8.994 8.994 0 0 0 .062-13.477zm-5.684 19.714h-.62a1.692 1.692 0 0 1 -1.69-1.69s-.007-.26-.008-.31h4.008v.31a1.692 1.692 0 0 1 -1.69 1.69zm4.3-7.741a7.667 7.667 0 0 0 -2.364 3.741h-1.246v-7.184a3 3 0 0 0 2-2.816 1 1 0 0 0 -2 0 1 1 0 0 1 -2 0 1 1 0 0 0 -2 0 3 3 0 0 0 2 2.816v7.184h-1.322a8.634 8.634 0 0 0 -2.448-3.881 7 7 0 0 1 3.951-12.073 7.452 7.452 0 0 1 .828-.046 6.921 6.921 0 0 1 4.652 1.778 6.993 6.993 0 0 1 -.048 10.481z" />
                                 </svg>
                                 Kavka's Features
                             </a>
                             <a track class="menu-item text-lg menu-item-no-animation">
-                                <svg
-                                    class="w-5 fill-white"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-5 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path
                                         d="M22,7a2,2,0,0,0,2-2V1a1,1,0,0,0-2,0V5H18c-.018,0-.032.009-.05.01a6.411,6.411,0,0,0-11.89,0C6.039,5.011,6.021,5,6,5H2V1A1,1,0,0,0,0,1V5A2,2,0,0,0,2,7H5.485L4.472,11H1a1,1,0,0,0,0,2H3.965l-.145.573L3.8,13.7a8.37,8.37,0,0,0-.07,1.032A8.2,8.2,0,0,0,4.053,17H2a2,2,0,0,0-2,2v4a1,1,0,0,0,2,0V19H4.93a8.248,8.248,0,0,0,14.14,0H22v4a1,1,0,0,0,2,0V19a2,2,0,0,0-2-2H19.947a8.2,8.2,0,0,0,.325-2.273A8.37,8.37,0,0,0,20.2,13.7l-.175-.7H23a1,1,0,0,0,0-2H19.522L18.513,7ZM12,21a6.279,6.279,0,0,1-6.272-6.273A6.188,6.188,0,0,1,5.775,14L7.805,5.97a4.448,4.448,0,0,1,8.376-.041L18.225,14a6.188,6.188,0,0,1,.047.725A6.279,6.279,0,0,1,12,21Z" />
                                 </svg>
@@ -148,4 +266,4 @@
             </div>
         </div>
     </div>
-</ng-scrollbar>
+</ng-scrollbar> -->

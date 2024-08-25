@@ -254,7 +254,7 @@
                         <app-message-bubble track [messageCaption]="item.payload.value.text" messageType="label"
                             [senderTitle]="item.sender.name + ' ' + item.sender.lastName"
                             [isSelfMessage]="item.sender.userId === activeUser.userId" [chatType]="activeChat.chatType"
-                            [createdAt]="item.createdAt" [sent]="item.sent"
+                            [createdAt]="item.createdAt"
                             [messageSelected]="isMessageSelected(item.messageId)"></app-message-bubble>
                         }
                         @case ("labelMessage") {

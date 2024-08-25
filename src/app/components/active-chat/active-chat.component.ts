@@ -153,10 +153,6 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
                     .then(fetchedMessages => {
                         this.messages = fetchedMessages;
 
-                        this.messages.forEach(message => {
-                            message.sent = true;
-                        });
-
                         this.store.dispatch(
                             MessageActions.set({
                                 chatId: this.activeChat.chatId,
@@ -271,8 +267,6 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
         this.messageService
             .SendTextMessage(this.activeChat.chatId, this.textInput.trim())
             .then((message: IMessage) => {
-                message.sent = false;
-
                 this.store.dispatch(
                     MessageActions.add({
                         chatId: this.activeChat.chatId,
@@ -281,8 +275,6 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
                 );
                 this.textInput = "";
                 this.scrollToBottom(this.messagesScrollbarRef);
-
-                console.log("sent");
             });
     }
 

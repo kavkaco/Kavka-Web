@@ -22,7 +22,6 @@ export class MessageBubbleComponent implements OnInit {
     @Input() chatType: ChatType;
     @Input() createdAt: bigint;
     @Input() messageSelected: boolean;
-    @Input() sent: boolean;
 
     chatTypeString: string;
     messageTimestamp: string;

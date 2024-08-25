@@ -55,8 +55,6 @@ export class EventsService {
         const chatId = event.chatId;
         let message = event.message as IMessage;
 
-        message.sent = true;
-
         this.store.dispatch(
             MessageActions.update({
                 chatId,

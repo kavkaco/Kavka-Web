@@ -8,9 +8,7 @@ export enum MessageType {
     Sticker,
 }
 
-export interface IMessage extends Message {
-    sent?: boolean;
-}
+export interface IMessage extends Message {}
 
 export function getMessageCreatedAtTimestamp(createdAtBigInt: bigint): string {
     const tsNumber = Number(createdAtBigInt);
