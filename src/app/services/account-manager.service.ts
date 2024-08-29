@@ -51,7 +51,7 @@ export class AccountManagerService {
         const accounts = JSON.parse(accountsString || "[]");
 
         const account: ILocalStorageAccount = accounts!.find(
-            ({ accountId }) => accountId === accountId
+            ({ _accountId }) => _accountId === accountId
         );
         if (account == null || account == undefined) {
             return false;

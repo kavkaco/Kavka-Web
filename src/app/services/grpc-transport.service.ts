@@ -9,8 +9,6 @@ import { Transport } from "@connectrpc/connect";
 import { ConnectTransportOptions, createConnectTransport } from "@connectrpc/connect-web";
 import { environment } from "@environments/environment.development";
 
-// Used for non-auth services!
-// AuthService has it's own transport client...
 @Injectable({ providedIn: "root" })
 export class GrpcTransportService {
     private _transport: Transport;

@@ -62,7 +62,6 @@ export class AuthService {
             defaultTimeoutMs: 20000,
         };
 
-        // const transport = createGrpcWebTransport(options);
         const transport = createConnectTransport(options);
         this.client = createPromiseClient(KavkaAuthService, transport);
     }
@@ -130,7 +129,7 @@ export class AuthService {
         }
     }
 
-    loadUser() {
+    LoadUser() {
         return new Promise(
             (
                 resolve: ({ user, accessToken }: { user: User; accessToken: string }) => void,

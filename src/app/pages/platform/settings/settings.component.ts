@@ -13,7 +13,7 @@ import * as ConnectivitySelector from "@app/store/connectivity/connectivity.sele
     templateUrl: "./settings.component.html",
     styleUrl: "./settings.component.scss",
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
     platformId = inject(PLATFORM_ID);
     user: User | undefined;
     users: User[] | undefined;
@@ -24,17 +24,13 @@ export class SettingsComponent implements OnInit {
         this.store.select(ConnectivitySelector.selectIsOnline).subscribe(_isOnline => {
             this.isOnline = _isOnline;
         });
-    }
 
-    ngOnInit() {
-        if (isPlatformBrowser(this.platformId)) {
-            this.store.select(AuthSelectors.selectActiveUser).subscribe(user => {
-                this.user = user;
-            });
+        this.store.select(AuthSelectors.selectActiveUser).subscribe(user => {
+            this.user = user;
+        });
 
-            this.store.select(AuthSelectors.selectUsers).subscribe(users => {
-                this.users = users;
-            });
-        }
+        this.store.select(AuthSelectors.selectUsers).subscribe(users => {
+            this.users = users;
+        });
     }
 }

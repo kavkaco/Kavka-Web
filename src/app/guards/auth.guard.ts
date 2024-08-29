@@ -20,7 +20,7 @@ export const authGuard: CanActivateFn = async () => {
         await AuthService.refreshTokenIfExpired(authService, accountManagerService)
             .then(async () => {
                 await authService
-                    .loadUser()
+                    .LoadUser()
                     .then(() => {
                         // Select user from store
                         store
