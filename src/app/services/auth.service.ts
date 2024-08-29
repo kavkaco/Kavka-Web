@@ -1,11 +1,15 @@
 import { inject } from "@angular/core";
-import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
+import { ConnectError, createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GetErrorMessage } from "@helpers/grpc_response";
 import { AuthService as KavkaAuthService } from "kavka-core/auth/v1/auth_connect";
 import { AccountManagerService } from "@app/services/account-manager.service";
 import { Store } from "@ngrx/store";
 import { AuthActions } from "@app/store/auth/auth.actions";
-import { ConnectTransportOptions, createGrpcWebTransport } from "@connectrpc/connect-web";
+import {
+    ConnectTransportOptions,
+    createConnectTransport,
+    createGrpcWebTransport,
+} from "@connectrpc/connect-web";
 import { environment } from "@environments/environment.development";
 import { User } from "kavka-core/model/user/v1/user_pb";
 
@@ -13,6 +17,12 @@ export class UnauthorizedError extends Error {
     constructor() {
         super();
         this.message = "Unauthorized";
+    }
+}
+export class AccountLockedError extends Error {
+    constructor(ts: string) {
+        super();
+        this.message = "Account locked until " + ts;
     }
 }
 export class InvalidEmailOrPasswordError extends Error {
@@ -52,7 +62,8 @@ export class AuthService {
             defaultTimeoutMs: 20000,
         };
 
-        const transport = createGrpcWebTransport(options);
+        // const transport = createGrpcWebTransport(options);
+        const transport = createConnectTransport(options);
         this.client = createPromiseClient(KavkaAuthService, transport);
     }
 
@@ -175,21 +186,30 @@ export class AuthService {
                             });
                         }
 
+                        console.log(response);
+
                         reject(new InternalServerError());
                     })
-                    .catch((e: Error) => {
-                        console.error("[AuthService][Login]", e.message);
-
-                        switch (GetErrorMessage(e)) {
-                            case "email not verified":
-                                reject(new EmailNotVerifiedError());
-                                break;
-                            case "invalid email or password":
-                                reject(new InvalidEmailOrPasswordError());
-                                break;
-                            default:
-                                reject(new InternalServerError());
-                                break;
+                    .catch(error => {
+                        const message = GetErrorMessage(error);
+                        if (message === "email not verified") {
+                            reject(new EmailNotVerifiedError());
+                        } else if (message === "invalid email or password") {
+                            reject(new InvalidEmailOrPasswordError());
+                        } else if (message.includes("account locked until")) {
+                            const dateStr = Date.parse(
+                                message.replace("account locked until ", "").trim()
+                            );
+                            const date = new Date(dateStr);
+                            const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                            const formatted = Intl.DateTimeFormat("en-US", {
+                                dateStyle: "medium",
+                                timeStyle: "medium",
+                                timeZone,
+                            }).format(date);
+                            reject(new AccountLockedError(formatted));
+                        } else {
+                            reject(new InternalServerError());
                         }
                     });
             }
