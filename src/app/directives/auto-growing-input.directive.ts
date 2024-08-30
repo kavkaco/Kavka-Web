@@ -38,6 +38,13 @@ export class AutoGrowingInputDirective {
             return this.initialHeight;
         }
 
+        const el = this.el.nativeElement as HTMLElement;
+        if (numberOfLineBreaks >= 1) {
+            el.classList.add("multiline");
+        } else {
+            el.classList.remove("multiline");
+        }
+
         // min-height + lines x line-height + border
         return this.initialHeight + numberOfLineBreaks * this.lineHeight + this.borderWidth;
     }
