@@ -152,7 +152,7 @@
 </div>
 
 <div (click)="closeMessageContextMenu()" class="active-chat">
-    <div class="active-chat--head relative">
+    <div class="active-chat--head">
         @if (selectedMessages.length > 0) {
         <div style="z-index: 93;"
             class="absolute left-0 right-0 top-0 bottom-0 w-full h-full bg-backgroundPrimary flex flex-row justify-between items-center px-5">
@@ -233,7 +233,7 @@
             </div>
         </div>
     </div>
-    <div class="active-chat--body relative">
+    <div class="active-chat--body">
         @if (isLoading) {
         <div class="active-chat--loading">
             <svg class="spinner-ring" viewBox="25 25 50 50" stroke-width="5">
@@ -273,7 +273,7 @@
         </div>
 
         @if (inputSectionStatus.show) {
-        <div class="active-chat--body--input-section relative">
+        <div class="active-chat--body--input-section">
             <button class="btn btn-circle btn-ghost fill-content2">
                 <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path

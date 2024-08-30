@@ -8,10 +8,12 @@ import { EventsService as KavkaEventsService } from "kavka-core/events/v1/events
 import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "kavka-core/events/v1/events_pb";
 import { ConnectivityActions } from "@app/store/connectivity/connectivity.actions";
 import { IMessage } from "@app/models/message";
+import { ChatService } from "@app/services/chat.service";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
     private store = inject(Store);
+    private chatService = inject(ChatService);
     private client: PromiseClient<typeof KavkaEventsService>;
 
     constructor() {
@@ -40,11 +42,20 @@ export class EventsService {
             }
         } catch (error) {
             this.store.dispatch(ConnectivityActions.set({ online: false }));
-            console.error("[EventsService] Stream terminated");
-            console.error("[EventsService] Stream Getting ready to establish stream again");
+            console.warn("[EventsService] Stream terminated");
 
             setTimeout(() => {
-                console.error("[EventsService] Establishing stream connection...");
+                console.warn("[EventsService] Establishing stream connection...");
+
+                // // Refresh data like chats, messages, profile, etc...
+                // this.chatService.GetUserChats().then(chats => {
+                //     this.store.dispatch(ChatActions.set({ chats }));
+                // });
+
+                // this.chatService.GetUserChats().then(chats => {
+                //     this.store.dispatch(ChatActions.set({ chats }));
+                // });
+
                 this.SubscribeEventsStream();
             }, 2500);
         }

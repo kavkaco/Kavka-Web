@@ -103,7 +103,7 @@ export class LoginComponent implements OnInit {
     activateAccount(accountId: string) {
         const isActivated = this.accountManagerService.ActivateAccount(accountId);
         if (isActivated) {
-            this.router.navigate(["/"]);
+            window.location.href = "/";
         }
     }
 

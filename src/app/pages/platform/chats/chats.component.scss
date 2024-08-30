@@ -47,13 +47,6 @@ $mobile-break-point: 900px;
 }
 
 .platform--header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: center;
-    gap: 15px;
-    width: 100%;
-
     margin-bottom: 10px;
 
     .platform-header--icon {

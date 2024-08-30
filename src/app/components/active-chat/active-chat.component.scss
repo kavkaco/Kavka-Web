@@ -13,9 +13,35 @@ $mobile-break-point: 900px;
     left: 0;
     right: 0;
 }
+
 @media screen and (max-width: $mobile-break-point) {
     .back-chat-button {
         display: flex;
+    }
+
+    .active-chat--head {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        height: var(--head-size);
+        z-index: 51;
+        background-color: rgb(var(--backgroundPrimary));
+    }
+
+    .active-chat--body {
+        position: fixed !important;
+        z-index: 50;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100vh;
+
+        .active-chat--body--input-section {
+            position: fixed !important;
+            z-index: 51;
+        }
     }
 }
 
@@ -48,13 +74,23 @@ $mobile-break-point: 900px;
             overflow-y: auto;
             padding: 10px;
             height: 100%;
+
+            padding-bottom: 70px;
         }
 
         .active-chat--body--input-section {
+            position: absolute;
+            border-radius: 50px;
+
+            bottom: 10px;
+            left: 20px;
+            right: 25px;
+            background-color: rgb(var(--backgroundPrimary));
+
             display: grid;
             align-items: end;
             grid-template-columns: max-content auto max-content;
-            border-top: 1px solid rgb(var(--border));
+            border: 1px solid rgb(var(--border));
             padding: 5px 10px;
             padding-top: 7px;
 

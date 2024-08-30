@@ -92,7 +92,9 @@ export class AuthService {
                                     newAccessToken
                                 )
                             ) {
-                                console.error("[AccessTokenProtector][UpdateAccessToken] Failed");
+                                console.error(
+                                    "[AccessTokenProtector] Update update access token failed"
+                                );
                                 reject();
                             }
 
@@ -104,6 +106,7 @@ export class AuthService {
                                 "Refreshing token failed:",
                                 e,
                             ]);
+
                             reject();
                         });
                 }
