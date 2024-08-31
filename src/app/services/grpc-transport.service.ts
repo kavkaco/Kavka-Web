@@ -7,7 +7,7 @@ import {
 } from "@app/services/grpc-interceptors.service";
 import { Transport } from "@connectrpc/connect";
 import { ConnectTransportOptions, createConnectTransport } from "@connectrpc/connect-web";
-import { environment } from "@environments/environment.development";
+import { environment } from "@environments/environment";
 
 @Injectable({ providedIn: "root" })
 export class GrpcTransportService {

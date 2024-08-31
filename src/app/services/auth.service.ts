@@ -10,7 +10,7 @@ import {
     createConnectTransport,
     createGrpcWebTransport,
 } from "@connectrpc/connect-web";
-import { environment } from "@environments/environment.development";
+import { environment } from "@environments/environment";
 import { User } from "kavka-core/model/user/v1/user_pb";
 
 export class UnauthorizedError extends Error {

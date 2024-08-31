@@ -20,7 +20,9 @@
                         "outputPath": "dist/kavka-web",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
-                        "polyfills": ["zone.js"],
+                        "polyfills": [
+                            "zone.js"
+                        ],
                         "tsConfig": "tsconfig.app.json",
                         "preserveSymlinks": true,
                         "inlineStyleLanguage": "scss",
@@ -30,7 +32,9 @@
                                 "input": "public"
                             }
                         ],
-                        "styles": ["src/styles.scss"],
+                        "styles": [
+                            "src/styles.scss"
+                        ],
                         "scripts": [],
                         "server": "src/main.server.ts",
                         "prerender": true,
@@ -54,18 +58,18 @@
                                 }
                             ],
                             "outputHashing": "all",
-                            "serviceWorker": "ngsw-config.json"
+                            "serviceWorker": "ngsw-config.json",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.production.ts"
+                                }
+                            ]
                         },
                         "development": {
                             "optimization": false,
                             "extractLicenses": false,
-                            "sourceMap": true,
-                            "fileReplacements": [
-                                {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.development.ts"
-                                }
-                            ]
+                            "sourceMap": true
                         }
                     },
                     "defaultConfiguration": "production"
@@ -88,7 +92,10 @@
                 "lint": {
                     "builder": "@angular-eslint/builder:lint",
                     "options": {
-                        "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+                        "lintFilePatterns": [
+                            "src/**/*.ts",
+                            "src/**/*.html"
+                        ]
                     }
                 }
             }
@@ -96,6 +103,8 @@
     },
     "cli": {
         "analytics": "043110a9-a5da-4926-948c-6c414d6d0b74",
-        "schematicCollections": ["@angular-eslint/schematics"]
+        "schematicCollections": [
+            "@angular-eslint/schematics"
+        ]
     }
 }
