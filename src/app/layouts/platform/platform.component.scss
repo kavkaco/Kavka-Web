@@ -65,7 +65,7 @@ $layout-grid-gap: 10px;
 @media screen and (max-width: $mobile-break-point) {
     .platform {
         --sidebar-size: 60px;
-        grid-template-columns: unset;
+        grid-template-columns: unset !important;
     }
 
     .platform-sidebar {

@@ -67,10 +67,9 @@ export class EventsService {
         let message = event.message as IMessage;
 
         this.store.dispatch(
-            MessageActions.update({
+            MessageActions.add({
                 chatId,
-                messageId: message.messageId,
-                replaceWith: message,
+                message,
             })
         );
 

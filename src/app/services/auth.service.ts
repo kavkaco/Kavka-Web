@@ -1,15 +1,11 @@
 import { inject } from "@angular/core";
-import { ConnectError, createPromiseClient, PromiseClient } from "@connectrpc/connect";
+import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GetErrorMessage } from "@helpers/grpc_response";
 import { AuthService as KavkaAuthService } from "kavka-core/auth/v1/auth_connect";
 import { AccountManagerService } from "@app/services/account-manager.service";
 import { Store } from "@ngrx/store";
 import { AuthActions } from "@app/store/auth/auth.actions";
-import {
-    ConnectTransportOptions,
-    createConnectTransport,
-    createGrpcWebTransport,
-} from "@connectrpc/connect-web";
+import { ConnectTransportOptions, createConnectTransport } from "@connectrpc/connect-web";
 import { environment } from "@environments/environment";
 import { User } from "kavka-core/model/user/v1/user_pb";
 
@@ -246,6 +242,8 @@ export class AuthService {
     }
 
     RefreshToken(refreshToken: string, userId: string) {
+        alert("refreshing"); // FIXME
+
         return new Promise<string>((resolve: (newAccessToken: string) => void, reject) => {
             this.client
                 .refreshToken({
