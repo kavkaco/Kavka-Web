@@ -2,6 +2,7 @@ $mobile-break-point: 900px;
 $layout-grid-gap: 10px;
 
 .platform {
+    overflow: hidden;
     --sidebar-size: 80px;
 
     width: 100%;

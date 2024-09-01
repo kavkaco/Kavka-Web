@@ -19,14 +19,19 @@ $mobile-break-point: 900px;
         display: flex;
     }
 
+    .active-chat {
+        display: block;
+        overflow: hidden;
+    }
+
     .active-chat--head {
         position: fixed;
-        top: 0;
+        top: 0px;
         right: 0;
         left: 0;
         width: 100%;
-        height: var(--head-size);
         z-index: 51;
+        height: var(--head-size);
         background-color: rgb(var(--backgroundPrimary));
     }
 
@@ -36,7 +41,8 @@ $mobile-break-point: 900px;
         top: 0;
         bottom: 0;
         width: 100%;
-        height: 100vh;
+        height: 100%;
+        overflow: hidden;
 
         .active-chat--body--input-section {
             position: fixed !important;
@@ -72,7 +78,7 @@ $mobile-break-point: 900px;
 
         .active-chat--body--messages-list {
             overflow-y: auto;
-            padding: 10px 20px;
+            padding: 10px;
             height: 100%;
 
             padding-bottom: 70px;

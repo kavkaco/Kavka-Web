@@ -12,7 +12,13 @@ $mobile-break-point: 900px;
     border-left: 1px solid rgb(var(--border));
     height: 100%;
 
+    .create-chat-button {
+        position: absolute;
+        bottom: 20px;
+    }
+
     .platform--sidebar {
+        position: relative;
         border-right: 1px solid rgb(var(--border));
     }
 
@@ -22,6 +28,11 @@ $mobile-break-point: 900px;
 
     // Responsive :: Mobile
     @media screen and (max-width: $mobile-break-point) {
+        .create-chat-button {
+            position: fixed;
+            bottom: 75px;
+        }
+
         & {
             --sidebar-size: 100%;
         }
