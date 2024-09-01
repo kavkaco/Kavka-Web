@@ -32,8 +32,18 @@ export class ChatItemComponent {
         });
     }
 
+    getFirstLine(text: string) {
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === "\n") {
+                return text.substring(0, i);
+            }
+        }
+
+        return text;
+    }
+
     sanitizeLastMessageCaption(messageCaption: string) {
-        messageCaption = messageCaption.replace(/\n\r?/g, "<br>");
+        messageCaption = this.getFirstLine(messageCaption).replace(/\n\r?/g, "<br>");
         return this.sanitizer.bypassSecurityTrustHtml(messageCaption);
     }
 }
