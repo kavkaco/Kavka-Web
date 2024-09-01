@@ -2,6 +2,12 @@ $mobile-break-point: 900px;
 
 .create-chat-modal {
     min-width: 470px !important;
+
+    @media screen and (max-width: $mobile-break-point) {
+        & {
+            width: 97%;
+        }
+    }
 }
 
 .platform-chats {

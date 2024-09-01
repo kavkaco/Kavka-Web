@@ -14,7 +14,24 @@ $mobile-break-point: 900px;
     right: 0;
 }
 
+.chat-detail-modal {
+    .modal-content {
+        margin-top: -50px;
+        min-width: 500px;
+        @media screen and (max-width: 750px) {
+            & {
+                min-width: unset;
+                width: 90%;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: $mobile-break-point) {
+    .chat-detail-modal .modal-content {
+        width: 97%;
+    }
+
     .back-chat-button {
         display: flex;
     }
@@ -145,18 +162,6 @@ $mobile-break-point: 900px;
     @media screen and (max-width: 700px) {
         & {
             width: 100% !important;
-        }
-    }
-}
-
-.chat-detail-modal {
-    .modal-content {
-        min-width: 500px;
-        @media screen and (max-width: 750px) {
-            & {
-                min-width: unset;
-                width: 90%;
-            }
         }
     }
 }
