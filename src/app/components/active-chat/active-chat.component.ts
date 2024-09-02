@@ -29,6 +29,7 @@ import { ChatService } from "@app/services/chat.service";
 import { User } from "kavka-core/model/user/v1/user_pb";
 import { getChatTypeString } from "@app/models/chat";
 import { IMessage } from "@app/models/message";
+import { animate, state, style, transition, trigger } from "@angular/animations";
 
 @Component({
     selector: "app-active-chat",
@@ -36,6 +37,28 @@ import { IMessage } from "@app/models/message";
     imports: [NgScrollbarModule, AutoGrowingInputDirective, FormsModule, MessageBubbleComponent],
     templateUrl: "./active-chat.component.html",
     styleUrl: "./active-chat.component.scss",
+    animations: [
+        trigger("openClose", [
+            state(
+                "open",
+                style({
+                    opacity: 1,
+                    marginTop: "0",
+                    transform: "scale(1)",
+                })
+            ),
+            state(
+                "closed",
+                style({
+                    opacity: 0,
+                    marginTop: "10px",
+                    transform: "scale(0.8)",
+                })
+            ),
+            transition("open => closed", [animate("0.08s ease-in")]),
+            transition("closed => open", [animate("0.08s ease-out")]),
+        ]),
+    ],
 })
 export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit, AfterViewInit {
     private store = inject(Store);
@@ -63,8 +86,39 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     };
     isLoading = true;
 
-    showMessageContextMenu = false;
     selectedMessageCaption: string | null;
+
+    @ViewChild("contextMenuRef") contextMenu!: ElementRef;
+    showMessageContextMenu = false;
+
+    contextMenuMouseEvent(event: MouseEvent) {
+        // debugger;
+        event.preventDefault();
+
+        if (this.contextMenu) {
+            const el = this.contextMenu.nativeElement as HTMLElement;
+            const rect = (
+                this.messagesScrollbarRef.nativeElement as HTMLElement
+            ).getBoundingClientRect();
+
+            const elWidth = el.clientWidth;
+            const elHeight = el.clientHeight;
+
+            if (event.clientX > rect.width) {
+                el.style.left = event.clientX - elWidth + "px";
+            } else {
+                el.style.left = event.clientX + "px";
+            }
+
+            if (event.clientY + 10 > rect.height) {
+                el.style.top = event.clientY - elHeight + "px";
+            } else {
+                el.style.top = event.clientY + "px";
+            }
+        }
+
+        this.showMessageContextMenu = true;
+    }
 
     isMessageSelected(messageId: string) {
         return this.selectedMessages.includes(messageId);

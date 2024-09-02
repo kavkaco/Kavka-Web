@@ -115,45 +115,42 @@
     </div>
 </div>
 
-<!-- ANCHOR -->
+
+@if (showMessageContextMenu) {
+<div (click)="showMessageContextMenu=false" class="context-menu-overlay"></div>
+}
 
 
+<div [@openClose]="showMessageContextMenu ? 'open' : 'closed'" #contextMenuRef
+    class="context-menu-content dropdown-menu-blur">
+    <button (click)="copySelectedMessageCaption()"
+        class="flex flex-row gap-4 items-center text-left w-full p-1 rounded-md text-sm">
+        <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="m15 20h-10a5.006 5.006 0 0 1 -5-5v-10a5.006 5.006 0 0 1 5-5h10a5.006 5.006 0 0 1 5 5v10a5.006 5.006 0 0 1 -5 5zm-10-18a3 3 0 0 0 -3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-10a3 3 0 0 0 -3-3zm19 17v-13a1 1 0 0 0 -2 0v13a3 3 0 0 1 -3 3h-13a1 1 0 0 0 0 2h13a5.006 5.006 0 0 0 5-5z" />
+        </svg>
+        Copy Text
+    </button>
 
+    <button (click)="copySelectedMessageCaption()"
+        class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm">
+        <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z" />
+        </svg>
+        Edit
+    </button>
 
-
-<!-- ANCHOR -->
-
-
-
-<!-- <button (click)="copySelectedMessageCaption()"
-    class="flex flex-row gap-4 items-center text-left w-full p-1 rounded-md text-sm">
-    <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path
-            d="m15 20h-10a5.006 5.006 0 0 1 -5-5v-10a5.006 5.006 0 0 1 5-5h10a5.006 5.006 0 0 1 5 5v10a5.006 5.006 0 0 1 -5 5zm-10-18a3 3 0 0 0 -3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-10a3 3 0 0 0 -3-3zm19 17v-13a1 1 0 0 0 -2 0v13a3 3 0 0 1 -3 3h-13a1 1 0 0 0 0 2h13a5.006 5.006 0 0 0 5-5z" />
-    </svg>
-    Copy Text
-</button>
-
-<button (click)="copySelectedMessageCaption()"
-    class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm">
-    <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path
-            d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z" />
-    </svg>
-    Edit
-</button>
-
-<button (click)="copySelectedMessageCaption()"
-    class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm text-error">
-    <svg class="fill-error w-4" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24">
-        <path
-            d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z">
-        </path>
-    </svg>
-    Delete
-</button> -->
-
-<!-- ANCHOR -->
+    <button (click)="copySelectedMessageCaption()"
+        class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm text-error">
+        <svg class="fill-error w-4" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24">
+            <path
+                d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z">
+            </path>
+        </svg>
+        Delete
+    </button>
+</div>
 
 <div class="active-chat">
     <div class="active-chat--head">
@@ -250,11 +247,12 @@
             <ng-scrollbar #messagesScrollbar [appearance]="'compact'" class="ngx-custom-scrollbar overflow-x-hidden">
                 <div class="pr-4">
                     @for (item of messages; track $index) {
-                    <div class="mb-3" (dblclick)="toggleSelectMessage($event, item.messageId)">
+                    <div class="mb-3" (lostpointercapture)="toggleSelectMessage($event, item.messageId)">
 
                         @switch (item.payload.case) {
                         @case ("textMessage") {
-                        <app-message-bubble track [messageCaption]="item.payload.value.text" messageType="label"
+                        <app-message-bubble (contextmenu)="contextMenuMouseEvent($event)" track
+                            [messageCaption]="item.payload.value.text" messageType="label"
                             [senderTitle]="item.sender.name + ' ' + item.sender.lastName"
                             [isSelfMessage]="item.sender.userId === activeUser.userId" [chatType]="activeChat.chatType"
                             [createdAt]="item.createdAt"
