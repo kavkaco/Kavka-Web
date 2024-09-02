@@ -9,12 +9,12 @@ $mobile-break-point: 900px;
     top: 0;
     right: 0;
     bottom: 0;
-    z-index: 20;
+    z-index: 53;
 }
 
 .context-menu-content {
     position: absolute;
-    z-index: 21;
+    z-index: 54;
     top: 0;
     bottom: 0;
     height: max-content;
@@ -159,6 +159,7 @@ $mobile-break-point: 900px;
     }
 
     .active-chat--head {
+        position: relative;
         display: grid;
         grid-template-columns: auto max-content;
         align-items: center;

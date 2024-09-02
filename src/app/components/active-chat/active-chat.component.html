@@ -247,7 +247,7 @@
             <ng-scrollbar #messagesScrollbar [appearance]="'compact'" class="ngx-custom-scrollbar overflow-x-hidden">
                 <div class="pr-4">
                     @for (item of messages; track $index) {
-                    <div class="mb-3" (lostpointercapture)="toggleSelectMessage($event, item.messageId)">
+                    <div class="mb-3" (dblclick)="toggleSelectMessage($event, item.messageId)">
 
                         @switch (item.payload.case) {
                         @case ("textMessage") {

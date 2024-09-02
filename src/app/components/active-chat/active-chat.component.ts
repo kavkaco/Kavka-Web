@@ -104,9 +104,13 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
             const elWidth = el.clientWidth;
             const elHeight = el.clientHeight;
 
-            if (event.clientX > rect.width) {
+            if (event.clientX > rect.width || event.clientX + elWidth > window.innerWidth) {
+                console.log("yes");
                 el.style.left = event.clientX - elWidth + "px";
             } else {
+                console.log("no");
+                console.log(event.clientX);
+
                 el.style.left = event.clientX + "px";
             }
 
