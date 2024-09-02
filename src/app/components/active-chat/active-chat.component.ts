@@ -25,7 +25,6 @@ import {
     ChatType,
     GroupChatDetail,
 } from "kavka-core/model/chat/v1/chat_pb";
-import { Message } from "kavka-core/model/message/v1/message_pb";
 import { ChatService } from "@app/services/chat.service";
 import { User } from "kavka-core/model/user/v1/user_pb";
 import { getChatTypeString } from "@app/models/chat";
@@ -46,7 +45,6 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     @Input() activeUser: User;
     @Input() activeChat: Chat;
     @ViewChild("messagesScrollbar") messagesScrollbarRef: ElementRef;
-    @ViewChild("messageContextMenu") messageContextMenuRef: ElementRef;
 
     // Active chat extra detail
     chatTypeString: string;
@@ -88,29 +86,6 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
         this.selectedMessages = this.selectedMessages.filter(
             _messageId => _messageId !== messageId
         );
-    }
-
-    openMessageContextMenu(event: MouseEvent, messageId: string) {
-        event.preventDefault();
-        const el = this.messageContextMenuRef.nativeElement as HTMLElement;
-        const menuRect = el.getBoundingClientRect();
-
-        el.style.top = event.clientY - menuRect.height + "px";
-        el.style.left = event.clientX + "px";
-
-        const message = this.messages.find(_message => _message.messageId === messageId);
-        if (message !== undefined) {
-            this.selectedMessageCaption = message.payload.value.text.trim();
-            this.showMessageContextMenu = true;
-
-            return;
-        }
-
-        this.showMessageContextMenu = false;
-    }
-
-    closeMessageContextMenu() {
-        this.showMessageContextMenu = false;
     }
 
     ngOnInit() {
