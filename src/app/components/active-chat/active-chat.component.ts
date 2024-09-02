@@ -91,8 +91,10 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     @ViewChild("contextMenuRef") contextMenu!: ElementRef;
     showMessageContextMenu = false;
 
+    longClickTimeoutTrigger = 650;
+    messageLongClickTimeout: NodeJS.Timeout;
+
     contextMenuMouseEvent(event: MouseEvent) {
-        // debugger;
         event.preventDefault();
 
         if (this.contextMenu) {
@@ -132,6 +134,22 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
         navigator.clipboard.writeText(this.selectedMessageCaption || "").then(() => {
             console.log("[ActiveChat] Message Caption Copied");
         });
+    }
+
+    messageMouseDown($event, messageId: string) {
+        if (this.selectedMessages.length == 0) {
+            this.messageLongClickTimeout = setTimeout(() => {
+                this.toggleSelectMessage($event, messageId);
+            }, this.longClickTimeoutTrigger);
+        } else {
+            if (this.selectedMessages.length > 0) {
+                this.toggleSelectMessage($event, messageId);
+            }
+        }
+    }
+
+    messageMouseUp() {
+        clearTimeout(this.messageLongClickTimeout);
     }
 
     toggleSelectMessage(event: MouseEvent, messageId: string) {
