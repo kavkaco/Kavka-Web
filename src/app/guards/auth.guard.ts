@@ -21,7 +21,7 @@ export const authGuard: CanActivateFn = async () => {
             .then(async () => {
                 await authService
                     .LoadUser()
-                    .then(({ accessToken }) => {
+                    .then(() => {
                         // Select user from store
                         store
                             .select(AuthSelector.selectActiveUser)

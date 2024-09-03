@@ -1,6 +1,5 @@
 import { IMessage } from "@app/models/message";
 import { createActionGroup, props } from "@ngrx/store";
-import { Message } from "kavka-core/model/message/v1/message_pb";
 
 export const MessageActions = createActionGroup({
     source: "Message",

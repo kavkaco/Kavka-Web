@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { getChatTypeString } from "@app/models/chat";
 import { getMessageCreatedAtTimestamp } from "@app/models/message";

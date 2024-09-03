@@ -14,6 +14,7 @@ module.exports = tseslint.config(
         ],
         processor: angular.processInlineTemplates,
         rules: {
+            "@angular-eslint/template/click-events-have-key-events": "off",
             "@typescript-eslint/no-explicit-any": "off",
             "@angular-eslint/directive-selector": [
                 "error",

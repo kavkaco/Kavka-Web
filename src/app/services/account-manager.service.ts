@@ -1,7 +1,5 @@
 import { Injectable } from "@angular/core";
 import { ILocalStorageAccount } from "@app/models/auth";
-import { debug } from "console";
-import { User } from "kavka-core/model/user/v1/user_pb";
 
 const localStorageKeys = {
     ActiveAccountKey: "active_account",

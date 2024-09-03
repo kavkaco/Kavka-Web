@@ -9,7 +9,6 @@ import { isUserAlreadyExist } from "@app/store/auth/auth.reducer";
 import { take } from "rxjs";
 import { AsyncPipe, isPlatformBrowser } from "@angular/common";
 import { AccountManagerService } from "@app/services/account-manager.service";
-import { GrpcTransportService } from "@app/services/grpc-transport.service";
 import { ILocalStorageAccount } from "@app/models/auth";
 
 @Component({

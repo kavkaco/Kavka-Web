@@ -1,6 +1,6 @@
-import { inject, Injectable, signal } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { CallOptions, createPromiseClient, PromiseClient } from "@connectrpc/connect";
+import { createPromiseClient, PromiseClient } from "@connectrpc/connect";
 import { GrpcTransportService } from "@app/services/grpc-transport.service";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { MessageActions } from "@app/store/messages/messages.actions";
@@ -40,7 +40,7 @@ export class EventsService {
                         break;
                 }
             }
-        } catch (error) {
+        } catch {
             this.store.dispatch(ConnectivityActions.set({ online: false }));
             console.warn("[EventsService] Stream terminated");
 
@@ -64,7 +64,7 @@ export class EventsService {
     addMessage(ie: SubscribeEventsStreamResponse) {
         const event = ie.payload.value as AddMessage;
         const chatId = event.chatId;
-        let message = event.message as IMessage;
+        const message = event.message as IMessage;
 
         this.store.dispatch(
             MessageActions.add({

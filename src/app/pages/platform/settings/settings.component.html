@@ -1,6 +1,8 @@
-<ng-scrollbar class="ngx-custom-scrollbar overflow-x-hidden" [visibility]="'hover'" [appearance]="'compact'">
+<ng-scrollbar
+    class="ngx-custom-scrollbar overflow-x-hidden"
+    [visibility]="'hover'"
+    [appearance]="'compact'">
     <div class="settings-container relative p-3 md:p-7 mb-10 mx-auto">
-
         <div>
             <div id="account" class="w-full">
                 <a href="/p/settings#account">
@@ -8,58 +10,69 @@
                 </a>
 
                 @if (avatar) {
-                <!-- TODO -->
-                }
-                @else {
-                <div class="flex flex-row gap-4 items-center mb-6">
-                    <div
-                        class="flex items-center justify-center text-2xl avatar size-20 md:size-28 border border-border bg-transparent">
-                        {{
-                        user.name[0].toUpperCase() }}
+                    <!-- TODO -->
+                } @else {
+                    <div class="flex flex-row gap-4 items-center mb-6">
+                        <div
+                            class="flex items-center justify-center text-2xl avatar size-20 md:size-28 border border-border bg-transparent">
+                            {{ user.name[0].toUpperCase() }}
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="text-3xl">{{ user.name + " " + user.lastName }}</h2>
+                            @if (isOnline) {
+                                <h3 class="text-md text-success">Online</h3>
+                            } @else {
+                                <h3 class="text-md text-content2">Offline</h3>
+                            }
+                        </div>
                     </div>
-                    <div class="flex flex-col ">
-                        <h2 class="text-3xl">{{ user.name + " " + user.lastName }}</h2>
-                        @if (isOnline) {
-                        <h3 class="text-md text-success">
-                            Online
-                        </h3>
-                        } @else {
-                        <h3 class="text-md text-content2">
-                            Offline
-                        </h3>
-                        }
-                    </div>
-                </div>
                 }
 
                 <div class="flex flex-row gap-2 mb-7">
                     <button class="btn btn-primary">Change picture</button>
-                    <button class="btn text-error bg-transparent border border-border">Delete picture</button>
+                    <button class="btn text-error bg-transparent border border-border">
+                        Delete picture
+                    </button>
                 </div>
 
                 <div class="flex md:flex-row flex-col gap-2">
                     <div class="w-full">
                         <label for="profile-name">Name</label>
-                        <input [ngModel]="user.name" id="profile-name" placeholder="Name"
-                            class="input-custom input input-block" type="text">
+                        <input
+                            [ngModel]="user.name"
+                            id="profile-name"
+                            placeholder="Name"
+                            class="input-custom input input-block"
+                            type="text" />
                     </div>
 
                     <div class="w-full">
                         <label for="profile-name">Last Name</label>
-                        <input [ngModel]="user.lastName" id="profile-last-name" placeholder="Last Name"
-                            class="input-custom input input-block" type="text">
+                        <input
+                            [ngModel]="user.lastName"
+                            id="profile-last-name"
+                            placeholder="Last Name"
+                            class="input-custom input input-block"
+                            type="text" />
                     </div>
                 </div>
 
                 <div class="mt-4">
                     <label for="profile-name">Email</label>
-                    <input [ngModel]="user.email" id="profile-email" placeholder="Email"
-                        class="input-custom input input-block cursor-default" type="email" readonly>
+                    <input
+                        [ngModel]="user.email"
+                        id="profile-email"
+                        placeholder="Email"
+                        class="input-custom input input-block cursor-default"
+                        type="email"
+                        readonly />
                 </div>
 
                 <div class="mt-4">
                     <label for="profile-bio">Biography</label>
-                    <textarea maxlength="120" [ngModel]="user.biography"
+                    <textarea
+                        maxlength="120"
+                        [ngModel]="user.biography"
                         class="input-custom textarea-block textarea h-52"
                         placeholder="Everything you want to people know about you..."></textarea>
                 </div>
@@ -79,7 +92,11 @@
                         <label for="private-chat-notif" class="w-full cursor-pointer">
                             Private chats
                         </label>
-                        <input id="private-chat-notif" type="checkbox" class="switch switch-primary" checked />
+                        <input
+                            id="private-chat-notif"
+                            type="checkbox"
+                            class="switch switch-primary"
+                            checked />
                     </div>
 
                     <span class="text-content2">On.</span>
@@ -87,9 +104,7 @@
 
                 <div class="mt-4">
                     <div class="flex flex-row justify-between">
-                        <label for="channels-notif" class="w-full cursor-pointer">
-                            Channels
-                        </label>
+                        <label for="channels-notif" class="w-full cursor-pointer"> Channels </label>
                         <input id="channels-notif" type="checkbox" class="switch switch-primary" />
                     </div>
 
@@ -98,20 +113,24 @@
 
                 <div class="mt-4">
                     <div class="flex flex-row justify-between">
-                        <label for="groups-notif" class="w-full cursor-pointer">
-                            Groups
-                        </label>
-                        <input id="groups-notif" type="checkbox" class="switch switch-primary" checked />
+                        <label for="groups-notif" class="w-full cursor-pointer"> Groups </label>
+                        <input
+                            id="groups-notif"
+                            type="checkbox"
+                            class="switch switch-primary"
+                            checked />
                     </div>
 
                     <span class="text-content2">On.</span>
                 </div>
 
-                <div class="flex items-center justify-center py-10 rounded-lg border border-border my-6">
+                <div
+                    class="flex items-center justify-center py-10 rounded-lg border border-border my-6">
                     <div class="flex flex-col gap-4">
-                        <div class="flex flex-row gap-3 items-center border border-border py-3 px-5 rounded-lg mt-4">
+                        <div
+                            class="flex flex-row gap-3 items-center border border-border py-3 px-5 rounded-lg mt-4">
                             <div class="avatar border border-border size-10">
-                                <img src="/assets/logo/icon-128x128.png" alt="Kavka Logo">
+                                <img src="/assets/logo/icon-128x128.png" alt="Kavka Logo" />
                             </div>
                             <div>
                                 <h2>Kavka Platform</h2>
@@ -144,6 +163,5 @@
                 <a href="/p/settings#notifications">Notifications</a>
             </div>
         </div>
-
     </div>
 </ng-scrollbar>

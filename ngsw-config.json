@@ -6,13 +6,7 @@
             "name": "app",
             "installMode": "prefetch",
             "resources": {
-                "files": [
-                    "/favicon.ico",
-                    "/index.html",
-                    "/manifest.webmanifest",
-                    "/*.css",
-                    "/*.js"
-                ]
+                "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
             }
         },
         {
@@ -20,18 +14,14 @@
             "installMode": "lazy",
             "updateMode": "prefetch",
             "resources": {
-                "files": [
-                    "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
-                ]
+                "files": ["/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"]
             }
         }
     ],
     "dataGroups": [
         {
             "name": "api",
-            "urls": [
-                "http://localhost:8000"
-            ],
+            "urls": ["http://localhost:8000"],
             "cacheConfig": {
                 "maxAge": "2h",
                 "maxSize": 100,

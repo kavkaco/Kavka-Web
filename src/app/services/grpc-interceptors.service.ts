@@ -5,7 +5,7 @@ import { Interceptor } from "@connectrpc/connect";
 
 // Do not use this interceptor for auth service!
 export function useAuthInterceptorFactory(
-    platformId: Object,
+    platformId: object,
     accountManagerService: AccountManagerService
 ) {
     const authInterceptor: Interceptor = next => async req => {
@@ -24,7 +24,7 @@ export function useAuthInterceptorFactory(
 
 // Only to be used in auth service!
 export function useRefreshTokenInterceptorFactory(
-    platformId: Object,
+    platformId: object,
     accountManagerService: AccountManagerService,
     authService: AuthService
 ) {

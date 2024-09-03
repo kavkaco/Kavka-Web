@@ -8,11 +8,10 @@ export enum MessageType {
     Sticker,
 }
 
-export interface IMessage extends Message {}
+export type IMessage = Message;
 
 export function getMessageCreatedAtTimestamp(createdAtBigInt: bigint): string {
-    const tsNumber = Number(createdAtBigInt);
-    const date = new Date(tsNumber);
+    const date = new Date(Number(createdAtBigInt));
 
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().locale;
 

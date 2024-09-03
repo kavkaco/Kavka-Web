@@ -149,7 +149,7 @@ export class AuthService {
 
                             resolve({ user, accessToken: activeAccount.accessToken });
                         })
-                        .catch(async (e: Error) => {
+                        .catch(async () => {
                             reject();
                         });
                 } else {

@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from "@angular/common";
-import { Component, inject, PLATFORM_ID, OnInit } from "@angular/core";
+import { Component, inject, PLATFORM_ID } from "@angular/core";
 import { Store } from "@ngrx/store";
 import * as AuthSelectors from "@app/store/auth/auth.selectors";
 import { NgScrollbar } from "ngx-scrollbar";
