@@ -137,13 +137,15 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     }
 
     messageMouseDown($event, messageId: string) {
-        if (this.selectedMessages.length == 0) {
-            this.messageLongClickTimeout = setTimeout(() => {
-                this.toggleSelectMessage($event, messageId);
-            }, this.longClickTimeoutTrigger);
-        } else {
-            if (this.selectedMessages.length > 0) {
-                this.toggleSelectMessage($event, messageId);
+        if (this.showMessageContextMenu == false) {
+            if (this.selectedMessages.length == 0) {
+                this.messageLongClickTimeout = setTimeout(() => {
+                    this.toggleSelectMessage($event, messageId);
+                }, this.longClickTimeoutTrigger);
+            } else {
+                if (this.selectedMessages.length > 0) {
+                    this.toggleSelectMessage($event, messageId);
+                }
             }
         }
     }

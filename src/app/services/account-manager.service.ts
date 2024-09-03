@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ILocalStorageAccount } from "@app/models/auth";
+import { debug } from "console";
+import { User } from "kavka-core/model/user/v1/user_pb";
 
 const localStorageKeys = {
     ActiveAccountKey: "active_account",
@@ -48,22 +50,23 @@ export class AccountManagerService {
     UpdateAccessToken(accountId, newAccessToken): boolean {
         let accountsString = localStorage.getItem(localStorageKeys.AccountsKey);
 
-        const accounts = JSON.parse(accountsString || "[]");
+        const accounts: ILocalStorageAccount[] = JSON.parse(accountsString || "[]");
 
-        const account: ILocalStorageAccount = accounts!.find(
-            ({ _accountId }) => _accountId === accountId
-        );
-        if (account == null || account == undefined) {
-            return false;
+        const account = accounts.find(account => {
+            return account.accountId === accountId;
+        });
+
+        if (account) {
+            account.accessToken = newAccessToken;
+
+            accountsString = JSON.stringify(accounts);
+
+            localStorage.setItem(localStorageKeys.AccountsKey, accountsString);
+
+            return true;
         }
 
-        account.accessToken = newAccessToken;
-
-        accountsString = JSON.stringify(accounts);
-
-        localStorage.setItem(localStorageKeys.AccountsKey, accountsString);
-
-        return true;
+        return false;
     }
 
     RemoveAccount(accountId: string): boolean {

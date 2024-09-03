@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, PLATFORM_ID } from "@angular/core";
 import { AccountManagerService } from "@app/services/account-manager.service";
 import { AuthService } from "@app/services/auth.service";
 import {
@@ -16,19 +16,25 @@ export class GrpcTransportService {
     private authService: AuthService;
     private accountManagerService = inject(AccountManagerService);
     private options: ConnectTransportOptions;
+    private platformId = inject(PLATFORM_ID);
 
     constructor() {
+        this.authService = new AuthService();
+
         this.options = {
             baseUrl: environment.grpcTransportBaseUrl,
             interceptors: [
-                useRefreshTokenInterceptorFactory(this.accountManagerService, this.authService),
-                useAuthInterceptorFactory(this.accountManagerService),
+                useRefreshTokenInterceptorFactory(
+                    this.platformId,
+                    this.accountManagerService,
+                    this.authService
+                ),
+                useAuthInterceptorFactory(this.platformId, this.accountManagerService),
             ],
             defaultTimeoutMs: 20000,
         };
 
         this.establishConnection();
-        this.authService = new AuthService();
     }
 
     establishConnection() {

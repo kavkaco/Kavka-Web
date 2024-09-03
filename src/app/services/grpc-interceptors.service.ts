@@ -1,13 +1,19 @@
+import { isPlatformBrowser } from "@angular/common";
 import { AccountManagerService } from "@app/services/account-manager.service";
 import { AuthService } from "@app/services/auth.service";
 import { Interceptor } from "@connectrpc/connect";
 
 // Do not use this interceptor for auth service!
-export function useAuthInterceptorFactory(accountManagerService: AccountManagerService) {
+export function useAuthInterceptorFactory(
+    platformId: Object,
+    accountManagerService: AccountManagerService
+) {
     const authInterceptor: Interceptor = next => async req => {
-        const activeAccount = accountManagerService.GetActiveAccount();
-        if (activeAccount) {
-            req.header.set("X-Access-Token", activeAccount.accessToken);
+        if (isPlatformBrowser(platformId)) {
+            const activeAccount = accountManagerService.GetActiveAccount();
+            if (activeAccount) {
+                req.header.set("X-Access-Token", activeAccount.accessToken);
+            }
         }
 
         return await next(req);
@@ -18,11 +24,14 @@ export function useAuthInterceptorFactory(accountManagerService: AccountManagerS
 
 // Only to be used in auth service!
 export function useRefreshTokenInterceptorFactory(
+    platformId: Object,
     accountManagerService: AccountManagerService,
     authService: AuthService
 ) {
     const refreshTokenInterceptor: Interceptor = next => async req => {
-        AuthService.refreshTokenIfExpired(authService, accountManagerService);
+        if (isPlatformBrowser(platformId)) {
+            AuthService.refreshTokenIfExpired(authService, accountManagerService);
+        }
 
         return await next(req);
     };

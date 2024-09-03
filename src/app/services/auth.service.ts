@@ -94,7 +94,7 @@ export class AuthService {
                                 reject();
                             }
 
-                            resolve(undefined);
+                            resolve(newAccessToken);
                         })
                         .catch(e => {
                             console.error([
@@ -148,12 +148,8 @@ export class AuthService {
                             );
 
                             resolve({ user, accessToken: activeAccount.accessToken });
-
-                            console.info("[AuthService][LoadUser]", "Authenticated");
                         })
                         .catch(async (e: Error) => {
-                            console.error("[AuthService][LoadUser][Authenticate]", e.message);
-
                             reject();
                         });
                 } else {
@@ -242,8 +238,6 @@ export class AuthService {
     }
 
     RefreshToken(refreshToken: string, userId: string) {
-        alert("refreshing"); // FIXME
-
         return new Promise<string>((resolve: (newAccessToken: string) => void, reject) => {
             this.client
                 .refreshToken({
