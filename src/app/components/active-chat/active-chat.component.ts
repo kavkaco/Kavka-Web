@@ -107,10 +107,8 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
             const elHeight = el.clientHeight;
 
             if (event.clientX > rect.width || event.clientX + elWidth > window.innerWidth) {
-                console.log("yes");
                 el.style.left = event.clientX - elWidth + "px";
             } else {
-                console.log("no");
                 console.log(event.clientX);
 
                 el.style.left = event.clientX + "px";
@@ -136,15 +134,15 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
         });
     }
 
-    messageMouseDown($event, messageId: string) {
-        if (this.showMessageContextMenu == false) {
+    messageMouseDown(event, messageId: string) {
+        if (event.button === 0) {
             if (this.selectedMessages.length == 0) {
                 this.messageLongClickTimeout = setTimeout(() => {
-                    this.toggleSelectMessage($event, messageId);
+                    this.toggleSelectMessage(event, messageId);
                 }, this.longClickTimeoutTrigger);
             } else {
                 if (this.selectedMessages.length > 0) {
-                    this.toggleSelectMessage($event, messageId);
+                    this.toggleSelectMessage(event, messageId);
                 }
             }
         }

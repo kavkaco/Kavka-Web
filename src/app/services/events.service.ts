@@ -47,12 +47,12 @@ export class EventsService {
             setTimeout(() => {
                 console.warn("[EventsService] Establishing stream connection...");
 
-                // // Refresh data like chats, messages, profile, etc...
+                // Refresh data like chats, messages, profile, etc...
                 // this.chatService.GetUserChats().then(chats => {
                 //     this.store.dispatch(ChatActions.set({ chats }));
                 // });
 
-                // this.chatService.GetUserChats().then(chats => {
+                // this.chatService.GetChat().then(chats => {
                 //     this.store.dispatch(ChatActions.set({ chats }));
                 // });
 
