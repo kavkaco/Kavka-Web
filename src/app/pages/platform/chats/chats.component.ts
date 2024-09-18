@@ -9,10 +9,10 @@ import * as AuthSelector from "@store/auth/auth.selectors";
 import * as ConnectivitySelector from "@store/connectivity/connectivity.selectors";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { ChatService } from "@services/chat.service";
-import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
+import { IChatItem } from "@app/models/chat";
 import { take } from "rxjs";
 import { SearchService } from "@app/services/search.service";
-import { Chat, DirectChatDetail } from "kavka-core/model/chat/v1/chat_pb";
+import { Chat, ChatType } from "kavka-core/model/chat/v1/chat_pb";
 import { User } from "kavka-core/model/user/v1/user_pb";
 import { ChatItemSkeletonComponent } from "@app/components/chat-item/chat-item-skeleton/chat-item-skeleton.component";
 
@@ -31,9 +31,9 @@ import { ChatItemSkeletonComponent } from "@app/components/chat-item/chat-item-s
     styleUrl: "./chats.component.scss",
 })
 export class ChatsComponent {
-    private chatService = inject(ChatService);
-    private searchService = inject(SearchService);
     private store = inject(Store);
+    private searchService = inject(SearchService);
+    chatService = inject(ChatService);
 
     isOnline = true;
 
@@ -92,33 +92,8 @@ export class ChatsComponent {
         });
     }
 
-    // Check it the chat does not exists in the local chats
-    // we prepare to fetch the chat from the back-end and add to store
-    activateUncreatedChat(chatId: string) {
-        this.store
-            .select(ChatSelector.selectChats)
-            .pipe(take(1))
-            .subscribe(localChats => {
-                const chatIdx = localChats.findIndex(_chat => _chat.chatId === chatId);
-                if (chatIdx !== -1) {
-                    // exist
-                    this.activateChat(chatId);
-                }
-
-                // fetch chat
-                this.chatService.GetChat(chatId).then(fetchedChat => {
-                    this.store.dispatch(ChatActions.setActiveChat({ chat: fetchedChat }));
-                });
-            });
-    }
-
-    activateChat(chatId: string) {
-        this.store
-            .select(ChatSelector.selectChat(chatId))
-            .pipe(take(1))
-            .subscribe(chat => {
-                this.store.dispatch(ChatActions.setActiveChat({ chat }));
-            });
+    activateUncreatedChat(item: IChatItem) {
+        this.chatService.activateUncreatedChat(item, this.search.users);
     }
 
     submitCreateChannel() {
@@ -174,55 +149,6 @@ export class ChatsComponent {
         };
     }
 
-    mergeLocalAndFetchedChats(
-        localChatItems: IChatItem[],
-        fetchResult: { users: User[]; chats: Chat[] }
-    ) {
-        return new Promise<IChatItem[]>(resolve => {
-            const finalChatItems: IChatItem[] = [...localChatItems];
-
-            this.store
-                .select(ChatSelector.selectChats)
-                .pipe(take(1))
-                .subscribe(async localChats => {
-                    if (fetchResult && fetchResult.chats !== undefined) {
-                        await fetchResult.chats.forEach(chat => {
-                            const alreadyExistIdx = localChatItems.findIndex(
-                                _chat => _chat.chatId === chat.chatId
-                            );
-                            if (alreadyExistIdx === -1) {
-                                finalChatItems.push(convertChatsToChatItems([chat])[0]);
-                            }
-                        });
-
-                        fetchResult.users.forEach(user => {
-                            const alreadyExistIdx = localChats.findIndex(_chat => {
-                                return (
-                                    (_chat.chatDetail.chatDetailType.value as DirectChatDetail)
-                                        .userInfo.userId === user.userId
-                                );
-                            });
-                            if (alreadyExistIdx === -1) {
-                                finalChatItems.push({
-                                    chatId: user.userId,
-                                    title: user.name + " " + user.lastName,
-                                    lastMessage: undefined,
-                                });
-                            }
-                        });
-                    }
-                });
-
-            resolve(finalChatItems);
-        });
-    }
-
-    determineSearchResult(result: { users: User[]; chats: Chat[] }) {
-        this.mergeLocalAndFetchedChats(this.filteredChatItems, result).then(merged => {
-            this.search.finalResult = merged;
-        });
-    }
-
     onSearchInputChange() {
         this.filteredChatItems = this.filterChatsList(this.search.input, this.chatItems);
 
@@ -236,11 +162,18 @@ export class ChatsComponent {
                         this.search.chats = result.chats as any as IChatItem[];
                         this.search.users = result.users;
 
-                        this.determineSearchResult(result);
+                        this.store
+                            .select(ChatSelector.selectChats)
+                            .pipe(take(1))
+                            .subscribe(chats => {
+                                this.chatService
+                                    .mergeChatItems(result.chats, result.users)
+                                    .then(mergedChatItems => {
+                                        this.search.finalResult = mergedChatItems;
+                                    });
+                            });
                     })
-                    .catch(() => {
-                        this.determineSearchResult(undefined);
-                    });
+                    .catch(() => {});
             }
         } else {
             this.clearSearchResult();
