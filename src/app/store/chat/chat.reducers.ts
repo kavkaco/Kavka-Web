@@ -2,7 +2,10 @@ import { createReducer, on } from "@ngrx/store";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { Chat } from "kavka-core/model/chat/v1/chat_pb";
 export interface ChatState {
-    activeChat: Chat | null;
+    activeChat: {
+        chat: Chat;
+        isChatCreated: boolean;
+    } | null;
     chats: Chat[];
 }
 
@@ -13,10 +16,13 @@ const initialState: ChatState = {
 
 export const chatReducer = createReducer(
     initialState,
-    on(ChatActions.setActiveChat, (state, { chat }) => {
+    on(ChatActions.setActiveChat, (state, { chat, isChatCreated }) => {
         return {
             ...state,
-            activeChat: chat,
+            activeChat: {
+                chat,
+                isChatCreated,
+            },
         };
     }),
     on(ChatActions.removeActiveChat, state => {

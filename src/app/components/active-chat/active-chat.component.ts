@@ -18,12 +18,13 @@ import { MessageBubbleComponent } from "@components/message-bubble/message-bubbl
 import { MessageService } from "@app/services/message.service";
 import { Store } from "@ngrx/store";
 import { ChatActions } from "@app/store/chat/chat.actions";
-import { Chat } from "kavka-core/model/chat/v1/chat_pb";
+import { Chat, ChatType, DirectChatDetail } from "kavka-core/model/chat/v1/chat_pb";
 import { ChatService } from "@app/services/chat.service";
 import { User } from "kavka-core/model/user/v1/user_pb";
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ActiveChatService } from "@app/services/active-chat.service";
 import * as MessageSelector from "@store/messages/messages.selectors";
+import * as ChatSelector from "@store/chat/chat.selectors";
 
 @Component({
     selector: "app-active-chat",
@@ -62,6 +63,7 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
 
     @Input() activeUser: User;
     @Input() activeChat: Chat;
+    @Input() isChatCreated: boolean; // used for direct chats
     @ViewChild("messagesScrollbar") messagesScrollbarRef: ElementRef;
 
     selectedMessageCaption: string | null;
@@ -75,16 +77,21 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     ngOnInit() {
         this.activeChatService = new ActiveChatService(this.store, this.messageService);
 
+        this.store.select(ChatSelector.selectActiveChat).subscribe(activeChat => {
+            this.isChatCreated = activeChat.isChatCreated;
+        });
+
         this.store
             .select(MessageSelector.selectChatMessages(this.activeChat.chatId))
             .subscribe(() => {
-                this.scrollToBottomAfterGettingNewMessage();
+                this.messagesScrollToBottom();
             });
     }
 
     updateActiveChatState() {
         this.activeChatService?.Load(this.activeChat);
         this.activeChatService?.setInputSectionStatus(this.activeChat);
+        this.messagesScrollToBottom();
     }
 
     ngOnChanges() {
@@ -164,7 +171,7 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     }
 
     ngAfterViewInit() {
-        this.scrollToBottom(this.messagesScrollbarRef);
+        this.messagesScrollToBottom();
     }
 
     submitJoinChat() {
@@ -184,27 +191,31 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
         return false;
     }
 
-    scrollToBottom(elRef: ElementRef) {
+    messagesScrollToBottom() {
         setTimeout(() => {
-            if (elRef && elRef.nativeElement) {
-                const el = elRef.nativeElement as HTMLElement;
+            if (this.messagesScrollbarRef && this.messagesScrollbarRef.nativeElement) {
+                const el = this.messagesScrollbarRef.nativeElement as HTMLElement;
                 el.scrollTop = el.scrollHeight;
             }
-        }, 100);
+        }, 10);
     }
 
-    scrollToBottomAfterGettingNewMessage() {
-        if (this.isScrollAtBottom(this.messagesScrollbarRef)) {
-            this.scrollToBottom(this.messagesScrollbarRef);
+    async submitSendTextMessage() {
+        if (this.isChatCreated == false && this.activeChat.chatType == ChatType.DIRECT) {
+            const chatDetail = this.activeChat.chatDetail.chatDetailType.value as DirectChatDetail;
+            const recipientUserId = chatDetail.recipient.userId;
+
+            await this.chatService.CreateDirect(recipientUserId).then(chat => {
+                console.log(chat);
+                this.activeChat = chat;
+            });
         }
-    }
 
-    submitSendTextMessage() {
         this.messageService
             .SendTextMessage(this.activeChat.chatId, this.activeChatService.textInput.trim())
             .then(() => {
                 this.activeChatService.textInput = "";
-                this.scrollToBottom(this.messagesScrollbarRef);
+                this.messagesScrollToBottom();
             });
     }
 

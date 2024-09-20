@@ -62,20 +62,20 @@ export class ChatsComponent {
     constructor() {
         this.clearSearchResult();
 
-        this.store.select(ChatSelector.selectActiveChat).subscribe(chat => {
-            if (chat !== null || chat !== undefined) {
-                this.activeChat = chat;
-                return;
-            }
-
-            this.activeChat = null;
-        });
-
         this.chatService.GetUserChats().then(chats => {
             this.store.dispatch(ChatActions.set({ chats }));
 
             this.filteredChatItems = this.chatItems;
             this.chatItemsLoaded = true;
+        });
+
+        this.store.select(ChatSelector.selectActiveChat).subscribe(activeChat => {
+            if (activeChat && activeChat.chat) {
+                this.activeChat = activeChat.chat;
+                return;
+            }
+
+            this.activeChat = null;
         });
 
         this.store.select(ChatSelector.selectChatItems).subscribe(chats => {

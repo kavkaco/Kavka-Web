@@ -21,20 +21,20 @@ export class ActiveChatService extends ActiveChat {
         super();
     }
 
-    Load(activeChat: Chat) {
-        if (activeChat === undefined) {
+    Load(chat: Chat) {
+        if (chat === undefined) {
             console.error("[ActiveChatService] empty active chat constructed");
 
             return;
         }
 
-        this.chatTypeString = getChatTypeString(activeChat.chatType);
+        this.chatTypeString = getChatTypeString(chat.chatType);
         this.messages = [];
 
         // Fetch messages from store or if it not exists in the local store
         // we need to call a rpc unary from the server to get them!
         this.store
-            .select(MessageSelector.selectChatMessages(activeChat.chatId))
+            .select(MessageSelector.selectChatMessages(chat.chatId))
             .subscribe(async _messages => {
                 // Load messages from local store
                 if (_messages) {
@@ -45,12 +45,12 @@ export class ActiveChatService extends ActiveChat {
 
                 this.isLoading = true;
                 // The message are not accessible form the local and here we do unary call
-                await this.messageService.FetchMessages(activeChat.chatId).then(fetchedMessages => {
+                await this.messageService.FetchMessages(chat.chatId).then(fetchedMessages => {
                     this.messages = fetchedMessages;
 
                     this.store.dispatch(
                         MessageActions.set({
-                            chatId: activeChat.chatId,
+                            chatId: chat.chatId,
                             messagesList: fetchedMessages,
                         })
                     );
@@ -59,21 +59,20 @@ export class ActiveChatService extends ActiveChat {
                 });
             });
 
-        if (activeChat.chatType == ChatType.CHANNEL) {
-            const channelDetail = activeChat.chatDetail.chatDetailType.value as ChannelChatDetail;
+        if (chat.chatType == ChatType.CHANNEL) {
+            const channelDetail = chat.chatDetail.chatDetailType.value as ChannelChatDetail;
             this.title = channelDetail.title;
             this.username = channelDetail.username;
             this.membersCount = channelDetail.members.length;
             this.description = channelDetail.description;
-        } else if (activeChat.chatType == ChatType.GROUP) {
-            const groupDetail = activeChat.chatDetail.chatDetailType.value as GroupChatDetail;
+        } else if (chat.chatType == ChatType.GROUP) {
+            const groupDetail = chat.chatDetail.chatDetailType.value as GroupChatDetail;
             this.title = groupDetail.title;
             this.username = groupDetail.username;
             this.membersCount = groupDetail.members.length;
             this.description = groupDetail.description;
-        } else if (activeChat.chatType == ChatType.DIRECT) {
-            const directDetail = activeChat.chatDetail.chatDetailType.value as DirectChatDetail;
-
+        } else if (chat.chatType == ChatType.DIRECT) {
+            const directDetail = chat.chatDetail.chatDetailType.value as DirectChatDetail;
             this.title = directDetail.recipient.name + " " + directDetail.recipient.lastName;
             this.username = directDetail.recipient.username;
             this.online = false;

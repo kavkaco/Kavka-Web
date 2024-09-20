@@ -3,9 +3,9 @@ import {
     ChannelChatDetail,
     Chat,
     ChatType,
-    DirectChatDetail,
     GroupChatDetail,
     LastMessage,
+    DirectChatDetail,
 } from "kavka-core/model/chat/v1/chat_pb";
 
 export abstract class ActiveChat {

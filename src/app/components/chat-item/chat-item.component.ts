@@ -22,8 +22,8 @@ export class ChatItemComponent {
     isActive = false;
 
     constructor(private sanitizer: DomSanitizer) {
-        this.store.select(ChatSelector.selectActiveChat).subscribe(chat => {
-            if (chat && chat.chatId == this.chatId) {
+        this.store.select(ChatSelector.selectActiveChat).subscribe(activeChat => {
+            if (activeChat && activeChat.chat && activeChat.chat.chatId == this.chatId) {
                 this.isActive = true;
                 return;
             }

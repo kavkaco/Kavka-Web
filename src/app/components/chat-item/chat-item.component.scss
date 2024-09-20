@@ -35,7 +35,8 @@ $mobile-break-point: 900px;
         }
     }
 
-    .platform-chats--item:hover {
+    .platform-chats--item:hover,
+    .platform-chats--active-item {
         background-color: rgb(var(--backgroundSecondary));
     }
 }

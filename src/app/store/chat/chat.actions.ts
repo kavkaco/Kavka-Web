@@ -4,7 +4,7 @@ import { Chat, LastMessage } from "kavka-core/model/chat/v1/chat_pb";
 export const ChatActions = createActionGroup({
     source: "Chat",
     events: {
-        SetActiveChat: props<{ chat: Chat }>(),
+        SetActiveChat: props<{ chat: Chat; isChatCreated?: boolean }>(),
         RemoveActiveChat: emptyProps(),
         Set: props<{ chats: Chat[] }>(),
         Add: props<{ chat: Chat }>(),

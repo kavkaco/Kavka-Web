@@ -10,16 +10,6 @@ import * as ChatSelector from "@store/chat/chat.selectors";
 import { take } from "rxjs";
 import { ChatActions } from "@app/store/chat/chat.actions";
 import { convertChatsToChatItems, IChatItem } from "@app/models/chat";
-import {
-    PlainMessage,
-    BinaryReadOptions,
-    JsonValue,
-    JsonReadOptions,
-    BinaryWriteOptions,
-    JsonWriteOptions,
-    JsonWriteStringOptions,
-    MessageType,
-} from "@bufbuild/protobuf";
 
 export class ChatNotFoundError extends Error {
     constructor() {
@@ -152,7 +142,7 @@ export class ChatService {
             .select(ChatSelector.selectChat(chatId))
             .pipe(take(1))
             .subscribe(chat => {
-                this.store.dispatch(ChatActions.setActiveChat({ chat }));
+                this.store.dispatch(ChatActions.setActiveChat({ chat, isChatCreated: true }));
             });
     }
 
@@ -177,16 +167,23 @@ export class ChatService {
 
                     this.GetDirectChat(recipientUserId)
                         .then(fetchedChat => {
-                            this.store.dispatch(ChatActions.setActiveChat({ chat: fetchedChat }));
+                            this.store.dispatch(
+                                ChatActions.setActiveChat({
+                                    chat: fetchedChat,
+                                    isChatCreated: true,
+                                })
+                            );
                         })
                         .catch(e => {
+                            // This direct chat does not exists in the system
+
                             if (e instanceof ChatNotFoundError) {
                                 const foundUser = usersCollection.find(
                                     _user => _user.userId === recipientUserId
                                 );
 
                                 if (foundUser) {
-                                    const chat: any = {
+                                    const chat = new Chat({
                                         chatId: undefined,
                                         chatType: ChatType.DIRECT,
                                         chatDetail: new ChatDetail({
@@ -194,18 +191,23 @@ export class ChatService {
                                                 case: "directDetail",
                                                 value: new DirectChatDetail({
                                                     recipient: foundUser,
-                                                }),
+                                                    isCreated: false,
+                                                } as any),
                                             },
                                         }),
-                                    };
+                                    });
 
-                                    this.store.dispatch(ChatActions.setActiveChat({ chat }));
+                                    this.store.dispatch(
+                                        ChatActions.setActiveChat({ chat, isChatCreated: false })
+                                    );
                                 }
                             }
                         });
                 } else {
                     this.GetChat(chatId).then(fetchedChat => {
-                        this.store.dispatch(ChatActions.setActiveChat({ chat: fetchedChat }));
+                        this.store.dispatch(
+                            ChatActions.setActiveChat({ chat: fetchedChat, isChatCreated: true })
+                        );
                     });
                 }
             });
