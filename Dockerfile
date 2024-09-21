@@ -1,12 +1,18 @@
-FROM node:22-alpine
+FROM node:22-alpine as builder
+
+WORKDIR /build
+
+COPY . /build
+
+RUN yarn
+
+RUN yarn build
+
+FROM node:22-alpine as runtime
 
 WORKDIR /app
 
-COPY . .
-
-RUN yarn install
-
-RUN yarn build
+COPY --from=builder /build .
 
 EXPOSE 4000
 
