@@ -5,7 +5,6 @@ import { User } from "kavka-core/model/user/v1/user_pb";
 import { Store } from "@ngrx/store";
 import * as AuthSelector from "@store/auth/auth.selectors";
 import { take } from "rxjs";
-
 @Component({
     selector: "app-platform",
     standalone: true,
