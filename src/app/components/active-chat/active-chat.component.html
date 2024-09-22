@@ -1,4 +1,35 @@
-<input class="modal-state" id="chat-detail-modal" type="checkbox" />
+<div [@openClose]="showMessageContextMenu ? 'open' : 'closed'" #contextMenuRef
+    class="context-menu-content dropdown-menu-blur">
+    <button (click)="copySelectedMessageCaption()"
+        class="flex flex-row gap-4 items-center text-left w-full p-1 rounded-md text-sm">
+        <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="m15 20h-10a5.006 5.006 0 0 1 -5-5v-10a5.006 5.006 0 0 1 5-5h10a5.006 5.006 0 0 1 5 5v10a5.006 5.006 0 0 1 -5 5zm-10-18a3 3 0 0 0 -3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-10a3 3 0 0 0 -3-3zm19 17v-13a1 1 0 0 0 -2 0v13a3 3 0 0 1 -3 3h-13a1 1 0 0 0 0 2h13a5.006 5.006 0 0 0 5-5z" />
+        </svg>
+        Copy Text
+    </button>
+
+    <button (click)="copySelectedMessageCaption()"
+        class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm">
+        <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z" />
+        </svg>
+        Edit
+    </button>
+
+    <button (click)="copySelectedMessageCaption()"
+        class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm text-error">
+        <svg class="fill-error w-4" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24">
+            <path
+                d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z">
+            </path>
+        </svg>
+        Delete
+    </button>
+</div>
+
+<input #chatDetailModalStateRef class="modal-state" id="chat-detail-modal" type="checkbox" />
 <div class="modal chat-detail-modal">
     <label class="modal-overlay" for="chat-detail-modal"></label>
     <div class="modal-content p-0 bg-backgroundPrimary border border-border">
@@ -139,42 +170,7 @@
     </div>
 </div>
 
-@if (showMessageContextMenu) {
-<div (click)="showMessageContextMenu = false" class="context-menu-overlay"></div>
-}
-
-<div [@openClose]="showMessageContextMenu ? 'open' : 'closed'" #contextMenuRef
-    class="context-menu-content dropdown-menu-blur">
-    <button (click)="copySelectedMessageCaption()"
-        class="flex flex-row gap-4 items-center text-left w-full p-1 rounded-md text-sm">
-        <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-                d="m15 20h-10a5.006 5.006 0 0 1 -5-5v-10a5.006 5.006 0 0 1 5-5h10a5.006 5.006 0 0 1 5 5v10a5.006 5.006 0 0 1 -5 5zm-10-18a3 3 0 0 0 -3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-10a3 3 0 0 0 -3-3zm19 17v-13a1 1 0 0 0 -2 0v13a3 3 0 0 1 -3 3h-13a1 1 0 0 0 0 2h13a5.006 5.006 0 0 0 5-5z" />
-        </svg>
-        Copy Text
-    </button>
-
-    <button (click)="copySelectedMessageCaption()"
-        class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm">
-        <svg class="fill-white w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-                d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z" />
-        </svg>
-        Edit
-    </button>
-
-    <button (click)="copySelectedMessageCaption()"
-        class="flex flex-row gap-2 items-center text-left w-full p-1 rounded-md text-sm text-error">
-        <svg class="fill-error w-4" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24">
-            <path
-                d="M 10 2 L 9 3 L 4 3 L 4 5 L 5 5 L 5 20 C 5 20.522222 5.1913289 21.05461 5.5683594 21.431641 C 5.9453899 21.808671 6.4777778 22 7 22 L 17 22 C 17.522222 22 18.05461 21.808671 18.431641 21.431641 C 18.808671 21.05461 19 20.522222 19 20 L 19 5 L 20 5 L 20 3 L 15 3 L 14 2 L 10 2 z M 7 5 L 17 5 L 17 20 L 7 20 L 7 5 z M 9 7 L 9 18 L 11 18 L 11 7 L 9 7 z M 13 7 L 13 18 L 15 18 L 15 7 L 13 7 z">
-            </path>
-        </svg>
-        Delete
-    </button>
-</div>
-
-<div class="active-chat">
+<div class="active-chat" (click)="showMessageContextMenu = false">
     <div class="active-chat--head">
         @if (activeChatService.selectedMessages.length > 0) {
         <div style="z-index: 93"
@@ -192,14 +188,17 @@
         </div>
         }
 
-        <label for="chat-detail-modal" class="h-full flex flex-row items-center gap-2">
-            <button (click)="submitCloseChat()"
-                class="back-chat-button ml-1 flex text-center justify-center btn btn-circle btn-ghost fill-content2">
-                <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path
-                        d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z" />
-                </svg>
-            </button>
+        <button (click)="submitCloseChat()"
+            class="back-chat-button ml-1 flex text-center justify-center btn btn-circle btn-ghost fill-content2">
+            <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                    d="M19,11H9l3.29-3.29a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0l-4.29,4.3A2,2,0,0,0,6,12H6a2,2,0,0,0,.59,1.4l4.29,4.3a1,1,0,1,0,1.41-1.42L9,13H19a1,1,0,0,0,0-2Z" />
+            </svg>
+        </button>
+
+        <div (click)="openChatDetailModal()" style="z-index: 70;"
+            class="relative h-full w-full flex flex-row items-center gap-2">
+
             <div class="flex items-center gap-2">
                 @if (activeChatService.avatar) {
                 <div class="avatar">
@@ -218,14 +217,15 @@
                     <span class="text-xs text-content2">{{ activeChatService.membersCount }} members</span>
                     } @else if (activeChatService.online !== undefined) {
                     @if (activeChatService.online === true) {
-                    <span class="text-xs text-green-600">Online</span>
+                    <span class="text-xs text-success">Online</span>
                     } @else {
                     <span class="text-xs text-content2">Offline</span>
                     }
                     }
                 </div>
             </div>
-        </label>
+        </div>
+
         <div>
             <button class="btn btn-circle btn-ghost fill-content2">
                 <svg class="w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -259,6 +259,7 @@
             </div>
         </div>
     </div>
+
     <div class="active-chat--body">
         @if (activeChatService.isLoading) {
         <div class="active-chat--loading">

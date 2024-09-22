@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
     debug: true,
-    grpcTransportBaseUrl: "http://localhost:8000",
+    grpcTransportBaseUrl: "http://91.107.241.254:8000",
 };

@@ -74,6 +74,12 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     longClickTimeoutTrigger = 650;
     messageLongClickTimeout: NodeJS.Timeout;
 
+    @ViewChild("chatDetailModalStateRef") chatDetailModalState;
+
+    openChatDetailModal() {
+        this.chatDetailModalState.nativeElement.checked = true;
+    }
+
     ngOnInit() {
         this.activeChatService = new ActiveChatService(this.store, this.messageService);
 
@@ -105,29 +111,33 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     contextMenuMouseEvent(event: MouseEvent) {
         event.preventDefault();
 
-        if (this.contextMenu) {
-            const el = this.contextMenu.nativeElement as HTMLElement;
-            const rect = (
-                this.messagesScrollbarRef.nativeElement as HTMLElement
-            ).getBoundingClientRect();
+        this.showMessageContextMenu = false;
 
-            const elWidth = el.clientWidth;
-            const elHeight = el.clientHeight;
+        setTimeout(() => {
+            if (this.contextMenu) {
+                const el = this.contextMenu.nativeElement as HTMLElement;
+                const rect = (
+                    this.messagesScrollbarRef.nativeElement as HTMLElement
+                ).getBoundingClientRect();
 
-            if (event.clientX > rect.width || event.clientX + elWidth > window.innerWidth) {
-                el.style.left = event.clientX - elWidth + "px";
-            } else {
-                el.style.left = event.clientX + "px";
+                const elWidth = el.clientWidth;
+                const elHeight = el.clientHeight;
+
+                if (event.clientX > rect.width || event.clientX + elWidth > window.innerWidth) {
+                    el.style.left = event.clientX - elWidth + "px";
+                } else {
+                    el.style.left = event.clientX + "px";
+                }
+
+                if (event.clientY + 10 > rect.height) {
+                    el.style.top = event.clientY - elHeight + "px";
+                } else {
+                    el.style.top = event.clientY + "px";
+                }
             }
 
-            if (event.clientY + 10 > rect.height) {
-                el.style.top = event.clientY - elHeight + "px";
-            } else {
-                el.style.top = event.clientY + "px";
-            }
-        }
-
-        this.showMessageContextMenu = true;
+            this.showMessageContextMenu = true;
+        }, 70);
     }
 
     isMessageSelected(messageId: string) {
