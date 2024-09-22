@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
-import { environment } from "@environments/environment";
+import appVersion from "@environments/app-version";
 @Component({
     selector: "app-blank-app-form",
     standalone: true,
@@ -9,5 +9,5 @@ import { environment } from "@environments/environment";
     styleUrl: "./blank-app-form.component.scss",
 })
 export class BlankAppFormComponent {
-    appVersion = environment.appVersion;
+    appVersion = appVersion;
 }
