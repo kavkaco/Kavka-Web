@@ -68,7 +68,7 @@ $mobile-break-point: 900px;
         right: 0;
         left: 0;
         width: 100%;
-        z-index: 51;
+        z-index: 60;
         height: var(--head-size);
         background-color: rgb(var(--backgroundPrimary));
     }
@@ -120,6 +120,10 @@ $mobile-break-point: 900px;
             height: 100%;
 
             padding-bottom: 70px;
+
+            @media screen and (max-width: $mobile-break-point) {
+                padding-top: 70px;
+            }
         }
 
         .active-chat--body--input-section {
