@@ -13,7 +13,7 @@ import { ChatType } from "kavka-core/model/chat/v1/chat_pb";
     styleUrl: "./message-bubble.component.scss",
 })
 export class MessageBubbleComponent implements OnInit {
-    showAvatar = true;
+    showAvatar = false;
 
     @Input() isSelfMessage: boolean;
     @Input() senderTitle?: string;
@@ -38,8 +38,8 @@ export class MessageBubbleComponent implements OnInit {
             }
         }
 
-        if (this.chatType == ChatType.CHANNEL || this.isSelfMessage) {
-            this.showAvatar = false;
+        if (this.chatType == ChatType.GROUP && !this.isSelfMessage) {
+            this.showAvatar = true;
         }
 
         this.chatTypeString = getChatTypeString(this.chatType);
