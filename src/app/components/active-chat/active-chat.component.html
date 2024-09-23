@@ -317,7 +317,7 @@
                 </svg>
             </button>
 
-            <textarea [(ngModel)]="activeChatService.textInput" appAutoGrowingInput [borderWidth]="1"
+            <textarea #textInputRef [(ngModel)]="activeChatService.textInput" appAutoGrowingInput [borderWidth]="1"
                 [initialHeight]="40" [lineHeight]="18" class="resize-none transparent-scrollbar"
                 placeholder="Write a message..."></textarea>
 

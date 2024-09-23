@@ -74,6 +74,8 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
     longClickTimeoutTrigger = 650;
     messageLongClickTimeout: NodeJS.Timeout;
 
+    @ViewChild("textInputRef") textInputRef!: ElementRef;
+
     @ViewChild("chatDetailModalStateRef") chatDetailModalState;
 
     openChatDetailModal() {
@@ -182,6 +184,13 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
 
     ngAfterViewInit() {
         this.messagesScrollToBottom();
+
+        this.focusTextInput();
+    }
+
+    focusTextInput() {
+        const el = this.textInputRef.nativeElement as HTMLElement;
+        el.focus();
     }
 
     submitJoinChat() {

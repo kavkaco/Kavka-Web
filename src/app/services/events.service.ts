@@ -9,11 +9,17 @@ import { AddChat, AddMessage, SubscribeEventsStreamResponse } from "kavka-core/e
 import { ConnectivityActions } from "@app/store/connectivity/connectivity.actions";
 import { IMessage } from "@app/models/message";
 import { ChatService } from "@app/services/chat.service";
+import * as ChatSelector from "@store/chat/chat.selectors";
+import { take } from "rxjs";
+import { ChatType } from "kavka-core/model/chat/v1/chat_pb";
+import { MessageService } from "@app/services/message.service";
+import * as MessageSelector from "@store/messages/messages.selectors";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
     private store = inject(Store);
     private chatService = inject(ChatService);
+    private messageService = inject(MessageService);
     private client: PromiseClient<typeof KavkaEventsService>;
 
     constructor() {
@@ -48,13 +54,37 @@ export class EventsService {
                 console.warn("[EventsService] Establishing stream connection...");
 
                 // Refresh data like chats, messages, profile, etc...
-                // this.chatService.GetUserChats().then(chats => {
-                //     this.store.dispatch(ChatActions.set({ chats }));
-                // });
+                this.chatService.GetUserChats().then(chats => {
+                    this.store.dispatch(ChatActions.set({ chats }));
+                });
 
-                // this.chatService.GetChat().then(chats => {
-                //     this.store.dispatch(ChatActions.set({ chats }));
-                // });
+                this.store
+                    .select(ChatSelector.selectActiveChat)
+                    .pipe(take(1))
+                    .subscribe(activeChat => {
+                        if (activeChat.chat.chatType != ChatType.DIRECT) {
+                            this.chatService.GetChat(activeChat.chat.chatId).then(chat => {
+                                this.store.dispatch(
+                                    ChatActions.setActiveChat({ chat: chat, isChatCreated: true })
+                                );
+                            });
+                        } else {
+                            this.chatService.GetDirectChat(activeChat.chat.chatId).then(chat => {
+                                this.store.dispatch(
+                                    ChatActions.setActiveChat({ chat: chat, isChatCreated: true })
+                                );
+                            });
+                        }
+
+                        this.messageService.FetchMessages(activeChat.chat.chatId).then(messages => {
+                            this.store.dispatch(
+                                MessageActions.set({
+                                    chatId: activeChat.chat.chatId,
+                                    messagesList: messages,
+                                })
+                            );
+                        });
+                    });
 
                 this.SubscribeEventsStream();
             }, 2500);
