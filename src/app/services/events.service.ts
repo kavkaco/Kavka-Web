@@ -13,7 +13,6 @@ import * as ChatSelector from "@store/chat/chat.selectors";
 import { take } from "rxjs";
 import { ChatType } from "kavka-core/model/chat/v1/chat_pb";
 import { MessageService } from "@app/services/message.service";
-import * as MessageSelector from "@store/messages/messages.selectors";
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
