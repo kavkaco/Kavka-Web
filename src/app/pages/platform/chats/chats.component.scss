@@ -5,6 +5,7 @@ $mobile-break-point: 900px;
 
     @media screen and (max-width: $mobile-break-point) {
         & {
+            min-width: unset !important;
             width: 97%;
         }
     }
