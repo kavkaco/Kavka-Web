@@ -1,9 +1,11 @@
-<div class="d-block w-100 flex text-center justify-center py-10">
-    <img class="w-14" src="/assets/logo/icon-transparent.png" alt="Kavka" />
-</div>
-
-<router-outlet></router-outlet>
-
-<div class="absolute bottom-0 w-full flex items-center justify-center py-3">
-    <span class="text-content2 text-xs">Kavka {{ appVersion }}</span>
+<div class="inline-block overflow-scroll h-screen w-full">
+    <div class="d-block w-100 flex text-center justify-center py-10">
+        <img class="w-14" src="/assets/logo/icon-transparent.png" alt="Kavka" />
+    </div>
+    
+    <router-outlet></router-outlet>
+    
+    <div class="absolute bottom-0 w-full flex items-center justify-center py-3">
+        <span class="text-content2 text-xs">Kavka {{ appVersion }}</span>
+    </div>
 </div>
