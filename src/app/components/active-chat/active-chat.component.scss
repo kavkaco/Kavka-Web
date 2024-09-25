@@ -71,8 +71,6 @@ $mobile-break-point: 900px;
     --head-size: 65px;
     --input-section-size: 40px;
 
-    border: inset 3px blue;
-
     .active-chat--head {
         position: absolute;
         z-index: 60;
@@ -94,7 +92,6 @@ $mobile-break-point: 900px;
         display: grid;
         grid-template-rows: auto max-content;
         align-items: end;
-        background: red !important;
 
         .active-chat--loading {
             position: absolute;
