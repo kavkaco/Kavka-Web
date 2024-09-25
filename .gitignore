@@ -42,3 +42,7 @@ testem.log
 Thumbs.db
 
 src/environments/environment.production.ts
+
+cert.pem
+key.pem
+server.key

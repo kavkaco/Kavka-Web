@@ -82,7 +82,13 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
         this.chatDetailModalState.nativeElement.checked = true;
     }
 
+    screenHeight = 0;
+
     ngOnInit() {
+        window.onresize = e => {
+            this.screenHeight = window.outerHeight;
+        };
+
         this.activeChatService = new ActiveChatService(this.store, this.messageService);
 
         this.store.select(ChatSelector.selectActiveChat).subscribe(activeChat => {
