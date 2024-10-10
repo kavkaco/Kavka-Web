@@ -1,21 +1,6 @@
-# Kavka Web
+# Tauri + Angular
+No description at the moment.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.1.
+## Recommended IDE Setup
 
-## Development server
-
-```bash
-npm start
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Serve SSR
-
-```bash
-npm run ssr:Kavka-Web
-```
+- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)

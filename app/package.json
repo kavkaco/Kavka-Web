@@ -1,0 +1,52 @@
+{
+  "name": "kavka-web",
+  "version": "0.0.1",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^18.2.0",
+    "@angular/cdk": "^18.2.8",
+    "@angular/common": "^18.2.0",
+    "@angular/compiler": "^18.2.0",
+    "@angular/core": "^18.2.0",
+    "@angular/forms": "^18.2.0",
+    "@angular/platform-browser": "^18.2.0",
+    "@angular/platform-browser-dynamic": "^18.2.0",
+    "@angular/router": "^18.2.0",
+    "@bufbuild/protobuf": "^1.10.0",
+    "@connectrpc/connect": "^1.4.0",
+    "@connectrpc/connect-web": "^1.4.0",
+    "@fontsource/poppins": "^5.0.14",
+    "@fontsource/vazirmatn": "^5.0.20",
+    "@ngrx/store": "^18.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "kavka-core": "^0.0.2",
+    "ngx-scrollbar": "^15.0.1",
+    "rxjs": "^7.8.1",
+    
+    "tslib": "^2.6.3",
+    "zone.js": "~0.14.7"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.2.8",
+    "@angular/cli": "^18.2.8",
+    "@angular/compiler-cli": "^18.2.0",
+    "@ngrx/store-devtools": "^18.1.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.2.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.5.2",
+    "rippleui": "^1.12.1",
+    "tailwindcss": "^3.4.13"
+  }
+}
