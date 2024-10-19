@@ -17,7 +17,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:application",
                     "options": {
-                        "outputPath": "dist/kavka-web",
+                        "outputPath": "dist",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
                         "polyfills": [
@@ -36,11 +36,11 @@
                             "src/styles.scss"
                         ],
                         "scripts": [],
-                        "server": "src/main.server.ts",
-                        "prerender": true,
-                        "ssr": {
-                            "entry": "server.ts"
-                        },
+                        // "server": "src/main.server.ts",
+                        // "prerender": true,
+                        // "ssr": {
+                        //     "entry": "server.ts"
+                        // },
                         "optimization": true
                     },
                     "configurations": {
@@ -58,7 +58,7 @@
                                 }
                             ],
                             "outputHashing": "all",
-                            "serviceWorker": "ngsw-config.json",
+                            // "serviceWorker": "ngsw-config.json",
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
