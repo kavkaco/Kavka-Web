@@ -1,12 +1,11 @@
 {
   "name": "kavka-web",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "serve:ssr": "node dist/kavka-web/server/server.mjs",
     "lint": "ng lint",
     "format": "npx prettier --write ."
   },

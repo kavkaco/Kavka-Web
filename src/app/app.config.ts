@@ -16,11 +16,11 @@ export const appConfig: ApplicationConfig = {
     providers: [
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
-        provideClientHydration(),
-        provideServiceWorker("ngsw-worker.js", {
-            enabled: true,
-            registrationStrategy: "registerWhenStable:30000",
-        }),
+        // provideClientHydration(),
+        // provideServiceWorker("ngsw-worker.js", {
+        //     enabled: true,
+        //     registrationStrategy: "registerWhenStable:30000",
+        // }),
         provideAnimations(),
         provideStore(),
         provideStoreDevtools({}),

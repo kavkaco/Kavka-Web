@@ -9,7 +9,6 @@ import {
     OnChanges,
     AfterContentInit,
     OnInit,
-    SimpleChanges,
 } from "@angular/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { AutoGrowingInputDirective } from "@directives/auto-growing-input.directive";
@@ -236,6 +235,8 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
                 this.activeChatService.textInput = "";
                 this.messagesScrollToBottom();
             });
+
+        this.focusTextInput();
     }
 
     submitCloseChat() {

@@ -16,7 +16,7 @@ export class AutoGrowingInputDirective {
 
         this.setOverflow("hidden");
 
-        if (textarea.value.trim() == "") {
+        if ((textarea.value as String).trim().length == 0) {
             textarea.style.height = this.initialHeight + "px";
             return;
         }
