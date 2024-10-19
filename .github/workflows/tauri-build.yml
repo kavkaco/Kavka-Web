@@ -2,8 +2,7 @@ name: 'publish-tauri-application'
 
 on:
   push:
-    branches:
-      - release
+    branches: [ "main" ]
 
 jobs:
   publish-tauri:
