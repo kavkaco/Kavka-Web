@@ -63,6 +63,10 @@ $mobile-break-point: 900px;
         .active-chat--body--input-section {
             position: fixed !important;
             z-index: 51;
+            right: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            width: 100%;
         }
     }
 }

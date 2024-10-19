@@ -9,7 +9,6 @@ import {
     OnChanges,
     AfterContentInit,
     OnInit,
-    SimpleChanges,
 } from "@angular/core";
 import { NgScrollbarModule } from "ngx-scrollbar";
 import { AutoGrowingInputDirective } from "@directives/auto-growing-input.directive";
