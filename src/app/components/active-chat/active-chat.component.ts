@@ -235,6 +235,8 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
                 this.activeChatService.textInput = "";
                 this.messagesScrollToBottom();
             });
+
+        this.focusTextInput();
     }
 
     submitCloseChat() {

@@ -14,7 +14,7 @@
             "sourceRoot": "src",
             "prefix": "app",
             "architect": {
-                "build": {
+                "build": {                   
                     "builder": "@angular-devkit/build-angular:application",
                     "options": {
                         "outputPath": "dist",
@@ -36,11 +36,7 @@
                             "src/styles.scss"
                         ],
                         "scripts": [],
-                        // "server": "src/main.server.ts",
-                        // "prerender": true,
-                        // "ssr": {
-                        //     "entry": "server.ts"
-                        // },
+                        "aot": true,
                         "optimization": true
                     },
                     "configurations": {

@@ -4,9 +4,7 @@
   "version": "0.1.0",
   "identifier": "com.kavka-messenger.dev",
   "build": {
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:4200",
-    "beforeDevCommand": "yarn start",
+    "frontendDist": "../dist/browser",
     "beforeBuildCommand": "yarn build"
   },
   "app": {
