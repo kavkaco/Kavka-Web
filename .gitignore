@@ -41,8 +41,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-src/environments/environment.production.ts
-
 cert.pem
 key.pem
 server.key
