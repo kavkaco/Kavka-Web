@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: KavkaMessenger.deb
-          path: src-tauri/target/release/bundle/deb/Kavka Messenger-${{steps.versioner.outputs.APP_VERSION}}-1.x86_64.deb
+          path: src-tauri/target/release/bundle/deb/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}_.amd64.deb
 
       - name: Upload rpm
         if: matrix.platform == 'ubuntu-22.04' && success()
