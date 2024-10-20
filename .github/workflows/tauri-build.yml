@@ -35,6 +35,9 @@ jobs:
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
+      - name: install tauri
+        run: cargo install tauri-cli --version "^2.0.0" --locked
+
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
@@ -50,9 +53,10 @@ jobs:
           echo "APP_VERSION=$(grep "^version" ./src-tauri/Cargo.toml | cut -d '"' -f 2)" >> "$GITHUB_OUTPUT"
 
       - name: build
-        run: cargo tauri build --release ${{ matrix.args }}
+        run: |
+          cargo tauri build --release ${{ matrix.args }}
 
-      - name: Upload de
+      - name: Upload deb
         if: matrix.platform == 'ubuntu-22.04' && success()
         uses: actions/upload-artifact@v3
         with:
