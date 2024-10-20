@@ -43,10 +43,19 @@ jobs:
       - name: install frontend dependencies
         run: yarn install 
 
-      - name: app version 
+      - name: app version (non-windows)
         id: versioner
+        if: matrix.platform != 'windows-latest' && success()
         run: |
           echo "APP_VERSION=$(grep "^version" ./src-tauri/Cargo.toml | cut -d '"' -f 2)" >> "$GITHUB_OUTPUT"
+
+      - name: app version (windows)
+        id: windows_versioner
+        if: matrix.platform == 'windows-latest' && success()
+        run: |
+          $version = Select-String -Pattern '^version' -Path ./src-tauri/Cargo.toml | ForEach-Object { ($_ -split '"')[1] }
+          echo "APP_VERSION=$version" >> $env:GITHUB_OUTPUT
+
 
       - name: build
         run: |
@@ -78,4 +87,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: KavkaMessenger.exe
-          path: src-tauri/target/release/bundle/nsis/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}_x64-setup.exe
+          path: src-tauri/target/release/bundle/nsis/Kavka Messenger_${{steps.windows_versioner.outputs.APP_VERSION}}_x64-setup.exe
