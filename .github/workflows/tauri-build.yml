@@ -54,7 +54,7 @@ jobs:
 
       - name: build
         run: |
-          cargo tauri build --release ${{ matrix.args }}
+          cargo tauri build -- --release ${{ matrix.args }}
 
       - name: Upload deb
         if: matrix.platform == 'ubuntu-22.04' && success()
