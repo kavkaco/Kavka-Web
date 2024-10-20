@@ -1,13 +1,13 @@
 name: 'publish-tauri-application'
 
 on:
+  pull_request:
+    branches: [ "**" ] 
   push:
     branches: [ "main" ]
 
 jobs:
   publish-tauri:
-    permissions:
-      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -28,16 +28,15 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: '22.3'
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
+        if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
@@ -45,13 +44,38 @@ jobs:
       - name: install frontend dependencies
         run: yarn install 
 
-      - uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: app version 
+        id: versioner
+        run: |
+          echo "APP_VERSION=$(grep "^version" ./src-tauri/Cargo.toml | cut -d '"' -f 2)" >> "$GITHUB_OUTPUT"
+
+      - name: build
+        run: cargo tauri build --release ${{ matrix.args }}
+
+      - name: Upload de
+        if: matrix.platform == 'ubuntu-22.04' && success()
+        uses: actions/upload-artifact@v3
         with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: 'App v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
-          prerelease: false
-          args: ${{ matrix.args }}
+          name: KavkaMessenger.deb
+          path: src-tauri/target/release/bundle/deb/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}.deb
+
+      - name: Upload rpm
+        if: matrix.platform == 'ubuntu-22.04' && success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: KavkaMessenger.rpm
+          path: src-tauri/target/release/bundle/rpm/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}.rpm
+
+      - name: Upload exe
+        if: matrix.platform == 'windows-latest' && success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: KavkaMessenger.exe
+          path: src-tauri/target/release/bundle/exe/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}.exe
+
+      - name: Upload AppImage
+        if: matrix.platform == 'windows-latest' && success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: KavkaMessenger.AppImage
+          path: src-tauri/target/release/bundle/appimage/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}.AppImage
