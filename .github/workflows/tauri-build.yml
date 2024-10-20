@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: KavkaMessenger.deb
-          path: src-tauri/target/release/bundle/deb/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}_.amd64.deb
+          path: src-tauri/target/release/bundle/deb/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}_amd64.deb
 
       - name: Upload rpm
         if: matrix.platform == 'ubuntu-22.04' && success()
@@ -66,16 +66,16 @@ jobs:
           name: KavkaMessenger.rpm
           path: src-tauri/target/release/bundle/rpm/Kavka Messenger-${{steps.versioner.outputs.APP_VERSION}}-1.x86_64.rpm
 
+      - name: Upload AppImage
+        if: matrix.platform == 'ubuntu-22.04' && success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: KavkaMessenger.AppImage
+          path: src-tauri/target/release/bundle/appimage/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}_amd64.AppImage
+      
       - name: Upload exe
         if: matrix.platform == 'windows-latest' && success()
         uses: actions/upload-artifact@v3
         with:
           name: KavkaMessenger.exe
           path: src-tauri/target/release/bundle/msi/Kavka Messenger-${{steps.versioner.outputs.APP_VERSION}}_x64_en-US.msi
-
-      - name: Upload AppImage
-        if: matrix.platform == 'windows-latest' && success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: KavkaMessenger.AppImage
-          path: src-tauri/target/release/bundle/appimage/Kavka Messenger_${{steps.versioner.outputs.APP_VERSION}}_amd64.AppImage
