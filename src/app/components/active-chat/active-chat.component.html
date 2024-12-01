@@ -205,14 +205,14 @@
                     <img src="https://i.pravatar.cc/150?u=a042581f4e29026024d" alt="avatar" />
                 </div>
                 } @else {
-                <div class="avatar items-center justify-center bg-primary">
+                <div class="avatar avatar-md items-center justify-center bg-primary">
                     @if (activeChatService.title) {
                     {{ activeChatService.title[0].toUpperCase() }}
                     }
                 </div>
                 }
                 <div class="flex flex-col">
-                    <h1 class="text-md">{{ activeChatService.title }}</h1>
+                    <h1 class="text-sm">{{ activeChatService.title }}</h1>
                     @if (activeChatService.membersCount) {
                     <span class="text-xs text-content2">{{ activeChatService.membersCount }} members</span>
                     } @else if (activeChatService.online !== undefined) {
