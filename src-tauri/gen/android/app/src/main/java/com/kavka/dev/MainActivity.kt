@@ -1,3 +1,3 @@
-package com.kavka_messenger.dev
+package com.kavka.dev
 
 class MainActivity : TauriActivity()
