@@ -85,7 +85,7 @@ export class ActiveChatComponent implements OnInit, OnChanges, AfterContentInit,
         this.activeChatService = new ActiveChatService(this.store, this.messageService);
 
         this.store.select(ChatSelector.selectActiveChat).subscribe(activeChat => {
-            this.isChatCreated = activeChat.isChatCreated;
+            this.isChatCreated = activeChat?.isChatCreated;
         });
 
         this.store

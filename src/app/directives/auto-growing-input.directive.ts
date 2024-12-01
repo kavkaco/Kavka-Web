@@ -12,6 +12,14 @@ export class AutoGrowingInputDirective {
     constructor(private el: ElementRef) {}
 
     @HostListener("keyup") onKeyup() {
+        this.setHeight();
+    }
+
+    @HostListener("keydown") onKeydown() {
+        this.setHeight();
+    }
+
+    private setHeight() {
         const textarea = this.el.nativeElement;
 
         this.setOverflow("hidden");
@@ -32,7 +40,7 @@ export class AutoGrowingInputDirective {
         textarea.style.height = heightCss;
     }
 
-    calculateInputHeight(value: string) {
+    private calculateInputHeight(value: string) {
         const numberOfLineBreaks = (value.match(/\n/g) || []).length;
         if (numberOfLineBreaks == 0) {
             return this.initialHeight;

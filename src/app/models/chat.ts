@@ -74,7 +74,7 @@ export function convertChatsToChatItems(chats: Chat[]): IChatItem[] {
             title = (chat.chatDetail.chatDetailType.value as GroupChatDetail).title;
         } else if (chat.chatType == ChatType.DIRECT) {
             const recipient = (chat.chatDetail.chatDetailType.value as DirectChatDetail).recipient;
-            title = recipient.name.trim() + recipient.lastName.trim();
+            title = recipient.name.trim() + " " + recipient.lastName.trim();
         }
 
         return { chatId: chat.chatId, title, lastMessage: chat.lastMessage };

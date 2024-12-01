@@ -13,6 +13,9 @@ import * as ChatSelector from "@store/chat/chat.selectors";
 import { take } from "rxjs";
 import { ChatType } from "kavka-core/model/chat/v1/chat_pb";
 import { MessageService } from "@app/services/message.service";
+import { NotifManagerService } from "./notif-manager.service";
+import { User } from "kavka-core/model/user/v1/user_pb";
+import * as AuthSelector from '@store/auth/auth.selectors';
 
 @Injectable({ providedIn: "root" })
 export class EventsService {
@@ -20,10 +23,19 @@ export class EventsService {
     private chatService = inject(ChatService);
     private messageService = inject(MessageService);
     private client: PromiseClient<typeof KavkaEventsService>;
+    private notifManager = inject(NotifManagerService);
+
+    private activeUser: User;
 
     constructor() {
         const transport = inject(GrpcTransportService).transport;
         this.client = createPromiseClient(KavkaEventsService, transport);
+
+        this.store
+        .select(AuthSelector.selectActiveUser)
+        .subscribe(activeUser => {
+            this.activeUser = activeUser
+        });
     }
 
     async SubscribeEventsStream() {
@@ -101,6 +113,20 @@ export class EventsService {
                 message,
             })
         );
+
+        if (message.sender?.userId !== this.activeUser.userId && !this.notifManager.connectivity) {
+            const senderName = `${message.sender.name} ${message.sender.lastName}`;
+            let body = "Unknown";
+
+            switch (message.payload.case) {
+                case "textMessage":
+                case "labelMessage":
+                    body = message.payload.value.text;
+                    break;
+            }
+
+            this.notifManager.SendNotif(senderName, body);
+        }
 
         // Update last message of the chat
         this.store.dispatch(

@@ -67,6 +67,7 @@ $mobile-break-point: 900px;
             left: 0 !important;
             bottom: 0 !important;
             width: 100%;
+            border-radius: 0 !important;
         }
     }
 }
@@ -133,6 +134,7 @@ $mobile-break-point: 900px;
             border: 1px solid rgb(var(--border));
             padding: 5px 10px;
             padding-top: 7px;
+            border-radius: 50px;
 
             min-height: var(--input-section-size);
 

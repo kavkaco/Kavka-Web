@@ -5,7 +5,7 @@
   "build": {
     "frontendDist": "../dist/browser",
     "beforeBuildCommand": "yarn build",
-    "devUrl": "http://localhost:42000"
+    "devUrl": "http://localhost:4200"
   },
   "app": {
     "windows": [
